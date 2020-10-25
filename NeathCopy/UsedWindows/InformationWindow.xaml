@@ -1,0 +1,56 @@
+﻿<Window x:Class="NeathCopy.UsedWindows.InformationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NeathCopy.UsedWindows" Closing="Window_Closing"
+        mc:Ignorable="d" SizeToContent="WidthAndHeight" Topmost="True"  WindowStartupLocation="CenterOwner"
+        Title="InformationWindow" Style="{DynamicResource UsedWindowStyle}" Icon="/NeathCopy;component/Themes/Images/Windows8Images/info.png">
+
+    <Grid Background="{DynamicResource ControlBackgroundBrush}">
+        <Grid.Resources>
+            <Style TargetType="Button">
+                <Setter Property="Background" Value="White"></Setter>
+                <Setter Property="Foreground" Value="Blue"></Setter>
+                <Setter Property="Width" Value="50"></Setter>
+                <Setter Property="Height" Value="25"></Setter>
+                <Setter Property="FontWeight" Value="Bold"></Setter>
+            </Style>
+        </Grid.Resources>
+        <StackPanel Margin="15">
+            <RichTextBox Name="message_rb" Height="49" Width="300" IsReadOnly="True" Foreground="{DynamicResource TextBrush}" Background="{DynamicResource ControlBackgroundBrush}"/>
+            <Separator Height="5" Background="Transparent"/>
+            <ListView Height="70" Name="diskSpace_listview">
+                <ListView.View>
+                    <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Employee Information">
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Volumen}" Header="{DynamicResource t44}" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Capacity}" Header="{DynamicResource t45}" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=UsedSpace}" Header="{DynamicResource t46}" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=FreeSpace}" Header="{DynamicResource t47}"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=RequireSpace}" Header="{DynamicResource t48}" >
+                            <GridViewColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Foreground="Green" FontWeight="Bold" Text="{Binding}"></TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.HeaderTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=NeedMore}" Header="{DynamicResource t49}">
+                            <GridViewColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Foreground="Blue" FontWeight="Bold" Text="{Binding}"></TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.HeaderTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Separator Height="5" Background="Transparent"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Background="Transparent" FontWeight="Bold" Name="try_button" Content="{DynamicResource t50}"  Width="60" HorizontalAlignment="Left"  Click="try_button_Click"/>
+                <Button Margin="5,0,5,0" Background="Transparent" FontWeight="Bold" Name="ignore_button" Width="60" Click="ignore_button_Click" Content="{DynamicResource t51}" HorizontalAlignment="Left"/>
+                <Button Background="Transparent" FontWeight="Bold" Name="fit_button" Content="{DynamicResource t52}" Width="135" Click="fit_button_Click"/>
+                <Button Margin="5,0,5,0" Background="Transparent" FontWeight="Bold" Name="cancel_button"  Width="60" Content="{DynamicResource t53}" Foreground="Red" HorizontalAlignment="Left" Click="cancel_button_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

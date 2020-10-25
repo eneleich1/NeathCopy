@@ -1,0 +1,167 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:NeathCopy.Languages"
+                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    >
+
+     <!--VisualCopy-->
+    <sys:String x:Key="t1">Opción de Copia:</sys:String>
+    <sys:String x:Key="t2">Archivo:</sys:String>
+    <sys:String x:Key="t3">Desde:</sys:String>
+    <sys:String x:Key="t4">Hacia:</sys:String>
+    <sys:String x:Key="t5">Tamaño Copiado del Archivo Actual</sys:String>
+    <sys:String x:Key="t6">Porciento Copiado del Archivo Actual</sys:String>
+    <sys:String x:Key="t7">Tamaño Copiado de Todo el Progreso</sys:String>
+    <sys:String x:Key="t8">Porciento Copiado de Todo el Progreso</sys:String>
+    <sys:String x:Key="t9">Cantidad de Ficheros Copiados del Total</sys:String>
+    <sys:String x:Key="t10">Velocidad:</sys:String>
+    <sys:String x:Key="t11">Nombre de Volumen</sys:String>
+    <sys:String x:Key="t12">Tiempo Restante:</sys:String>
+    <sys:String x:Key="t13">Tiempo Transcurrido:</sys:String>
+    <sys:String x:Key="t14">Mas Detalles</sys:String>
+    <sys:String x:Key="t109">Número de Cola:</sys:String>
+
+    <!--CopyListWindow-->
+    <sys:String x:Key="t15">Archivo</sys:String>
+    <sys:String x:Key="t16">Estado</sys:String>
+    <sys:String x:Key="t17">Nombre de Archivo</sys:String>
+    <sys:String x:Key="t115">Nombre Completo de Archivo</sys:String>
+    <sys:String x:Key="t116">Destino</sys:String>
+    <sys:String x:Key="t18">Tamaño</sys:String>
+    <sys:String x:Key="t113">Cargar Lista de un solo Destino</sys:String>
+    <sys:String x:Key="t114">Salvar Lista de un solo Destino</sys:String>
+    <sys:String x:Key="t19">Cargar Lista</sys:String>
+    <sys:String x:Key="t20">Salvar Lista</sys:String>
+    <sys:String x:Key="t21">Cargar Lista Comprimida</sys:String>
+    <sys:String x:Key="t22">Salvar y Comprimir Lista</sys:String>
+    <sys:String x:Key="t23">Mueve la Selección hasta el tope</sys:String>
+    <sys:String x:Key="t24">Mueve la Selección un paso hacia arriba</sys:String>
+    <sys:String x:Key="t25">Mueve la Selección un paso hacia abajo</sys:String>
+    <sys:String x:Key="t26">Mueve la Selección para el final</sys:String>
+    <sys:String x:Key="t27">Borra la Selección de la Lista</sys:String>
+    <sys:String x:Key="t108">Cantidad de Archivos:</sys:String>
+
+    <!--More on VisualCopy-->
+    <sys:String x:Key="t28">Operación:</sys:String>
+
+    <!--ContainerWindows-->
+    <sys:String x:Key="t29">Configuración</sys:String>
+
+    <!--DiskIsFullWindows-->
+    <sys:String x:Key="t30">Eliminar el Archivo Incompleto</sys:String>
+    <sys:String x:Key="t31">No Eliminar</sys:String>
+
+    <!--ErrorWindow-->
+    <sys:String x:Key="t32">Pasar Todos</sys:String>
+    <sys:String x:Key="t33">Pasar</sys:String>
+    <sys:String x:Key="t34">Cancelar</sys:String>
+
+    <!--FileExistOptionsWindow-->
+    <sys:String x:Key="t35">Aceptar</sys:String>
+    <sys:String x:Key="t36">Cancelar</sys:String>
+    <sys:String x:Key="t37">Sobreescribir Archivo Actual</sys:String>
+    <sys:String x:Key="t38">Sobreescribir Todos</sys:String>
+    <sys:String x:Key="t111">Sobreescribir si es Diferente</sys:String>
+    <sys:String x:Key="t112">Sobreescribir todos si son Diferentes</sys:String>
+    <sys:String x:Key="t39">Pasar Archivo Actual</sys:String>
+    <sys:String x:Key="t40">Pasar Todos</sys:String>
+
+    <!--FileNotFoundWindows-->
+    <sys:String x:Key="t41">Probar</sys:String>
+    <sys:String x:Key="t42">Pasar</sys:String>
+    <sys:String x:Key="t43">Cancelar</sys:String>
+
+    <!--InformationWindow-->
+    <sys:String x:Key="t44">Volumen</sys:String>
+    <sys:String x:Key="t45">Capacidad</sys:String>
+    <sys:String x:Key="t46">Espacio Usado</sys:String>
+    <sys:String x:Key="t47">Espacio Libre</sys:String>
+    <sys:String x:Key="t48">Espacio Requerido</sys:String>
+    <sys:String x:Key="t49">Espacio a Liberar</sys:String>
+    <sys:String x:Key="t50">Probar</sys:String>
+    <sys:String x:Key="t51">Ignorar</sys:String>
+    <sys:String x:Key="t52">Ajustar a la Capacidad</sys:String>
+    <sys:String x:Key="t53">Cancelar</sys:String>
+
+    <!--MessageWindow-->
+    <sys:String x:Key="t54">Aceptar</sys:String>
+
+    <!--UserDropUIWindow-->
+    <sys:String x:Key="t55">Copiar a:</sys:String>
+    <sys:String x:Key="t56">Mover a:</sys:String>
+    <sys:String x:Key="t57">Aceptar</sys:String>
+    <sys:String x:Key="t58">Cancelar</sys:String>
+    <sys:String x:Key="t110">Seleccione la Operación y el Destino</sys:String>
+
+    <!--ConfigurationWindow=========================================-->
+    <!--Menu-->
+    <sys:String x:Key="t59">Archivo</sys:String>
+    <sys:String x:Key="t60">Herramientas</sys:String>
+
+    <!--Settings-->
+    <sys:String x:Key="t97">Configuración</sys:String>
+    <sys:String x:Key="t61">Como Adicionar Nuevas Copias</sys:String>
+    <sys:String x:Key="t62">Adicionar al Primer NeathCopy</sys:String>
+    <sys:String x:Key="t63">Adicionar al Ultimo NeathCopy</sys:String>
+    <sys:String x:Key="t64">Adicionar al NeatCopy con el Mismo Destino</sys:String>
+    <sys:String x:Key="t65">Adicionar al NeathCopy con el mismo Volumen</sys:String>
+
+    <sys:String x:Key="t66">Como Iniciar una Operación</sys:String>
+    <sys:String x:Key="t67">Comenzar Automaticamente</sys:String>
+    <sys:String x:Key="t68">Esperar en una Cola</sys:String>
+
+    <sys:String x:Key="t69">Rendimiento</sys:String>
+    <sys:String x:Key="t70">Motor de Copia</sys:String>
+    <sys:String x:Key="t71">Tamaño del Buffer en Bytes</sys:String>
+
+    <sys:String x:Key="t72">Opciones de Sonidos</sys:String>
+    <sys:String x:Key="t73">Reproducir Sonido al Adicionar Datos</sys:String>
+    <sys:String x:Key="t74">Reporducir Sonido al Terminar</sys:String>
+    <sys:String x:Key="t75">Reproducir Sonido al Cancelar</sys:String>
+
+    <sys:String x:Key="t76">Donde Incluier un Nuevo NeathCopy</sys:String>
+    <sys:String x:Key="t77">En una sola ventana</sys:String>
+    <sys:String x:Key="t78">En ventanas separadas</sys:String>
+
+    <sys:String x:Key="t117">Accion a Realizar si Ocurre un Error</sys:String>
+    <sys:String x:Key="t118">Cerrar NeathCopy</sys:String>
+    <sys:String x:Key="t119">Mantener NeathCopy Abierto</sys:String>
+
+    <sys:String x:Key="t102">Tiempos de Actualización</sys:String>
+    <sys:String x:Key="t103">Intervalo de Actualización de Tiempo</sys:String>
+    <sys:String x:Key="t104">Intervalo de Actualización de Información de Copia</sys:String>
+    <sys:String x:Key="t105">Tiempo de Actualización de Velocidad</sys:String>
+    <sys:String x:Key="t106">Tiempo de Actualización de Descubrir Archivos</sys:String>
+    <sys:String x:Key="t107">Tiempos de Actualización en Milisegundos</sys:String>
+
+    <!--Themes and Languages-->
+    <sys:String x:Key="t79">Temas y Lenguajes</sys:String>
+    <sys:String x:Key="t80">Lenguaje</sys:String>
+    <sys:String x:Key="t81">Seleccione el Lenguaje</sys:String>
+    <sys:String x:Key="t82">Temas</sys:String>
+    <sys:String x:Key="t83">Tema</sys:String>
+    <sys:String x:Key="t84">Piel del Copiador Visual</sys:String>
+    <sys:String x:Key="t85">Colores</sys:String>
+    <sys:String x:Key="t86">Fuente</sys:String>
+    <sys:String x:Key="t87">Vista de Ejemplo</sys:String>
+
+    <!--On Finished-->
+    <sys:String x:Key="t88">Al Finalizar</sys:String>
+    <sys:String x:Key="t89">Operación que se realiza al terminar</sys:String>
+    <sys:String x:Key="t90">Apagar</sys:String>
+    <sys:String x:Key="t91">No hacer nada</sys:String>
+    <sys:String x:Key="t92">Hibernar</sys:String>
+    <sys:String x:Key="t93">Expulsar el dispositivo</sys:String>
+
+    <!--About-->
+    <sys:String x:Key="t94">Acerca de</sys:String>
+    <sys:String x:Key="t95">Creado por:</sys:String>
+    <sys:String x:Key="t96">Versión:</sys:String>
+
+    <!--Buttons Tool Tips-->
+    <sys:String x:Key="t98">Pausar/Resumir</sys:String>
+    <sys:String x:Key="t99">Lista de Archivos</sys:String>
+    <sys:String x:Key="t100">Cancelar</sys:String>
+    <sys:String x:Key="t101">Pasar</sys:String>
+
+</ResourceDictionary>

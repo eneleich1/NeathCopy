@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     x:Class="NeathCopy.Fonts.Fonts1"
+                    xmlns:local="clr-namespace:NeathCopy.Fonts">
+
+
+
+    <!--<sys:String x:Key="FontFamilyVc">"Verdana"</sys:String>-->
+
+</ResourceDictionary>

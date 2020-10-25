@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8F30B57C-7E25-4ED6-A179-C1498A2D528D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NeathCopyEngine</RootNamespace>
+    <AssemblyName>NeathCopyEngine</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\NeathCopy\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AlphaFS, Version=2.0.0.0, Culture=neutral, PublicKeyToken=4d31a58f7d7ad5c9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\NeathCopy\bin\Debug\AlphaFS.dll</HintPath>
+    </Reference>
+    <Reference Include="Delimon.Win32.IO, Version=0.5.2574.27179, Culture=neutral, PublicKeyToken=6f601db60ebd9657, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Delimon.Win32.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CopyHandlers\CopyHandle.cs" />
+    <Compile Include="CopyHandlers\Error.cs" />
+    <Compile Include="CopyHandlers\FileCopier.cs" />
+    <Compile Include="CopyHandlers\NeathCopyHandle.cs" />
+    <Compile Include="DataTools\DataInfo.cs" />
+    <Compile Include="DataTools\DirectoryDataInfo.cs" />
+    <Compile Include="DataTools\Extensions.cs" />
+    <Compile Include="DataTools\FileDataInfo.cs" />
+    <Compile Include="DataTools\LongPath.cs" />
+    <Compile Include="DataTools\MyDirectoryInfo.cs" />
+    <Compile Include="Exceptions\FileSystemNotExistException.cs" />
+    <Compile Include="Exceptions\InvalidCopyOperationException.cs" />
+    <Compile Include="Exceptions\NotEnoughSpaceException.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Helpers\FilesList.cs" />
+    <Compile Include="Helpers\MySerializer.cs" />
+    <Compile Include="Helpers\MySize.cs" />
+    <Compile Include="Helpers\MyThread.cs" />
+    <Compile Include="Helpers\OnFinishFuncitons.cs" />
+    <Compile Include="Helpers\RegisterAccess.cs" />
+    <Compile Include="Helpers\RequestInfo.cs" />
+    <Compile Include="Helpers\Time.cs" />
+    <Compile Include="Helpers\WinApiMembers.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

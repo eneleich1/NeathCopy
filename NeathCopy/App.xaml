@@ -1,0 +1,33 @@
+﻿<Application x:Class="NeathCopy.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:NeathCopy"
+             StartupUri="VisualsCopysHandler.xaml">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+                 <!--Set default skin--><!-- 
+                <ResourceDictionary Source="Themes/Windows8Theme.xaml"/>
+                --><!--<ResourceDictionary Source="Themes/Theme1.xaml"/>-->
+                
+                <!--Set default VisualCopyStyle--><!--
+                <ResourceDictionary Source="VisualCopySkins/Advance2017Fixed.xaml"/>
+                
+                --><!--Set default Brushes--><!--
+                <ResourceDictionary Source="Brushes/Windows8_Brushes.xaml"/>
+
+                --><!--Set default Fonts--><!--
+                <ResourceDictionary Source="Fonts/Fonts1.xaml"/>
+
+                --><!--Set default Language--><!--
+                <ResourceDictionary Source="Languages/English.xaml"/>
+                --><!--<ResourceDictionary Source="Languages/Spanish.xaml"/>--> 
+
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+    </Application.Resources>
+    
+</Application>

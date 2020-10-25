@@ -1,0 +1,141 @@
+
+-------------------------------------------------------------------------
+FIXEDS AND UPGRADES DateFormat(English) 7-16-2018,7-29-2018
+
+4-24-2020 11:08 PM, 4-28-2020 9:40AM- 11:31AM, 5-14-2020
+5-23-2020 11:30 PM, 5-24-2020 11:59, 6-3-2020 9:05 PM
+-------------------------------------------------------------------------
+[Jan-Feb/2018]
+1- Use Configuration from register.
+2- Fix check for free space.
+2- Use FindWindows Api Function to avoid not started when crash.
+3- Add 3 News VisualCopy Graphics UI, 2 Windows Theme, 4 Brushes, 1 Font.
+4- Add Language Settings.
+5- Add Update Time Settings.
+6- Used Windows UI Improved.
+7- Enable on Finish Operation(DoNothing, Shutdown, Hibernate, Eject Drive)
+8- Add MenuContex wich make posible standar Windows theme by right click on ClientArea
+   and show this menu including Settings sub-menu.
+
+[4-6-2018 3:59AM]
+1- No needed load control to display copy information, used DependencyProperty on VisualCopy Style/Template.
+
+[4-10-2018 2:51AM]
+1- Save and Load List of files only, instead save the completle list object.
+2- If FilesList is empty Ask for a operation and Destiny.
+
+[4-23-2018]
+1- Override if is Different Option
+
+[7-31-2018]
+1- Add in Configuration when an Error Occur if Keep Open or Close NeathCopy.
+
+[4-28-2020]
+1- Since ShellExt was created in VisualStudio 2017 using Plataform Toolset v141, them when use VisualStudio 2019 include "Visual Studio     2017 (v141)" from individual components.
+2- Change ShellExtension Project Windows SDK to 10.0.18362.0
+3- Set Solution Projects Dependencies to fix Projects order
+4- Changed the ShellExt Output Directory. Previous: Shell Extension Output Directory: $(SolutionDir)$(Platform)\$(Configuration)\
+5- Note1: ShellExt debug mode must be "Release" instead "Debug" in order to work in a PC without VisualStudio installed
+6- Create Setup project for x86 and x64
+
+[4-29-2020]
+1- Remove old NeathCopySetup project
+
+[5-24-2020]
+1- Use framework MVVM for visualcopy using VisualCopy_VM, isntead of using Windows.Tag property
+
+[6-3-2020]
+1- Remove all  update visual informations bad code from VisualCopy class and from the VisualCopyVM class as well
+2- Let only one UpdateAll method in the VisualCopyVM
+3- Remove others update configurations in ConfigurationsWindows
+4- The probleme of not display information when the visualCopy skin was changed was solved by setting the VisualCopy.xaml.cs 
+   DataContex = The only instance of ViewModel in ControlLoad Event.
+5- I do not used only one static instance because this instance must be new for all added visualcopy
+-------------------------------------------------------------------------
+	ERRORS
+-------------------------------------------------------------------------
+[x] 1- Save List do not work properly
+[x] 2- Into the badland affter copy error
+[x] 3- Bad Synchronization when is copiying and add files to the list at the same time.
+[x] 4- When the copier dosen't have permissions and the operation is Move, delete the files.
+[x] 5- Make shure when update To: use the currentFile Destiny Directory.
+[x] 6- When Moving, if Canceled or an error accur, the completle directory is deleted.
+[]  7- Is a folder has the hidden attribute it is ignore.
+[]  8- When Load standar CopyList do not allow add others files to the list by dragin or sending to
+       the same device.
+[]  9- In some cases, when adding files to one NeathCopy instance, it crash. This is by collection files
+       sources is changes and the listView of file do not update: The collection source was changed...
+[x] 10- When not exist register information the program crahs when set TransferLogs File paht
+[x] 11- Setupx86 do not create FilesList.txt file, so the program crash
+[x] 12- Setup download prerequisites from same location error
+[x] 13- Shell Ext not display right click NeathCopy options and not work correctly
+-------------------------------------------------------------------------
+	ERRORS-FIXEDS
+-------------------------------------------------------------------------
+[7-24-2018]
+1- Save as serialized object: [files(from,to), multipleDestiny, Operation]
+   Load the serialized object. For One Destiny List only change the drive letter.
+   [7-27-2018]
+    -Use a CollectionView instead FilesList, reduce error probability if any
+	-Add 2 view in CopyListWindow: FullName and Destiny
+   
+   
+2- Into the Badlands fail when set attributes, them use try-catch-finally to
+   ignore the exception and finish ok.
+   
+3- Bad Synchronization was solved by call Pause/Resume in each AddData call.
+   The produced error(Unwanted Pause/Resume) may be solved by force the Thread to
+   Susped(Pause) or Resume(Resume).[This error is been checking]
+   
+5- Replace First destiny in the FilesList by the CurrentFile.Destiny Directory.
+
+[7-27-2018]
+4- Have to check if occurs
+
+[7-29-2018]
+6- Make CopyRoutine return a Flag(Canceled, Error, Ok), only if Ok was returned 
+   the completle directory will delete.
+
+[4-24-2020]
+10- Use Application.StartupPath to set as default Logs path
+
+[5-14-2020]
+11- Include in the Setup File System an SpecialFolder ="AppUserDataFolder" and include NeatCopy/FilesList.txt
+
+[5-23-2020]
+9- Use the MVVM framework by using ObservableColletion<DataInfoFile> instead List<DataInfoFile>
+
+[6-17-2020]
+12- https://stackoverflow.com/questions/28709432/how-to-enable-download-prerequisites-from-the-same-location-as-my-application
+
+[6-26-2020]
+13- Insert menus in QueryContextMenu method and set as default for copy and paste operations
+    Call copy or move process in InvokwCommand method
+    Ask before insert NeathMove menu for FastMove
+-------------------------------------------------------------------------
+	Tasks
+-------------------------------------------------------------------------
+1- Create a Tool wich allow edit FilesList.
+2- Make proecess porcent display in windows taskbar
+3- (x)Imlpement dynamic buffer FileCopier *
+4- Use clipboard in shell extension
+5- Fix pause buton brush
+6- Implement all desings created
+7- Set files and directories attributes
+8- Allow copy work over network
+9- (x)Start displaying remaining and elapsed time when discovering 
+10- Implement use as default CopyHandler option
+
+-------------------------------------------------------------------------
+	Tasks Completle 6-11-2020
+-------------------------------------------------------------------------
+6-11-2020
+9- if(discovering)Update elapsed and remaining Times.
+3- Implemented but it is not better than TeraCopy
+   
+   
+   
+   
+   
+   
+   

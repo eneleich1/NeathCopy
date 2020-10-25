@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:NeathCopy.Resources"
+                    xmlns:viewmodels="clr-namespace:NeathCopy.ViewModels"
+                    >
+    
+    <viewmodels:VisualCopyVM x:Key="vc_VM"/>
+
+</ResourceDictionary>

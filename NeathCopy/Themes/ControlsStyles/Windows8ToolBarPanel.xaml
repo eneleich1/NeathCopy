@@ -1,0 +1,132 @@
+﻿<local:Windows8ToolBarPanel xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:NeathCopy.Themes.ControlsStyles"
+                    xmlns:tools="clr-namespace:NeathCopy.Tools"
+                    x:Class="Windows8ToolBarPanel"
+                    >
+
+    <LinearGradientBrush x:Key="ToolBarBackground" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientBrush.GradientStops>
+            <GradientStopCollection>
+                <GradientStop Color="#00ccff" Offset="0.0"/>
+                <GradientStop Color="Blue" Offset="1.0"/>
+            </GradientStopCollection>
+        </GradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ButtonPressedBrush" StartPoint="0,0" EndPoint="0,1" >
+        <GradientStop Color="White" Offset="0"/>
+        <GradientStop Color="Blue" Offset="1"/>
+        <!--<GradientStop Color="White" Offset="1"/>-->
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ButtonMouseHoverBrush" StartPoint="0,0" EndPoint="0,1" >
+        <GradientStop Color="AliceBlue" Offset="0"/>
+        <GradientStop Color="DarkBlue" Offset="1"/>
+    </LinearGradientBrush>
+
+    <Style TargetType="Button" x:Key="myButtonStyle">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="Width" Value="25"/>
+        <Setter Property="Margin" Value="0,2,0,2"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Name="border" 
+        				BorderThickness="1"
+        				BorderBrush="{TemplateBinding BorderBrush}" 
+        				>
+                        <Grid Name="grid1">
+                            <Grid Name="storeColor" Margin="3" Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center" Name="content"/>
+                            </Grid>
+
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="grid1" Property="Background" Value="{DynamicResource ButtonMouseHoverBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource ButtonPressedBrush}"/>
+
+                            <Setter TargetName="content" Property="RenderTransform" >
+                                <Setter.Value>
+                                    <TranslateTransform Y="1.0" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsDefaulted" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="#FF282828" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="#FF282828" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="border" Property="Opacity" Value="0.7" />
+                            <Setter Property="Foreground" Value="Gray" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Control" x:Key="ToolBarPanelStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <ToolBarPanel VerticalAlignment="Center" Orientation="Vertical">
+
+                        <ToolBarPanel.Resources>
+                            <Style TargetType="Button" BasedOn="{StaticResource myButtonStyle}">
+                                <Setter Property="Height" Value="25"/>
+                                <Setter Property="Width" Value="25"/>
+                                <Setter Property="Margin" Value="0,2,0,2"/>
+                            </Style>
+                        </ToolBarPanel.Resources>
+
+                        <!--MoveFirst-->
+                        <Button  Name="moveFirst_button" Background="{DynamicResource moveFirstBrush}" SnapsToDevicePixels="True" 
+                                 Foreground="Red" Command="{x:Static tools:MyCommands.MoveFirstCommand}" ToolTip="{DynamicResource t23}" >
+                        </Button>
+
+                        <!--MoveUp-->
+                        <Button Name="moveUp_button" ToolTip="{DynamicResource t24}" Background="{DynamicResource moveUpBrush}"  
+                                Command="{x:Static tools:MyCommands.MoveUpCommand}">
+                        </Button>
+
+                        <!--MoveDown-->
+                        <Button Name="moveDown_button" Background="{DynamicResource moveDownBrush}" ToolTip="{DynamicResource t25}"  
+                                Command="{x:Static tools:MyCommands.MoveDownCommand}">
+                        </Button>
+
+                        <!--MoveLast-->
+                        <Button Name="moveLast_button" Background="{DynamicResource moveLastBrush}" ToolTip="{DynamicResource t26}"  
+                               Command="{x:Static tools:MyCommands.MoveLastCommand}">
+                        </Button>
+
+                        <!--Remove-->
+                        <Button Name="remove_button" Background="{DynamicResource removeFromListBrush}" ToolTip="{DynamicResource t27}"  
+                                Command="{x:Static tools:MyCommands.RemoveCommand}">
+                        </Button>
+
+                        <!--SaveList-->
+                        <Button Name="saveList_button" Background="{DynamicResource saveListBrush}" ToolTip="{DynamicResource t20}"  
+                               Command="{x:Static tools:MyCommands.SaveCommand}">
+                        </Button>
+
+                        <!--LoadList-->
+                        <Button Name="loadList_button" Background="{DynamicResource loadListBrush}"  ToolTip="{DynamicResource t19}"  
+                                Command="{x:Static tools:MyCommands.LoadCommand}">
+                        </Button>
+
+                    </ToolBarPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</local:Windows8ToolBarPanel>

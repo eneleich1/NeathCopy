@@ -1,0 +1,230 @@
+﻿<local:Windows8 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:NeathCopy.VisualCopySkins"
+                    xmlns:tools="clr-namespace:NeathCopy.Tools"
+                    xmlns:resources="clr-namespace:NeathCopy.Resources" 
+                xmlns:viewmodels="clr-namespace:NeathCopy.ViewModels"
+                x:Class="Windows8"
+                >
+    
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/NeathCopy;component/Resources/ProgressBar.xaml"/>
+        <ResourceDictionary Source="/NeathCopy;component/Resources/Button.xaml"/>
+        <ResourceDictionary Source="/NeathCopy;component/Resources/Menu.xaml"/>
+        <ResourceDictionary Source="/NeathCopy;component/Resources/ViewModelsDictionary.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="TextBlock" x:Key="InfoLabelStyle">
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+    </Style>
+    
+    <Style TargetType="Control" x:Key="VisualCopyStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border x:Name="mainBorder" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+                        <Grid Margin="2,0,2,0" Background="{DynamicResource ClientAreaBackgroundBrush}">
+                            <WrapPanel  Margin="5,2,5,2" Width="400">
+                                <Grid Margin="0,5,0,0">
+                                    <Grid.Resources>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                                        </Style>
+                                    </Grid.Resources>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="18"/>
+                                        <RowDefinition Height="18"/>
+                                        <RowDefinition Height="18"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!--File-->
+                                    <Image Stretch="Fill" Width="11" Height="15" HorizontalAlignment="Left"  Margin="0,0,3,0" Source="Images/Advance2017/file.png" />
+                                    <StackPanel Grid.Row="0" Grid.Column="1" Width="220" Orientation="Horizontal" Margin="2,0,0,0">
+                                        <TextBlock Text="{DynamicResource t2}" Style="{DynamicResource InfoLabelStyle}"/>
+                                        <TextBlock  Name="file1_tb"  Margin="3,0,0,0"
+                                                 Text="{Binding CurrentFile.Name, StringFormat=0}"
+                                                />
+                                    </StackPanel>
+
+                                    <!--From-->
+                                    <Image Stretch="Fill" Grid.Row="1" Width="9" Height="15"  HorizontalAlignment="Left" Source="Images/Advance2017/folder.png"  />
+                                    <StackPanel Grid.Row="1" Grid.Column="1"  Orientation="Horizontal" Width="220" Margin="3,0,0,0">
+                                        <TextBlock Text="{DynamicResource t3}" Style="{DynamicResource InfoLabelStyle}" />
+                                        <TextBlock Name="from1_tb"  Margin="2,0,0,0"
+                                               Text="{Binding From, StringFormat=0}"/>
+                                    </StackPanel>
+
+                                    <!--To-->
+                                    <Image Stretch="Fill" Grid.Row="2" Width="9" Height="15"  HorizontalAlignment="Left" Source="Images/Advance2017/folder.png"  />
+                                    <StackPanel Grid.Row="2" Grid.Column="1" Width="220" Orientation="Horizontal" Margin="3,0,0,0">
+                                        <TextBlock Text="{DynamicResource t4}" Style="{DynamicResource InfoLabelStyle}"/>
+                                        <TextBlock Name="to1_tb"  Margin="2,0,0,0"
+                                               Text="{Binding To, StringFormat=0}"/>
+                                    </StackPanel>
+
+                                    <!--Speed-->
+                                    <StackPanel Grid.Column="2" Margin="25,0,0,0" Grid.RowSpan="3" Orientation="Vertical">
+                                        <StackPanel Width="120" Orientation="Horizontal">
+                                            <TextBlock Text="{DynamicResource t10}"  Foreground="{DynamicResource TextBrush}" />
+                                            <TextBlock Name="speed_tb" Margin="2,0,0,0" Foreground="{DynamicResource TextBrush}"
+                                                   Text="{Binding SpeedInfo, StringFormat=0}"/>
+                                        </StackPanel>
+                                        <ProgressBar Name="speed_pb"  Width="120" Height="3"
+                                                 Foreground="{Binding SpeedBrush}"
+                                                 Maximum="{Binding MaxSpeed}"
+                                                 Value="{Binding Speed}"/>
+                                    </StackPanel>
+
+                                    <!--Device-->
+                                    <StackPanel Margin="30,-10,0,0" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Orientation="Horizontal">
+                                        <Image Width="30" Height="25" Source="Images/Advance2017/hdd.png"/>
+                                        <StackPanel Grid.Column="2" Orientation="Vertical" VerticalAlignment="Center">
+                                            <TextBlock Name="targetDevice_tb" Width="90" FontSize="9" Foreground="{DynamicResource TextBrush}"
+                                                Text="{Binding TargetDevice, StringFormat=0}"/>
+                                            <ProgressBar  HorizontalAlignment="Left" Height="3" Name="targetDevice_pb" Maximum="100" Width="90"
+                                                      Foreground="{Binding RelativeSource={RelativeSource TemplatedParent},Path=DriverSizeBrush}"
+                                                      Value="{Binding DriverSizePorcent}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!--PorgressBar1-->
+                                <Grid Margin="0,8,0,0" HorizontalAlignment="Left" Width="285" Height="15" >
+                                    <ProgressBar Name="single_progBar"  Foreground="{DynamicResource ProgressBarIndicatorBrush}" 
+                                         Background="{DynamicResource ProgressBarTrackBrush}"
+                                             Value="{Binding SinglePorcent}"/>
+
+                                    <TextBlock Name="singleSize_tb" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center" 
+                                           Margin="2,0,0,0" HorizontalAlignment="Left" MaxWidth="135" TextAlignment="Left"  FontSize="9"
+                                            Text="{Binding CurrentFileSizeTransferred, StringFormat=0}"/>
+
+                                    <TextBlock Name="singlePorcent_tb" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center" 
+                                           TextAlignment="Center"  Width="50" FontSize="9" HorizontalAlignment="Center" 
+                                           Text="{Binding SinglePorcent,StringFormat={}{0:f2}%}"/>
+
+                                    <TextBlock Name="countFiles_tb" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"
+                                           Margin="0,0,2,0" HorizontalAlignment="Right" Width="142" TextAlignment="Right"  FontSize="9"
+                                             Text="{Binding FilesCount, StringFormat=0}"/>
+                                </Grid>
+
+                                <!--Buttons-->
+                                <StackPanel Orientation="Horizontal" Margin="20,5,0,0">
+                                    <!--More-->
+                                    <Button Tag="Windows8" Width="20" Height="15" ToolTip="{DynamicResource t99}" Name="list_bt"  Background="{DynamicResource moreBrush}"
+                                         Command="{x:Static tools:MyCommands.MoreCommand}"/>
+                                    <!--Paused-->
+                                    <Button Width="20" Height="15" Margin="2,0,2,0" Name="pauseResume_bt" ToolTip="{DynamicResource t98}" 
+                                            Background="{Binding PauseButtonBrush}"
+                                        Command="{x:Static tools:MyCommands.PauseCommand}" 
+                                        >
+                                    </Button>
+                                    <!--Skip-->
+                                    <Button Width="20" Height="15"  ToolTip="{DynamicResource t101}" Name="skip_bt"  Background="{DynamicResource skipBrush}"
+                                         Command="{x:Static tools:MyCommands.SkipCommand}"/>
+                                    <!--Cancel-->
+                                    <Button Width="20" Height="15" Margin="2,0,2,0" Name="cancel_bt" ToolTip="{DynamicResource t100}"  Background="{DynamicResource cancelBrush}"
+                                         Command="{x:Static tools:MyCommands.CancelCommand}"/>
+                                </StackPanel>
+
+                                <!--PorgressBar2-->
+                                <Grid Margin="0,3,0,5" Width="285">
+                                    <ProgressBar Name="overall_progBar" Height="15"  Foreground="{DynamicResource ProgressBarIndicatorBrush}" 
+                                         Background="{DynamicResource ProgressBarTrackBrush}"
+                                             Value="{Binding OverallPorcent}"/>
+
+                                    <TextBlock Name="overallSize_tb" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center" 
+                                           Margin="2,0,0,0" HorizontalAlignment="Left" Width="135" TextAlignment="Left"  FontSize="9"
+                                           Text="{Binding OverallSizeTransferred, StringFormat=0}"/>
+
+                                    <TextBlock Name="overallPorcent_tb" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center" 
+                                           TextAlignment="Center"  Width="50" FontSize="9" HorizontalAlignment="Center" 
+                                           Text="{Binding OverallPorcent, StringFormat={}{0:f2}%}"/>
+
+                                    <TextBlock Name="remainingTime1_tb" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center" 
+                                           Margin="0,0,2,0" HorizontalAlignment="Right" Width="142" TextAlignment="Right"  FontSize="9"
+                                           Text="{Binding RemainingTime, StringFormat=Remaining: {0}}"/>
+                                </Grid>
+
+                                <!--Operation1-->
+                                <StackPanel Width="100" Orientation="Horizontal" Margin="10,0,0,0">
+                                    <TextBlock Text="{DynamicResource t28}" FontStyle="Italic"  VerticalAlignment="Center" Style="{DynamicResource InfoLabelStyle}"/>
+                                    <TextBlock Name="operation1_tb" FontStyle="Italic" VerticalAlignment="Center" FontSize="10" Margin="4,0,0,0" Foreground="{DynamicResource TextBrush}"
+                                           Text="{Binding Operation, StringFormat=0}"/>
+                                </StackPanel>
+                                <Rectangle Width="400" Height="1" Margin="0,1,0,0" StrokeThickness="5" VerticalAlignment="Center">
+                                    <Rectangle.Stroke>
+                                        <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                                            <GradientStop Color="Blue" Offset="0" />
+                                            <GradientStop Color="DarkBlue" Offset="0.5" />
+                                            <GradientStop Color="Blue" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Rectangle.Stroke>
+                                </Rectangle>
+
+                                <!--Expander-->
+                                <StackPanel Orientation="Horizontal">
+                                    <Expander Header="{DynamicResource t14}" Foreground="{DynamicResource TextBrush}">
+                                        <StackPanel Background="{DynamicResource ControlBackgroundBrush}"  Orientation="Vertical"  Margin="5,0,0,0" Width="392">
+                                            <Separator Height="1.5" Margin="0,0,0,4"/>
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{DynamicResource t109}" Style="{DynamicResource InfoLabelStyle}"/>
+                                                <TextBlock Name="inqueueNumber_tb" Margin="2,0,0,0"
+                                                       Text="{Binding InqueueNumber, StringFormat=0}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{DynamicResource t28}" Style="{DynamicResource InfoLabelStyle}"/>
+                                                <TextBlock Name="operation2_tb" Margin="2,0,0,0"
+                                                       Text="{Binding Operation, StringFormat=0}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{DynamicResource t1}" Style="{DynamicResource InfoLabelStyle}"/>
+                                                <TextBlock Name="copyOption_tb"  Margin="2,0,0,0"
+                                                       Text="{Binding CopyOption, StringFormat=0}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{DynamicResource t2}" Style="{DynamicResource InfoLabelStyle}"/>
+                                                <TextBlock Name="file2_tb"  Margin="2,0,0,0"
+                                                       Text="{Binding CurrentFile.Name, StringFormat=0}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{DynamicResource t3}" Style="{DynamicResource InfoLabelStyle}"/>
+                                                <TextBlock Name="from2_tb"  Margin="2,0,0,0"
+                                                       Text="{Binding From, StringFormat=0}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{DynamicResource t4}" Style="{DynamicResource InfoLabelStyle}"/>
+                                                <TextBlock Name="to2_tb"  Margin="2,0,0,0"
+                                                       Text="{Binding To, StringFormat=0}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{DynamicResource t13}" Style="{DynamicResource InfoLabelStyle}"/>
+                                                <TextBlock Name="elapsedTime_tb" Margin="2,0,0,0"
+                                                       Text="{Binding ElapsedTime, StringFormat=Elapsed: {0}}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{DynamicResource t12}" Style="{DynamicResource InfoLabelStyle}"/>
+                                                <TextBlock Name="remainingTime2_tb"  Margin="2,0,0,0"
+                                                       Text="{Binding RemainingTime, StringFormat=Remaining: {0}}"/>
+                                            </StackPanel>
+                                            <Separator Height="1.5" Margin="0,4,0,4"/>
+                                        </StackPanel>
+                                    </Expander>
+
+                                </StackPanel>
+                            </WrapPanel>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+</local:Windows8>

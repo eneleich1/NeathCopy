@@ -1,0 +1,199 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:local="clr-namespace:NeathCopy.Brushes">
+
+    <SolidColorBrush x:Key="BorderBrush" Color="Blue" />
+
+    <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="White" />
+
+    <SolidColorBrush x:Key="ControlBackgroundBrush" Color="White" />
+
+    <SolidColorBrush x:Key="ClientAreaBackgroundBrush" Color="White" />
+
+    <SolidColorBrush x:Key="TextBrush" Color="Black" />
+
+    <LinearGradientBrush x:Key="ToolBarBackground" EndPoint="1,0.5" StartPoint="0,0.5">
+        <GradientBrush.GradientStops>
+            <GradientStopCollection>
+                <GradientStop Color="#00ccff" Offset="0.0"/>
+                <GradientStop Color="DarkBlue" Offset="1"/>
+            </GradientStopCollection>
+        </GradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="MenuBackground" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientBrush.GradientStops>
+            <GradientStopCollection>
+                <GradientStop Color="#00ccff" Offset="0.0"/>
+                <GradientStop Color="Blue" Offset="0.5"/>
+                <GradientStop Color="#00ccff" Offset="1"/>
+            </GradientStopCollection>
+        </GradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ButtonMouseHoverBrush"  StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="White" Offset="0" />
+        <GradientStop Color="Blue" Offset="1" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="ProgressBarIndicatorBrush" Color="#00ccff"/>
+    <LinearGradientBrush x:Key="ProgressBarIndicatorBorderBrush">
+        <GradientStop Offset="0" Color="White"/>
+        <GradientStop Offset="1" Color="White"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="ProgressBarTrackBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientBrush.GradientStops>
+            <GradientStopCollection>
+                <GradientStop Color="White" Offset="0" />
+                <GradientStop Color="White" Offset="1" />
+            </GradientStopCollection>
+        </GradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="ProgressBarTrackBorderBrush" Color="Black"/>
+
+    <!--Image Brushes-->
+    <sys:String x:Key="IconUri">"/NeathCopy;component/Brushes/Images/Light/settings.png"</sys:String>
+
+    <ImageBrush x:Key="settingsBrush" Stretch="Uniform" ImageSource="Images/Light/settings.png">
+        <ImageBrush.RelativeTransform>
+            <TransformGroup>
+                <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="1.5" ScaleY="1.5"/>
+                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </ImageBrush.RelativeTransform>
+    </ImageBrush>
+    <ImageBrush x:Key="moveUpBrush" ImageSource="Images/Dark/move_up.png">
+        <ImageBrush.RelativeTransform>
+            <TransformGroup>
+                <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="1.5" ScaleY="1.5"/>
+                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </ImageBrush.RelativeTransform>
+    </ImageBrush>
+    <ImageBrush x:Key="moveDownBrush" ImageSource="Images/Dark/move_down.png">
+        <ImageBrush.RelativeTransform>
+            <TransformGroup>
+                <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="1.5" ScaleY="1.5"/>
+                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </ImageBrush.RelativeTransform>
+    </ImageBrush>
+    <ImageBrush x:Key="moveFirstBrush" ImageSource="Images/Dark/move_first.png">
+        <ImageBrush.RelativeTransform>
+            <TransformGroup>
+                <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="1.5" ScaleY="1.5"/>
+                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </ImageBrush.RelativeTransform>
+    </ImageBrush>
+    <ImageBrush x:Key="moveLastBrush" ImageSource="Images/Dark/move_last.png">
+        <ImageBrush.RelativeTransform>
+            <TransformGroup>
+                <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="1.5" ScaleY="1.5"/>
+                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </ImageBrush.RelativeTransform>
+    </ImageBrush>
+    <ImageBrush x:Key="loadListBrush" ImageSource="Images/Dark/load_list.png">
+        <ImageBrush.RelativeTransform>
+            <TransformGroup>
+                <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="1.5" ScaleY="1.5"/>
+                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </ImageBrush.RelativeTransform>
+    </ImageBrush>
+    <ImageBrush x:Key="saveListBrush" ImageSource="Images/Dark/save.png">
+        <ImageBrush.RelativeTransform>
+            <TransformGroup>
+                <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="1.5" ScaleY="1.5"/>
+                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </ImageBrush.RelativeTransform>
+    </ImageBrush>
+    <ImageBrush x:Key="removeFromListBrush" ImageSource="Images/Dark/remove.png">
+        <ImageBrush.RelativeTransform>
+            <TransformGroup>
+                <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="1.5" ScaleY="1.5"/>
+                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </ImageBrush.RelativeTransform>
+    </ImageBrush>
+
+    <ImageBrush x:Key="moreBrush" ImageSource="Images/Dark/more.png" Stretch="Uniform"/>
+    <ImageBrush x:Key="pauseBrush" ImageSource="Images/Dark/pause.png" Stretch="Uniform"/>
+    <ImageBrush x:Key="resumeStartBrush" ImageSource="Images/Dark/resume.png" Stretch="Uniform"/>
+    <ImageBrush x:Key="skipBrush" ImageSource="Images/Dark/skip.png" Stretch="Uniform"/>
+    <ImageBrush x:Key="cancelBrush" ImageSource="Images/Dark/cancel_zoom.png" Stretch="Uniform"/>
+
+
+    <!--Microsoft Brushes-->
+    <LinearGradientBrush x:Key="NormalBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientBrush.GradientStops>
+            <GradientStopCollection>
+                <GradientStop Color="White" Offset="0.0"/>
+                <GradientStop Color="White" Offset="1.0"/>
+            </GradientStopCollection>
+        </GradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="DarkBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientBrush.GradientStops>
+            <GradientStopCollection>
+                <GradientStop Color="AliceBlue" Offset="0.0"/>
+                <GradientStop Color="LightBlue" Offset="1.0"/>
+            </GradientStopCollection>
+        </GradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="LightBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientBrush.GradientStops>
+            <GradientStopCollection>
+                <GradientStop Color="AliceBlue" Offset="0.0"/>
+                <GradientStop Color="White" Offset="1.0"/>
+            </GradientStopCollection>
+        </GradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="PressedBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientBrush.GradientStops>
+            <GradientStopCollection>
+                <GradientStop Color="White" Offset="0.0"/>
+                <GradientStop Color="AliceBlue" Offset="0.1"/>
+                <GradientStop Color="Blue" Offset="0.9"/>
+                <GradientStop Color="DarkBlue" Offset="1.0"/>
+            </GradientStopCollection>
+        </GradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="DisabledForegroundBrush" Color="Yellow" />
+
+    <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="Red" />
+
+    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="White" />
+
+    <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="Green" />
+
+    <!-- Miscellaneous Brushes -->
+    <SolidColorBrush x:Key="GlyphBrush" Color="Black" />
+
+    <SolidColorBrush x:Key="LightColorBrush" Color="Red" />
+
+
+</ResourceDictionary>

@@ -1,0 +1,175 @@
+﻿<Window x:Class="NeathCopy.UsedWindows.ConfigurationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Name="configWnd"
+        xmlns:local="clr-namespace:NeathCopy.UsedWindows" MinHeight="380" MinWidth="480" Loaded="Window_Loaded" Closing="configWnd_Closing"
+        mc:Ignorable="d" Style="{DynamicResource UsedWindowStyle}" SizeToContent="WidthAndHeight"  WindowStartupLocation="CenterOwner"
+        Title="ConfigurationWindow" Icon="/NeathCopy;component/Brushes/Images/Light/settings.png">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Menu VerticalAlignment="Top" Margin="0,2,0,0" Background="{DynamicResource MenuBackground}">
+            <MenuItem Header="{DynamicResource t59}" Name="fileMenu"/>
+            <MenuItem Header="{DynamicResource t60}" Name="toolsMenu"/>
+        </Menu>
+        <TabControl Grid.Row="1" Margin="5">
+            <TabItem Header="{DynamicResource t97}" >
+                <StackPanel Orientation="Vertical" Margin="10" Background="{DynamicResource ControlBackgroundBrush}">
+                    <StackPanel Orientation="Horizontal">
+                        <GroupBox Header="{DynamicResource t61}">
+                            <StackPanel Margin="3">
+                                <RadioButton Margin="0,3,0,0" Name="addToFirsth_rb" Checked="addToFirsth_rb_Checked"  Content="{DynamicResource t62}"/>
+                                <RadioButton Margin="0,3,0,0" Name="addToLast_rb" Content="{DynamicResource t63}" Checked="addToLast_rb_Checked"/>
+                                <RadioButton Margin="0,3,0,0" Name="add_SameDestiny_rb"  Content="{DynamicResource t64}" Checked="add_SameDestiny_rb_Checked" />
+                                <RadioButton Margin="0,3,0,0" Name="add_SameVolumen_rb"   Content="{DynamicResource t65}" Checked="add_SameVolumen_rb_Checked"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Margin="5,0,0,0" Header="{DynamicResource t66}">
+                            <StackPanel Margin="3">
+                                <RadioButton Margin="0,3,0,0" Name="sob_AutomatlyStart_rb" Checked="sob_AutomatlyStart_rb_Checked"  Content="{DynamicResource t67}" />
+                                <RadioButton Margin="0,3,0,0" Name="sob_WaitInQueve_rb" Checked="sob_WaitInQueve_rb_Checked"  Content="{DynamicResource t68}"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                    <Separator/>
+                    <GroupBox Header="{DynamicResource t69}" HorizontalAlignment="Left">
+                        <StackPanel Margin="3" Orientation="Horizontal">
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource t70}"/>
+                                <ComboBox Name="copyEngine_cb" SelectionChanged="copyEngine_cb_SelectionChanged" Background="Transparent" Width="209"></ComboBox>
+                            </StackPanel>
+                            <Separator Width="30" Background="Transparent"/>
+                            <StackPanel >
+                                <TextBlock Text="{DynamicResource t71}"/>
+                                <TextBox Width="105"  Name="bufferSize_textBox" HorizontalAlignment="Left" TextAlignment="Right" TextChanged="bufferSize_textBox_TextChanged"
+                                         
+                                         />
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    <Separator/>
+                    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Height="90">
+                        <GroupBox Header="{DynamicResource t72}" >
+                            <StackPanel Margin="3">
+                                <CheckBox Margin="0,3,0,0" Name="ps_affter_ADD_DATA_cb"  Content="{DynamicResource t73}" HorizontalAlignment="Left" Click="ps_affter_ADD_DATA_cb_Click"/>
+                                <CheckBox Margin="0,3,0,0" Name="ps_affter_Finish_cb"  Content="{DynamicResource t74}" HorizontalAlignment="Left" Click="ps_affter_Finish_cb_Click"/>
+                                <CheckBox Margin="0,3,0,0" Name="ps_When_Cancel_cb"  Content="{DynamicResource t75}" HorizontalAlignment="Left" Click="ps_When_Cancel_cb_Click"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Margin="5,0,0,0" Header="{DynamicResource t76}">
+                            <StackPanel Margin="3">
+                                <RadioButton Margin="0,3,0,0" Name="ancb_All_In_One_rb" Checked="ancb_All_In_One_rb_Checked"  Content="{DynamicResource t77}"/>
+                                <RadioButton Margin="0,3,0,0" Name="ancb_Use_Separate_Windos_rb" Checked="ancb_Use_Separate_Windos_rb_Checked"  Content="{DynamicResource t78}" />
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                    <Separator/>
+                    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Height="90">
+                        <GroupBox Margin="5,0,0,0" Header="{DynamicResource t117}">
+                            <StackPanel Margin="3,3,30,3">
+                                <RadioButton Margin="0,3,0,0" Name="closeAffterError_rb" Checked="closeAffterError_rb_Checked" Content="{DynamicResource t118}"/>
+                                <RadioButton Margin="0,3,0,0" Name="keepAffterError_rb" Checked="keepAffterError_rb_Checked"  Content="{DynamicResource t119}" />
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="{DynamicResource t79}" >
+                <StackPanel Orientation="Vertical" Background="{DynamicResource ControlBackgroundBrush}">
+                    <GroupBox Header="{DynamicResource t80}">
+                        <StackPanel  Orientation="Horizontal">
+                            <Label Content="{DynamicResource t81}" />
+                            <ComboBox Name="language_cb" SelectionChanged="language_cb_SelectionChanged" Width="160"  Height="23" SelectedIndex="0" Margin="3,0,0,0"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="{DynamicResource t82}" Margin="0,3,0,0">
+                        <Canvas Margin="0" Height="130">
+                            <StackPanel Canvas.Top="13" Canvas.Left="0">
+                                <StackPanel Orientation="Horizontal" Grid.Row="0" Height="23">
+                                    <TextBlock Text="{DynamicResource t83}" Width="130"/>
+                                    <ComboBox Width="200" SelectionChanged="theme_cb_SelectionChanged"  Name="theme_cb"  SelectedIndex="0"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Grid.Row="1" Height="23" Margin="0,5,0,5">
+                                    <TextBlock Text="{DynamicResource t84}" Width="130"/>
+                                    <ComboBox Width="200" SelectionChanged="skins_cb_SelectionChanged"  Name="skins_cb"  SelectedIndex="0"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Grid.Row="2" Height="23">
+                                    <TextBlock Text="{DynamicResource t85}" Width="130"/>
+                                    <ComboBox Width="200" SelectionChanged="brushes_cb_SelectionChanged"  Name="brushes_cb"  SelectedIndex="0"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Grid.Row="2" Height="23" Margin="0,5,0,5">
+                                    <TextBlock Text="{DynamicResource t86}" Width="130"/>
+                                    <ComboBox Width="200" SelectionChanged="font_cb_SelectionChanged"  SelectedIndex="0" Name="font_cb" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Canvas>
+                    </GroupBox>
+                    <GroupBox Header="{DynamicResource t87}">
+                        <Grid>
+                            <Control Margin="-10,-12,-10,-10" Name="skinControl" Width="409" Style="{DynamicResource VisualCopyStyle}" RenderTransformOrigin="0.5,0.5" >
+                                <Control.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="0.7" ScaleY="0.7"/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Control.RenderTransform>
+                            </Control>
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="{DynamicResource t102}">
+                <GroupBox Margin="10" Header="{DynamicResource t107}">
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Content="{DynamicResource t103}"/>
+                        <TextBox Name="updateTime_tb" TextChanged="updateTime_tb_TextChanged" Grid.Column="1" Width="60" Margin="3"/>
+
+                      
+                    </Grid>
+                </GroupBox>
+            </TabItem>
+            <TabItem Header="{DynamicResource t94}">
+                <Grid Margin="10" Background="{DynamicResource ControlBackgroundBrush}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.Resources>
+                        <Style TargetType="TextBlock" x:Key="InfoLabelStyle">
+                            <Setter Property="Width" Value="80"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                            
+                        </Style>
+                    </Grid.Resources>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{DynamicResource t95}" Style="{StaticResource InfoLabelStyle}"/>
+                        <TextBlock Text="Néstor Longa Henández"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1">
+                        <TextBlock Text="{DynamicResource t96}" Style="{StaticResource InfoLabelStyle}" />
+                        <TextBlock Text="NeathCopy v3.8"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

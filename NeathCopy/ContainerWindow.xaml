@@ -1,0 +1,18 @@
+﻿<Window x:Class="NeathCopy.ContainerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NeathCopy"
+        mc:Ignorable="d"
+        Style="{DynamicResource ContainerStyle}"
+        Loaded="Window_Loaded"
+        Title="NeathCopy" Height="185.333" SizeToContent="WidthAndHeight"  MaxHeight="600" Icon="appicon.ico" >
+
+    <Grid >
+        <ListBox Name="listbox1" BorderBrush="Transparent" HorizontalAlignment="Center">
+            <!--<local:VisualCopy/>
+            <local:VisualCopy/>-->
+        </ListBox>
+    </Grid>
+</Window>

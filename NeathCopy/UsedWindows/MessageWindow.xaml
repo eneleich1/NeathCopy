@@ -1,0 +1,17 @@
+﻿<Window x:Class="NeathCopy.UsedWindows.MessageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NeathCopy.UsedWindows" Closing="Window_Closing"
+        mc:Ignorable="d" SizeToContent="WidthAndHeight" Topmost="True"  WindowStartupLocation="CenterOwner"
+        Title="MessageWindow" Style="{DynamicResource UsedWindowStyle}" Icon="/NeathCopy;component/Themes/Images/Windows8Images/info.png">
+    <Grid Background="{DynamicResource ControlBackgroundBrush}">
+        <StackPanel Margin="10">
+            <TextBox IsReadOnly="True" Foreground="{DynamicResource TextBrush}" Name="message_tb" Width="200" Height="49" Background="{DynamicResource ControlBackgroundBrush}"  TextWrapping="Wrap"/>
+            <Separator Height="5" Background="Transparent"/>
+            <Button Background="Transparent" FontWeight="Bold" Width="60" Height="23" Foreground="Blue" Name="ok_bt" 
+                    Content="{DynamicResource t54}"  Click="fit_button_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

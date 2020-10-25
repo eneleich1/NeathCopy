@@ -1,0 +1,31 @@
+﻿<Window x:Class="NeathCopy.UsedWindows.UserDropUIWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NeathCopy.UsedWindows" Closing="Window_Closing"
+        mc:Ignorable="d" SizeToContent="WidthAndHeight" Topmost="True"  WindowStartupLocation="CenterOwner"
+        Title="UserDropUIWindow"  Style="{DynamicResource UsedWindowStyle}" Icon="/NeathCopy;component/Themes/Images/Windows8Images/info.png">
+    <Grid Background="{DynamicResource ControlBackgroundBrush}">
+        
+        <Grid Margin="20"  HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" >
+                <ComboBox Name="option_cb" FontWeight="Bold" VerticalAlignment="Center" Width="80" SelectedIndex="0">
+                    <ComboBoxItem Content="{DynamicResource t55}"/>
+                    <ComboBoxItem Content="{DynamicResource t56}"/>
+                </ComboBox>
+                <TextBox Name="tb1" Width="200" Margin="3,0,3,0" Foreground="{DynamicResource TextBrush}" Background="{DynamicResource ControlBackgroundBrush}"/>
+                <Button Background="Transparent" FontWeight="Bold" Name="browse_bt" Click="browse_bt_Click"  Margin="5,0,0,0" Width="25"   Content="..."/>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0" Height="23">
+                <Button Background="Transparent" Foreground="Blue" FontWeight="Bold" Content="{DynamicResource t57}" Name="ok_bt" Click="ok_bt_Click" Width="60" IsDefault="True"/>
+                <Button Background="Transparent" FontWeight="Bold" Content="{DynamicResource t58}" Name="cancel_bt" Click="cancel_bt_Click" Margin="20,0,0,0" Foreground="Red" Width="60" IsCancel="True"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
