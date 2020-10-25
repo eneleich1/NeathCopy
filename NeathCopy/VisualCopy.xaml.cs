@@ -785,7 +785,13 @@ namespace NeathCopy
                 }
 
                 //Transfer Log
-                double speed = displayInfo.ElapsedTime.AllMiliseconds == 0 ? NeathCopy.DiscoverdList.Size.Bytes : (NeathCopy.DiscoverdList.Size.Bytes) / (displayInfo.ElapsedTime.AllMiliseconds / 1000);
+                double speed = 0;
+                if (displayInfo.ElapsedTime.AllMiliseconds <1000)
+                    speed = NeathCopy.DiscoverdList.Size.Bytes;
+                else
+                    speed = (NeathCopy.DiscoverdList.Size.Bytes / displayInfo.ElapsedTime.AllMiliseconds)/1000d;
+
+
                 WriteTransferLog(
                 new List<string>
                     {
@@ -794,7 +800,9 @@ namespace NeathCopy
                         string.Format("BufferSize: {0}",((BufferFileCopier)NeathCopy.FileCopier).BufferSize),
                         string.Format("Request Operation: {0}",RequestInf.Operation),
                         string.Format("Destiny Folder: {0}", RequestInf==null?"Destiny Variable":RequestInf.Destiny),
-                        string.Format("Volumen Name: {0} [{1} Gb]",di==null?"Multiple Volumens":di.VolumeLabel,di==null?(object)"unknown":(object)(di.TotalSize/1024/1024/1024)),
+
+                        string.Format("Volumen Name: {0} [{1} Gb]",di==null?"Multiple Volumens":di.VolumeLabel,di==null?"unknown":new MySize(di.TotalSize).ToString()),
+
                         string.Format("Files: {0}", NeathCopy.DiscoverdList.Count),
                         string.Format("Size: {0}", NeathCopy.DiscoverdList.Size),
                         string.Format("Estimated Cost: {0} MN", cost),

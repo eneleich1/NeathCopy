@@ -498,7 +498,9 @@ namespace NeathCopy.Module2_Configuration
             {
                 //Animate the window or play sound
                 soundPlayer.SoundLocation = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, sound);
-                soundPlayer.Play();
+
+                if (File.Exists(soundPlayer.SoundLocation))
+                    soundPlayer.Play();
 
                 System.Threading.Thread.Sleep(850);
             }

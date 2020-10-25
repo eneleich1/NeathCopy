@@ -39,6 +39,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_473C9F060FDD4F8FB61920811E1FCE0C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5779E98353034E359FF6B9817639F2A8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -51,30 +57,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7A6C637FF92942EBA8D6D1974ED240B8"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_89A6E51CFF2344ABAAAFE01D5DB4591A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_ACC476E7BF954FF3AFD50D1BC5C0B72A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_CCF70AFE385744429C8CE6F608FDE755"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_DA4B616A8B420CC6001DBE4EF39DB1DA"
         "OwnerKey" = "8:_5779E98353034E359FF6B9817639F2A8"
         "MsmSig" = "8:_UNDEFINED"
@@ -82,6 +64,24 @@
         "Entry"
         {
         "MsmKey" = "8:_E254E7D95D6040E58CC06EC715CE062A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EE513ACC8EBC430CB683050C4B0379C1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FAD95E61F29D4200BD2579A444603EFE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FFE4B0FC2DB54864847219450AA48390"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -272,6 +272,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_473C9F060FDD4F8FB61920811E1FCE0C"
+            {
+            "SourcePath" = "8:..\\..\\Folders\\Publish\\Sounds\\cancell.wav"
+            "TargetName" = "8:cancell.wav"
+            "Tag" = "8:"
+            "Folder" = "8:_B8E6536DF35848D29093983CBC54D1DF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_66759E86A0CA1C350099E806DE1B626E"
             {
             "AssemblyRegister" = "3:1"
@@ -303,86 +323,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7A6C637FF92942EBA8D6D1974ED240B8"
-            {
-            "SourcePath" = "8:..\\..\\!!Folders\\Publish\\Sounds\\task finished.wav"
-            "TargetName" = "8:task finished.wav"
-            "Tag" = "8:"
-            "Folder" = "8:_B8E6536DF35848D29093983CBC54D1DF"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_89A6E51CFF2344ABAAAFE01D5DB4591A"
-            {
-            "SourcePath" = "8:..\\..\\!!Folders\\Publish\\FilesList.txt"
-            "TargetName" = "8:FilesList.txt"
-            "Tag" = "8:"
-            "Folder" = "8:_E6D68975E65344AC99ADFDEAC9CCD264"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ACC476E7BF954FF3AFD50D1BC5C0B72A"
-            {
-            "SourcePath" = "8:..\\..\\!!Folders\\Publish\\Sounds\\cancell.wav"
-            "TargetName" = "8:cancell.wav"
-            "Tag" = "8:"
-            "Folder" = "8:_B8E6536DF35848D29093983CBC54D1DF"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CCF70AFE385744429C8CE6F608FDE755"
-            {
-            "SourcePath" = "8:..\\..\\!!Folders\\Publish\\Sounds\\add data.wav"
-            "TargetName" = "8:add data.wav"
-            "Tag" = "8:"
-            "Folder" = "8:_B8E6536DF35848D29093983CBC54D1DF"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DA4B616A8B420CC6001DBE4EF39DB1DA"
             {
             "AssemblyRegister" = "3:1"
@@ -412,6 +352,66 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EE513ACC8EBC430CB683050C4B0379C1"
+            {
+            "SourcePath" = "8:..\\..\\Folders\\Publish\\Sounds\\add data.wav"
+            "TargetName" = "8:add data.wav"
+            "Tag" = "8:"
+            "Folder" = "8:_B8E6536DF35848D29093983CBC54D1DF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FAD95E61F29D4200BD2579A444603EFE"
+            {
+            "SourcePath" = "8:..\\..\\Folders\\Publish\\Sounds\\task finished.wav"
+            "TargetName" = "8:task finished.wav"
+            "Tag" = "8:"
+            "Folder" = "8:_B8E6536DF35848D29093983CBC54D1DF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FFE4B0FC2DB54864847219450AA48390"
+            {
+            "SourcePath" = "8:..\\..\\Folders\\Publish\\FilesList.txt"
+            "TargetName" = "8:FilesList.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_E6D68975E65344AC99ADFDEAC9CCD264"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
         }

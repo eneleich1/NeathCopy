@@ -17,7 +17,7 @@ using static NeathCopy.VisualCopy;
 
 namespace NeathCopy.ViewModels
 {
-    public class VisualCopyVM: INotifyPropertyChanged
+    public class VisualCopyVM : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -51,7 +51,7 @@ namespace NeathCopy.ViewModels
             Themes.ThemesManager.Manager.VisualCopySkingChanged += Manager_VisualCopySkingChanged;
 
             InitializeTimers();
-          
+
         }
 
         private void Manager_VisualCopySkingChanged(string skin)
@@ -392,122 +392,153 @@ namespace NeathCopy.ViewModels
         }
         public void UpdateSpeed()
         {
-            if (VisualCopy == null || VisualCopy.NeathCopy == null) return;
+            try
+            {
+                if (VisualCopy == null || VisualCopy.NeathCopy == null) return;
 
-            /*
-           * currenntCopySize -> elapsedTime
-           *     x            -> 1000 1 sec
-           */
-            if (elapsedTime.AllMiliseconds == 0) return;
+                /*
+               * currenntCopySize -> elapsedTime
+               *     x            -> 1000 1 sec
+               */
+                if (elapsedTime.AllMiliseconds == 0) return;
 
-            //Way 1
-            //totalBytesTransferred -> elapsed
-            //           x          -> 1000
-            // x = totalBytesTransferred * 1000/elapsed;
-            //double speed = (NeathCopy.TotalBytesTransferred * 1000) / elapsedTime;
+                //Way 1
+                //totalBytesTransferred -> elapsed
+                //           x          -> 1000
+                // x = totalBytesTransferred * 1000/elapsed;
+                //double speed = (NeathCopy.TotalBytesTransferred * 1000) / elapsedTime;
 
-            //Way 2
-            // ds -> UpdateSpeedInterval
-            // x -> 1000 ms
-            ds = VisualCopy.NeathCopy.TotalBytesTransferred - lastAmountSize;
-            lastAmountSize = VisualCopy.NeathCopy.TotalBytesTransferred;
+                //Way 2
+                // ds -> UpdateSpeedInterval
+                // x -> 1000 ms
+                ds = VisualCopy.NeathCopy.TotalBytesTransferred - lastAmountSize;
+                lastAmountSize = VisualCopy.NeathCopy.TotalBytesTransferred;
 
-            if (Configuration.Main.UpdateTimeInterval == 0) return;
-            Speed = (ds * 1000d) / Configuration.Main.UpdateTimeInterval;
+                if (Configuration.Main.UpdateTimeInterval == 0) return;
+                Speed = (ds * 1000d) / Configuration.Main.UpdateTimeInterval;
 
-            //Speed ProgressBar
-            if (MaxSpeed == 0) return;
-            if (MaxSpeed < Speed)
-                MaxSpeed = Speed;
-            double porcent = MaxSpeed == 0 ? 100 : Speed * 100 / MaxSpeed;
+                //Speed ProgressBar
+                if (MaxSpeed == 0) return;
+                if (MaxSpeed < Speed)
+                    MaxSpeed = Speed;
+                double porcent = MaxSpeed == 0 ? 100 : Speed * 100 / MaxSpeed;
 
-            if (porcent < 40)
-                SpeedBrush = Brushes.Red;
-            else if (porcent < 70)
-                SpeedBrush = Brushes.Orange;
-            else SpeedBrush = Brushes.Green;
+                if (porcent < 40)
+                    SpeedBrush = Brushes.Red;
+                else if (porcent < 70)
+                    SpeedBrush = Brushes.Orange;
+                else SpeedBrush = Brushes.Green;
+            }
+            catch (Exception) { }
         }
         public void UpdateCurrentFileSizeTransferred()
         {
-            //Total size trandferred of CurrentFile
-            if (VisualCopy != null && VisualCopy.NeathCopy.CurrentFile != null)
+            try
             {
-                CurrentFileSizeTransferred = string.Format("{0} of {1}"
-                    , new MySize(VisualCopy.NeathCopy.CurrentFileBytesTransferred)
-                    , new MySize(VisualCopy.NeathCopy.CurrentFile.Size));
+                //Total size trandferred of CurrentFile
+                if (VisualCopy != null && VisualCopy.NeathCopy.CurrentFile != null)
+                {
+                    CurrentFileSizeTransferred = string.Format("{0} of {1}"
+                        , new MySize(VisualCopy.NeathCopy.CurrentFileBytesTransferred)
+                        , new MySize(VisualCopy.NeathCopy.CurrentFile.Size));
+                }
             }
+            catch (Exception) { }
         }
         public void UpdateTotalSizeTransferred()
         {
-            if (VisualCopy == null) return;
+            try
+            {
+                if (VisualCopy == null) return;
 
-            //Total size transferred
-            OverallSizeTransferred = string.Format("{0} of {1}"
-                , new MySize(VisualCopy.NeathCopy.TotalBytesTransferred)
-                , VisualCopy.NeathCopy.DiscoverdList.Size);
+                //Total size transferred
+                OverallSizeTransferred = string.Format("{0} of {1}"
+                    , new MySize(VisualCopy.NeathCopy.TotalBytesTransferred)
+                    , VisualCopy.NeathCopy.DiscoverdList.Size);
+            }
+            catch (Exception) { }
         }
         public void UpdateTotalsFilesCopieds()
         {
-            if (VisualCopy == null || VisualCopy.NeathCopy.DiscoverdList == null) return;
+            try
+            {
+                if (VisualCopy == null || VisualCopy.NeathCopy.DiscoverdList == null) return;
 
-            //Total of Files Copieds
-            FilesCount = string.Format("{0} of {1}"
-                , Math.Min(VisualCopy.NeathCopy.CopiedsFiles + 1, VisualCopy.NeathCopy.DiscoverdList.Count)
-                , VisualCopy.NeathCopy.DiscoverdList.Count);
+                //Total of Files Copieds
+                FilesCount = string.Format("{0} of {1}"
+                    , Math.Min(VisualCopy.NeathCopy.CopiedsFiles + 1, VisualCopy.NeathCopy.DiscoverdList.Count)
+                    , VisualCopy.NeathCopy.DiscoverdList.Count);
+            }
+            catch (Exception) { }
 
         }
         public void UpdateProgressBarPorcents()
         {
-            if (VisualCopy == null || VisualCopy.NeathCopy == null) return;
-
-            //Single Porcent ProgressBar
-            if (VisualCopy.NeathCopy.CurrentFile != null && VisualCopy.NeathCopy.CurrentFile.Size > 0)
+            try
             {
-                SinglePorcent = (VisualCopy.NeathCopy.CurrentFileBytesTransferred * 100f) / VisualCopy.NeathCopy.CurrentFile.Size;
-                //porcent = Math.Round(porcent, 2);
+                if (VisualCopy == null || VisualCopy.NeathCopy == null) return;
 
-                if (SinglePorcent > 100) SinglePorcent = 100;
-            }
+                //Single Porcent ProgressBar
+                if (VisualCopy.NeathCopy.CurrentFile != null && VisualCopy.NeathCopy.CurrentFile.Size > 0)
+                {
+                    SinglePorcent = (VisualCopy.NeathCopy.CurrentFileBytesTransferred * 100f) / VisualCopy.NeathCopy.CurrentFile.Size;
+                    //porcent = Math.Round(porcent, 2);
 
-            //Overall Porcent ProgressBar
-            if (VisualCopy.NeathCopy.DiscoverdList.Size > 0)
-            {
-                OverallPorcent = (VisualCopy.NeathCopy.TotalBytesTransferred * 100f) / VisualCopy.NeathCopy.DiscoverdList.Size.Bytes;
+                    if (SinglePorcent > 100) SinglePorcent = 100;
+                }
+
+                //Overall Porcent ProgressBar
+                if (VisualCopy.NeathCopy.DiscoverdList.Size > 0)
+                {
+                    OverallPorcent = (VisualCopy.NeathCopy.TotalBytesTransferred * 100f) / VisualCopy.NeathCopy.DiscoverdList.Size.Bytes;
+                }
             }
+            catch (Exception) { }
         }
         public void UpdateRemainingTime()
         {
-            leftToCopy = VisualCopy.NeathCopy.DiscoverdList.Size.Bytes - VisualCopy.NeathCopy.TotalBytesTransferred;
+            try
+            {
+                leftToCopy = VisualCopy.NeathCopy.DiscoverdList.Size.Bytes - VisualCopy.NeathCopy.TotalBytesTransferred;
 
-            /*
-             * currenntCopySize -> elapsedTime
-             *     leftToCopy   ->  x
-             */
+                /*
+                 * currenntCopySize -> elapsedTime
+                 *     leftToCopy   ->  x
+                 */
 
-            if (VisualCopy.NeathCopy.TotalBytesTransferred > 0)
-                RemainingTime = new Time((elapsedTime.AllMiliseconds * leftToCopy) / VisualCopy.NeathCopy.TotalBytesTransferred);
-
+                if (VisualCopy.NeathCopy.TotalBytesTransferred > 0)
+                    RemainingTime = new Time((elapsedTime.AllMiliseconds * leftToCopy) / VisualCopy.NeathCopy.TotalBytesTransferred);
+            }
+            catch (Exception) { }
         }
         public void UpdateElapsedTime()
         {
-            if (VisualCopy == null || VisualCopy.NeathCopy == null) return;
+            try
+            {
+                if (VisualCopy == null || VisualCopy.NeathCopy == null) return;
 
-            elapsedTime.AllMiliseconds += Configuration.Main.UpdateTimeInterval;
+                elapsedTime.AllMiliseconds += Configuration.Main.UpdateTimeInterval;
 
-            ElapsedTime = new Time(elapsedTime.AllMiliseconds);
+                ElapsedTime = new Time(elapsedTime.AllMiliseconds);
+            }
+            catch (Exception) { }
         }
         public void UpdateDriverSizeProgressBar()
         {
-            if (VisualCopy == null || VisualCopy.driveInfo == null || VisualCopy.driveInfo.TotalSize==0) return;
-
             try
             {
-                //Update DriveInfo
-                VisualCopy.driveInfo = new System.IO.DriveInfo(VisualCopy.driveInfo.Name);
+                if (VisualCopy == null || VisualCopy.driveInfo == null || VisualCopy.driveInfo.TotalSize == 0) return;
 
-                //Driver Size ProgressBar
-                DriverSizePorcent = 100 - (VisualCopy.driveInfo.TotalFreeSpace * 100f) / VisualCopy.driveInfo.TotalSize;
-                DriverSizeBrush = driverSizePorcent > 75 ? Brushes.Red : Brushes.Green;
+                try
+                {
+                    //Update DriveInfo
+                    VisualCopy.driveInfo = new System.IO.DriveInfo(VisualCopy.driveInfo.Name);
+
+                    //Driver Size ProgressBar
+                    DriverSizePorcent = 100 - (VisualCopy.driveInfo.TotalFreeSpace * 100f) / VisualCopy.driveInfo.TotalSize;
+                    DriverSizeBrush = driverSizePorcent > 75 ? Brushes.Red : Brushes.Green;
+                }
+                catch (Exception) { }
             }
             catch (Exception) { }
 
@@ -524,7 +555,7 @@ namespace NeathCopy.ViewModels
         {
             UpdateInqueveNo();
             UpdateToAndDevice();
-            
+
             UpdateCurrentFileNameAndFrom();
             UpdateCurrentFileSizeTransferred();
             UpdateProgressBarPorcents();
@@ -538,7 +569,7 @@ namespace NeathCopy.ViewModels
                 UpdateElapsedTime();
                 UpdateRemainingTime();
             }
-            else if(VisualCopy.State== VisualCopyState.Discovering)
+            else if (VisualCopy.State == VisualCopyState.Discovering)
             {
                 UpdateElapsedTime();
                 UpdateRemainingTime();
@@ -548,7 +579,7 @@ namespace NeathCopy.ViewModels
         #endregion
 
         #region Timers
-       
+
         long lastAmountSize = 0;
         double ds;// speed, maxSpeed;
         long leftToCopy;
