@@ -33,6 +33,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_42C70FBE74224BFC85B087A3EC1C01A6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6F546B74E6854C3482054B6F40EB4BF7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -46,12 +52,6 @@
         "Entry"
         {
         "MsmKey" = "8:_780A882A11DB498F919350DEFAD2F177"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8E821A86EFB940E1B719EC34502BD921"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -163,7 +163,7 @@
             {
             "Enabled" = "11:TRUE"
             "PromptEnabled" = "11:TRUE"
-            "PrerequisitesLocation" = "2:2"
+            "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
                 "Items"
@@ -260,6 +260,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_42C70FBE74224BFC85B087A3EC1C01A6"
+            {
+            "SourcePath" = "8:..\\..\\Folders\\Publish\\FilesList.txt"
+            "TargetName" = "8:FilesList.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_BD22527711874420AD3E748C2AA5B10E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_751F179D387944E186C0DC8612470236"
             {
             "SourcePath" = "8:..\\..\\Folders\\Publish\\Sounds\\task finished.wav"
@@ -286,26 +306,6 @@
             "TargetName" = "8:add data.wav"
             "Tag" = "8:"
             "Folder" = "8:_3B989A7CB5E84FC1B69F8AAB846A509B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8E821A86EFB940E1B719EC34502BD921"
-            {
-            "SourcePath" = "8:..\\..\\!!Folders\\Publish\\FilesList.txt"
-            "TargetName" = "8:FilesList.txt"
-            "Tag" = "8:"
-            "Folder" = "8:_BD22527711874420AD3E748C2AA5B10E"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -716,7 +716,7 @@
                                                     "Condition" = "8:"
                                                     "Transitive" = "11:FALSE"
                                                     "ValueTypes" = "3:1"
-                                                    "Value" = "8:Dark.xaml"
+                                                    "Value" = "8:Light.xaml"
                                                     }
                                                     "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_87DAD38C09234204AF8B2C127827DF04"
                                                     {

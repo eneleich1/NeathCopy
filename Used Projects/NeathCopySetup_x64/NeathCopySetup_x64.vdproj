@@ -164,7 +164,7 @@
             {
             "Enabled" = "11:TRUE"
             "PromptEnabled" = "11:TRUE"
-            "PrerequisitesLocation" = "2:2"
+            "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
                 "Items"
@@ -504,7 +504,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NeathCopy"
         "ProductCode" = "8:{CFADC5B1-A076-4072-83A1-F3C22E6EE4B9}"
-        "PackageCode" = "8:{36D97494-1CDE-4C74-B145-1CA53B061D2C}"
+        "PackageCode" = "8:{B70CE5DC-E02C-4233-A67C-9B3A808FD415}"
         "UpgradeCode" = "8:{8853671A-AB8C-4516-8A1B-B4466FA4EDED}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -773,7 +773,7 @@
                                                     "Condition" = "8:"
                                                     "Transitive" = "11:FALSE"
                                                     "ValueTypes" = "3:1"
-                                                    "Value" = "8:Dark.xaml"
+                                                    "Value" = "8:Light.xaml"
                                                     }
                                                 }
                                             }
