@@ -36,10 +36,14 @@ namespace NeathCopy.UsedWindows
             InitializeComponent();
 
             AddDataRbts = new Dictionary<string, RadioButton>();
-            AddDataRbts.Add("SameDestiny_Process_ADD_DATA", add_SameDestiny_rb);
-            AddDataRbts.Add("SameVolumen_Process_ADD_DATA", add_SameVolumen_rb);
-            AddDataRbts.Add("AddToFirsth_Process_ADD_DATA", addToFirsth_rb);
-            AddDataRbts.Add("AddToLast_Process_ADD_DATA", addToLast_rb);
+            //AddDataRbts.Add("SameDestiny_Process_ADD_DATA", add_SameDestiny_rb);
+            //AddDataRbts.Add("SameVolumen_Process_ADD_DATA", add_SameVolumen_rb);
+            //AddDataRbts.Add("AddToFirsth_Process_ADD_DATA", addToFirsth_rb);
+            //AddDataRbts.Add("AddToLast_Process_ADD_DATA", addToLast_rb);
+            AddDataRbts.Add("AddToSameDestiny", add_SameDestiny_rb);
+            AddDataRbts.Add("AddToSameVolumen", add_SameVolumen_rb);
+            AddDataRbts.Add("AddToFirsth", addToFirsth_rb);
+            AddDataRbts.Add("AddToLast", addToLast_rb);
 
             HowStartRbts = new Dictionary<string, RadioButton>();
             HowStartRbts.Add("StartOperation_SetRunningState", sob_AutomatlyStart_rb);
@@ -72,8 +76,9 @@ namespace NeathCopy.UsedWindows
             font_cb.SelectedItem = Configuration.Main.Font;
             language_cb.SelectedItem = Configuration.Main.Language;
 
-            //Add Dara
-            AddDataRbts[Configuration.Main.Process_ADD_DATA.Method.Name].IsChecked = true;
+            //Add Data
+            //AddDataRbts[Configuration.Main.Process_ADD_DATA.Method.Name].IsChecked = true;
+            AddDataRbts[Configuration.Main.addDataBehaviour.Name].IsChecked = true;
 
             //CopyEngine copyEngine_cb.ItemsSource = Configuration.FileCopiers;
             copyEngine_cb.ItemsSource = Configuration.FileCopiers.Values;
@@ -105,19 +110,26 @@ namespace NeathCopy.UsedWindows
         #region Add Data
         private void addToFirsth_rb_Checked(object sender, RoutedEventArgs e)
         {
-            Configuration.Main.Process_ADD_DATA = Configuration.Main.AddToFirsth_Process_ADD_DATA;
+            //Configuration.Main.Process_ADD_DATA = Configuration.Main.AddToFirsth_Process_ADD_DATA;
+            Configuration.Main.addDataBehaviour = Configuration.addDataFac.GetBehaviour("AddToFirsth");
         }
         private void add_SameDestiny_rb_Checked(object sender, RoutedEventArgs e)
         {
-            Configuration.Main.Process_ADD_DATA = Configuration.Main.SameDestiny_Process_ADD_DATA;
+            //Configuration.Main.Process_ADD_DATA = Configuration.Main.SameDestiny_Process_ADD_DATA;
+            Configuration.Main.addDataBehaviour = Configuration.addDataFac.GetBehaviour("AddToSameDestiny");
+
         }
         private void add_SameVolumen_rb_Checked(object sender, RoutedEventArgs e)
         {
-            Configuration.Main.Process_ADD_DATA = Configuration.Main.SameVolumen_Process_ADD_DATA;
+            //Configuration.Main.Process_ADD_DATA = Configuration.Main.SameVolumen_Process_ADD_DATA;
+            Configuration.Main.addDataBehaviour = Configuration.addDataFac.GetBehaviour("AddToSameVolumen");
+
         }
         private void addToLast_rb_Checked(object sender, RoutedEventArgs e)
         {
-            Configuration.Main.Process_ADD_DATA = Configuration.Main.AddToLast_Process_ADD_DATA;
+            //Configuration.Main.Process_ADD_DATA = Configuration.Main.AddToLast_Process_ADD_DATA;
+            Configuration.Main.addDataBehaviour = Configuration.addDataFac.GetBehaviour("AddToLast");
+
         }
 
         #endregion

@@ -116,7 +116,7 @@ FIXEDS AND UPGRADES DateFormat(English) 7-16-2018,7-29-2018
 	Tasks
 -------------------------------------------------------------------------
 1- Create a Tool wich allow edit FilesList.
-2- Make proecess porcent display in windows taskbar
+2- Make proccess porcent display in windows taskbar
 3- (x)Imlpement dynamic buffer FileCopier *
 4- Use clipboard in shell extension
 5- Fix pause buton brush

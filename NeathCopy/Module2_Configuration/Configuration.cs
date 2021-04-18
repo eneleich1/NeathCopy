@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
+using NeathCopy.Module2_Configuration.AddDataBehaviour;
 
 namespace NeathCopy.Module2_Configuration
 {
@@ -207,7 +208,6 @@ namespace NeathCopy.Module2_Configuration
 
         public Dictionary<string, Action> AffterErrorAction_WAYS;
         public Dictionary<string, Func<VisualCopy>> AddNewVisualCopy_WAYS;
-        public Dictionary<string, Action<IEnumerable<VisualCopy>>> Process_ADD_DATA_WAYS;
         public Dictionary<string, Action<VisualCopy, RequestInfo>> SetRunningState_WAYS;
         public Configuration()
         {
@@ -221,12 +221,6 @@ namespace NeathCopy.Module2_Configuration
             AffterErrorAction_WAYS = new Dictionary<string, Action>();
             AffterErrorAction_WAYS.Add("Keep_AffterErrorAction", Keep_AffterErrorAction);
             AffterErrorAction_WAYS.Add("Close_AffterErrorAction", Close_AffterErrorAction);
-
-            Process_ADD_DATA_WAYS = new Dictionary<string, Action<IEnumerable<VisualCopy>>>();
-            Process_ADD_DATA_WAYS.Add("AddToLast_Process_ADD_DATA", AddToLast_Process_ADD_DATA);
-            Process_ADD_DATA_WAYS.Add("AddToFirsth_Process_ADD_DATA", AddToFirsth_Process_ADD_DATA);
-            Process_ADD_DATA_WAYS.Add("SameDestiny_Process_ADD_DATA", SameDestiny_Process_ADD_DATA);
-            Process_ADD_DATA_WAYS.Add("SameVolumen_Process_ADD_DATA", SameVolumen_Process_ADD_DATA);
 
             SetRunningState_WAYS = new Dictionary<string, Action<VisualCopy, RequestInfo>>();
             SetRunningState_WAYS.Add("StartOperation_SetRunningState", StartOperation_SetRunningState);
@@ -312,142 +306,9 @@ namespace NeathCopy.Module2_Configuration
 
         #region Process ADD_DATA_MESSAGE Behavior
 
-        Action<IEnumerable<VisualCopy>> addData;
-        public Action<IEnumerable<VisualCopy>> Process_ADD_DATA
-        {
-            get { return addData; }
-            set
-            {
-                addData = value;
-                RegisterAccess.Acces.SetConfigurationValue("Process_ADD_DATA", addData.Method.Name);
-            }
-        }
+        public static AddDataFactory addDataFac = new AddDataFactory();
+        public AddData addDataBehaviour;
 
-        public void AddToLast_Process_ADD_DATA(IEnumerable<VisualCopy> VisualsCopys)
-        {
-            var requestInfo = RegisterAccess.Acces.GetLastCopyRequestInfo();
-
-            var first = VisualsCopys.First();
-            if (first.RequestInf.Content == RquestContent.None)
-            {
-                if (first.State == VisualCopy.VisualCopyState.Finished) return;
-                SetRunningState(first, requestInfo);
-            }
-            else
-            {
-                var active = VisualsCopys.Last();
-                if (active.State == VisualCopy.VisualCopyState.Finished) return;
-
-                //If operations mach, them AddToCopy.
-                if (active.RequestInf.Operation == requestInfo.Operation)
-                {
-                    //Add items to only active CopyHandle in BackGround
-                    Task.Factory.StartNew(() =>
-                    {
-                        active.AddData(requestInfo,false);
-                    });
-                }
-                else
-                {
-                    SetRunningState(VisualsCopysHandler.MainContainer.AddNew(), requestInfo);
-                }
-            }
-
-            PLaySoundAfterOperation(PlaySound_After_ADD_DATA, AddData_Sound);
-
-        }
-        public void AddToFirsth_Process_ADD_DATA(IEnumerable<VisualCopy> VisualsCopys)
-        {
-            var requestInfo = RegisterAccess.Acces.GetLastCopyRequestInfo();
-
-            var first = VisualsCopys.First();
-            if (first.RequestInf.Content == RquestContent.None)
-            {
-                if (first.State == VisualCopy.VisualCopyState.Finished) return;
-                SetRunningState(first, requestInfo);
-            }
-            else
-            {
-                var active = VisualsCopys.First();
-                if (active.State == VisualCopy.VisualCopyState.Finished) return;
-
-                //If operations mach, them AddToCopy.
-                if (active.RequestInf.Operation == requestInfo.Operation)
-                {
-                    //Add items to only active CopyHandle in BackGround
-                    Task.Factory.StartNew(() =>
-                    {
-                        active.AddData(requestInfo,false);
-                    });
-                }
-                else
-                {
-                    SetRunningState(VisualsCopysHandler.MainContainer.AddNew(), requestInfo);
-                }
-            }
-
-            PLaySoundAfterOperation(PlaySound_After_ADD_DATA, AddData_Sound);
-
-        }
-        public void SameDestiny_Process_ADD_DATA(IEnumerable<VisualCopy> VisualsCopys)
-        {
-            var info = RegisterAccess.Acces.GetLastCopyRequestInfo();
-
-            var first = VisualsCopys.First();
-            if (first.RequestInf.Content == RquestContent.None)
-            {
-                if (first.State == VisualCopy.VisualCopyState.Finished) return;
-                SetRunningState(first, info);
-            }
-            else
-            {
-                var visuals = VisualsCopys.Where(v => v.RequestInf.Destiny == info.Destiny 
-                && v.RequestInf.Operation == info.Operation && v.State!= VisualCopy.VisualCopyState.Finished);
-
-                if (visuals != null && visuals.Count() > 0)
-                {
-                    //Add items to only active CopyHandle in Background
-                    Task.Factory.StartNew(() =>
-                    {
-                        visuals.First().AddData(info,false);
-                    });
-                }
-                else
-                {
-                    SetRunningState(AddNewVisualCopy(), info);
-                }
-            }
-
-            PLaySoundAfterOperation(PlaySound_After_ADD_DATA, AddData_Sound);
-        }
-        public void SameVolumen_Process_ADD_DATA(IEnumerable<VisualCopy> VisualsCopys)
-        {
-            var info = RegisterAccess.Acces.GetLastCopyRequestInfo();
-
-            var first = VisualsCopys.First();
-            if (first.RequestInf.Content == RquestContent.None)
-            {
-                if (first.State == VisualCopy.VisualCopyState.Finished) return;
-                SetRunningState(first, info);
-            }
-            else
-            {
-                var visuals = VisualsCopys.Where(v => Path.GetPathRoot(v.RequestInf.Destiny) == Path.GetPathRoot(info.Destiny) 
-                && v.RequestInf.Operation == info.Operation && v.State!= VisualCopy.VisualCopyState.Finished);
-
-                if (visuals != null && visuals.Count() > 0)
-                {
-                    //Add items to only active CopyHandle in Background
-                    visuals.First().AddData(info, false);
-                }
-                else
-                {
-                    SetRunningState(AddNewVisualCopy(), info);
-                }
-            }
-
-            PLaySoundAfterOperation(PlaySound_After_ADD_DATA, AddData_Sound);
-        }
 
         #endregion
 
@@ -557,8 +418,11 @@ namespace NeathCopy.Module2_Configuration
         {
             var config = new Configuration();
 
+            //config.Process_ADD_DATA = config.Process_ADD_DATA_WAYS["SameVolumen_Process_ADD_DATA"];
+            config.addDataBehaviour = Configuration.addDataFac.GetDefaultBehaviour();
+
+
             config.AddNewVisualCopy = config.AddNewVisualCopy_WAYS["SeparateWindows_AddNewVC"];
-            config.Process_ADD_DATA = config.Process_ADD_DATA_WAYS["SameVolumen_Process_ADD_DATA"];
             config.SetRunningState = config.SetRunningState_WAYS["StartOperation_SetRunningState"];
             config.AffterErrorAction = config.AffterErrorAction_WAYS["Keep_AffterErrorAction"];
 
@@ -597,9 +461,9 @@ namespace NeathCopy.Module2_Configuration
                 action = RegisterAccess.Acces.GetConfigurationValue("AffterErrorAction");
                 config.AffterErrorAction = config.AffterErrorAction_WAYS[action];
 
+                var addDataName = RegisterAccess.Acces.GetConfigurationValue("Process_ADD_DATA");
+                config.addDataBehaviour = Configuration.addDataFac.GetBehaviour(addDataName);
 
-                action = RegisterAccess.Acces.GetConfigurationValue("Process_ADD_DATA");
-                config.Process_ADD_DATA = config.Process_ADD_DATA_WAYS[action];
 
                 action = RegisterAccess.Acces.GetConfigurationValue("SetRunningState");
                 config.SetRunningState = config.SetRunningState_WAYS[action];

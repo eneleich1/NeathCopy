@@ -1,0 +1,8 @@
+
+----------------------------
+4-16-2021
+----------------------------
+Problems
+1- Current Settings option: Use a functions dictionary of implemented methods to allow user seleted option
+   Problem: If I want to add new specific behavior I must create a new method and add in to the dictionary
+   Solution: Use Factory Dessing Patter

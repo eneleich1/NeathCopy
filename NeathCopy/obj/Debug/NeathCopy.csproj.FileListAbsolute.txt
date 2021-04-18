@@ -94,9 +94,7 @@ D:\Company\!!Projects\NeathCopy\NeathCopy\obj\Debug\UsedWindows\InformationWindo
 D:\Company\!!Projects\NeathCopy\NeathCopy\obj\Debug\UsedWindows\MessageWindow.g.cs
 D:\Company\!!Projects\NeathCopy\NeathCopy\obj\Debug\UsedWindows\UserDropUIWindow.g.cs
 D:\Company\!!Projects\NeathCopy\NeathCopy\obj\Debug\VisualCopy.g.cs
-D:\Company\!!Projects\NeathCopy\NeathCopy\obj\Debug\VisualCopySkins\Advance2017.g.cs
 D:\Company\!!Projects\NeathCopy\NeathCopy\obj\Debug\VisualCopySkins\Advance2017Fixed.g.cs
-D:\Company\!!Projects\NeathCopy\NeathCopy\obj\Debug\VisualCopySkins\Windows8.g.cs
 D:\Company\!!Projects\NeathCopy\NeathCopy\obj\Debug\VisualsCopysHandler.g.cs
 D:\Company\!!Projects\NeathCopy\NeathCopy\obj\Debug\App.g.cs
 D:\Company\!!Projects\NeathCopy\NeathCopy\obj\Debug\GeneratedInternalTypeHelper.g.cs
@@ -149,3 +147,5 @@ D:\Company\!!Projects\NeathCopy\NeathCopy\obj\Debug\NeathCopy.csproj.GenerateRes
 D:\Company\!!Projects\NeathCopy\NeathCopy\obj\Debug\NeathCopy.csproj.CopyComplete
 D:\Company\!!Projects\NeathCopy\NeathCopy\obj\Debug\NeathCopy.exe
 D:\Company\!!Projects\NeathCopy\NeathCopy\obj\Debug\NeathCopy.pdb
+D:\Company\!!Projects\NeathCopy\NeathCopy\obj\Debug\NeathCopy.csproj.CoreCompileInputs.cache
+D:\Company\!!Projects\NeathCopy\NeathCopy\bin\Debug\NeathCopyEngine.pdb

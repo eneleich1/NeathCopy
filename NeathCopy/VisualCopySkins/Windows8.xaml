@@ -3,8 +3,7 @@
                     xmlns:local="clr-namespace:NeathCopy.VisualCopySkins"
                     xmlns:tools="clr-namespace:NeathCopy.Tools"
                     xmlns:resources="clr-namespace:NeathCopy.Resources" 
-                xmlns:viewmodels="clr-namespace:NeathCopy.ViewModels"
-                x:Class="Windows8"
+                    xmlns:viewmodels="clr-namespace:NeathCopy.ViewModels"
                 >
     
     <ResourceDictionary.MergedDictionaries>

@@ -197,7 +197,8 @@ namespace NeathCopy
                     Visibility = System.Windows.Visibility.Hidden;
                     break;
                 case WM_ADD_DATAINFO:
-                    Configuration.Main.Process_ADD_DATA(VisualsCopys);
+                    //Configuration.Main.Process_ADD_DATA(VisualsCopys);
+                    Configuration.Main.addDataBehaviour.Execute(VisualsCopys);
                     break;
 
             }

@@ -88,6 +88,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Module1_ShellExt\ShellExtAgent.cs" />
+    <Compile Include="Module2_Configuration\AddDataBehaviour\AddData.cs" />
+    <Compile Include="Module2_Configuration\AddDataBehaviour\AddToFirsth.cs" />
+    <Compile Include="Module2_Configuration\AddDataBehaviour\AddToLast.cs" />
+    <Compile Include="Module2_Configuration\AddDataBehaviour\AddToSameDestiny.cs" />
+    <Compile Include="Module2_Configuration\AddDataBehaviour\AddToSameVolumen.cs" />
+    <Compile Include="Module2_Configuration\AddDataBehaviour\AddDataFactory.cs" />
     <Compile Include="Module2_Configuration\Configuration.cs" />
     <Compile Include="Resources\Converters.cs" />
     <Compile Include="Themes\ControlsStyles\Theme1ToolBarPanel.xaml.cs">
@@ -134,6 +140,7 @@
     <Compile Include="UsedWindows\UserDropUIWindow.xaml.cs">
       <DependentUpon>UserDropUIWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\ConfigurationWindow_VM.cs" />
     <Compile Include="ViewModels\CopyList_VM.cs" />
     <Compile Include="ViewModels\VisualCopyVM.cs" />
     <Compile Include="VisualCopy.xaml.cs">
@@ -477,6 +484,60 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Brushes\Images\Blue\cancel_zoom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="VisualCopySkins\Images\Blue\cancel.png" />
+    <Resource Include="VisualCopySkins\Images\Blue\cancel_zoom.png" />
+    <Resource Include="VisualCopySkins\Images\Blue\lightning.png" />
+    <Resource Include="VisualCopySkins\Images\Blue\list.png" />
+    <Resource Include="VisualCopySkins\Images\Blue\load_list.png" />
+    <Resource Include="VisualCopySkins\Images\Blue\more.png" />
+    <Resource Include="VisualCopySkins\Images\Blue\move_down.png" />
+    <Resource Include="VisualCopySkins\Images\Blue\move_first.png" />
+    <Resource Include="VisualCopySkins\Images\Blue\move_last.png" />
+    <Resource Include="VisualCopySkins\Images\Blue\move_up.png" />
+    <Resource Include="VisualCopySkins\Images\Blue\pause.png" />
+    <Resource Include="VisualCopySkins\Images\Blue\remove.png" />
+    <Resource Include="VisualCopySkins\Images\Blue\resume.png" />
+    <Resource Include="VisualCopySkins\Images\Blue\save.png" />
+    <Resource Include="VisualCopySkins\Images\Blue\settings.png" />
+    <Resource Include="VisualCopySkins\Images\Blue\skip.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="VisualCopySkins\Images\Dark\cancel.png" />
+    <Resource Include="VisualCopySkins\Images\Dark\cancel_zoom.png" />
+    <Resource Include="VisualCopySkins\Images\Dark\lightning.png" />
+    <Resource Include="VisualCopySkins\Images\Dark\list.png" />
+    <Resource Include="VisualCopySkins\Images\Dark\load_list.png" />
+    <Resource Include="VisualCopySkins\Images\Dark\more.png" />
+    <Resource Include="VisualCopySkins\Images\Dark\move_down.png" />
+    <Resource Include="VisualCopySkins\Images\Dark\move_first.png" />
+    <Resource Include="VisualCopySkins\Images\Dark\move_last.png" />
+    <Resource Include="VisualCopySkins\Images\Dark\move_up.png" />
+    <Resource Include="VisualCopySkins\Images\Dark\pause.png" />
+    <Resource Include="VisualCopySkins\Images\Dark\remove.png" />
+    <Resource Include="VisualCopySkins\Images\Dark\resume.png" />
+    <Resource Include="VisualCopySkins\Images\Dark\save.png" />
+    <Resource Include="VisualCopySkins\Images\Dark\settings.png" />
+    <Resource Include="VisualCopySkins\Images\Dark\skip.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="VisualCopySkins\Images\Light\cancel.png" />
+    <Resource Include="VisualCopySkins\Images\Light\cancel_zoom.png" />
+    <Resource Include="VisualCopySkins\Images\Light\lightning.png" />
+    <Resource Include="VisualCopySkins\Images\Light\list.png" />
+    <Resource Include="VisualCopySkins\Images\Light\load_list.png" />
+    <Resource Include="VisualCopySkins\Images\Light\more.png" />
+    <Resource Include="VisualCopySkins\Images\Light\move_down.png" />
+    <Resource Include="VisualCopySkins\Images\Light\move_first.png" />
+    <Resource Include="VisualCopySkins\Images\Light\move_last.png" />
+    <Resource Include="VisualCopySkins\Images\Light\move_up.png" />
+    <Resource Include="VisualCopySkins\Images\Light\pause.png" />
+    <Resource Include="VisualCopySkins\Images\Light\remove.png" />
+    <Resource Include="VisualCopySkins\Images\Light\resume.png" />
+    <Resource Include="VisualCopySkins\Images\Light\save.png" />
+    <Resource Include="VisualCopySkins\Images\Light\settings.png" />
+    <Resource Include="VisualCopySkins\Images\Light\skip.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
