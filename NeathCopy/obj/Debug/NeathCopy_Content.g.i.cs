@@ -8,21 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/cancel.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/cancel_zoom.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/lightning.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/list.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/load_list.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/more.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/move_down.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/move_first.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/move_last.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/move_up.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/pause.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/remove.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/resume.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/save.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/settings.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("visualcopyskins/images/light/skip.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("neathcopy_j6i_icon.ico")]
 
 

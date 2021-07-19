@@ -10,9 +10,11 @@
         <GradientStop Color="Gray" Offset="1" />
     </LinearGradientBrush>
 
-    <SolidColorBrush x:Key="ControlBackgroundBrush" Color="#1a1a1a" />
+    <!--Control Bakground-->
+    <ImageBrush x:Key="ControlBackgroundBrush" Stretch="Fill" ImageSource="Images/Dark/squares.jpg"/>
 
-    <SolidColorBrush x:Key="ClientAreaBackgroundBrush" Color="#1a1a1a" />
+    <!--Client Area Background-->
+    <ImageBrush x:Key="ClientAreaBackgroundBrush" Stretch="Fill" ImageSource="Images/Dark/squares.jpg"/>
 
     <SolidColorBrush x:Key="TextBrush" Color="White" />
 

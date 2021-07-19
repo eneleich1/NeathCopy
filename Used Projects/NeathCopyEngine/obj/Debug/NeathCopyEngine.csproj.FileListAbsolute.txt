@@ -82,3 +82,9 @@ D:\Company\!!Projects\NeathCopy\Used Projects\NeathCopyEngine\obj\Debug\NeathCop
 D:\Company\!!Projects\NeathCopy\Used Projects\NeathCopyEngine\obj\Debug\NeathCopyEngine.dll
 D:\Company\!!Projects\NeathCopy\Used Projects\NeathCopyEngine\obj\Debug\NeathCopyEngine.pdb
 D:\Company\!!Projects\NeathCopy\Used Projects\NeathCopyEngine\obj\Debug\NeathCopyEngine.csproj.CoreCompileInputs.cache
+D:\Company\Projects\NeathCopy\NeathCopy\bin\Debug\NeathCopyEngine.dll
+D:\Company\Projects\NeathCopy\NeathCopy\bin\Debug\NeathCopyEngine.pdb
+D:\Company\Projects\NeathCopy\Used Projects\NeathCopyEngine\obj\Debug\NeathCopyEngine.csproj.CoreCompileInputs.cache
+D:\Company\Projects\NeathCopy\Used Projects\NeathCopyEngine\obj\Debug\NeathCopyEngine.csproj.CopyComplete
+D:\Company\Projects\NeathCopy\Used Projects\NeathCopyEngine\obj\Debug\NeathCopyEngine.dll
+D:\Company\Projects\NeathCopy\Used Projects\NeathCopyEngine\obj\Debug\NeathCopyEngine.pdb

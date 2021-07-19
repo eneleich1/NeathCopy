@@ -17,6 +17,8 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "NeathCopySetup_x64", "Used 
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "NeathCopySetup_x86", "Used Projects\NeathCopySetup_x86\NeathCopySetup_x86.vdproj", "{8F0D491B-4EAE-4F26-99F8-EC3349C07738}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallerActions", "Used Projects\InstallerActions\InstallerActions.csproj", "{509756C6-BDE0-4964-B612-420C144337E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,7 +58,7 @@ Global
 		{ADAC173F-A883-4F26-BDAC-88D3F2ADE219}.Debug|x64.Build.0 = Release|x64
 		{ADAC173F-A883-4F26-BDAC-88D3F2ADE219}.Debug|x86.ActiveCfg = Release|Win32
 		{ADAC173F-A883-4F26-BDAC-88D3F2ADE219}.Debug|x86.Build.0 = Release|Win32
-		{ADAC173F-A883-4F26-BDAC-88D3F2ADE219}.Release|Any CPU.ActiveCfg = Release|Win32
+		{ADAC173F-A883-4F26-BDAC-88D3F2ADE219}.Release|Any CPU.ActiveCfg = Release|x64
 		{ADAC173F-A883-4F26-BDAC-88D3F2ADE219}.Release|x64.ActiveCfg = Release|x64
 		{ADAC173F-A883-4F26-BDAC-88D3F2ADE219}.Release|x64.Build.0 = Release|x64
 		{ADAC173F-A883-4F26-BDAC-88D3F2ADE219}.Release|x86.ActiveCfg = Release|Win32
@@ -78,6 +80,18 @@ Global
 		{8F0D491B-4EAE-4F26-99F8-EC3349C07738}.Release|x64.Build.0 = Release
 		{8F0D491B-4EAE-4F26-99F8-EC3349C07738}.Release|x86.ActiveCfg = Release
 		{8F0D491B-4EAE-4F26-99F8-EC3349C07738}.Release|x86.Build.0 = Release
+		{509756C6-BDE0-4964-B612-420C144337E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{509756C6-BDE0-4964-B612-420C144337E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{509756C6-BDE0-4964-B612-420C144337E9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{509756C6-BDE0-4964-B612-420C144337E9}.Debug|x64.Build.0 = Debug|Any CPU
+		{509756C6-BDE0-4964-B612-420C144337E9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{509756C6-BDE0-4964-B612-420C144337E9}.Debug|x86.Build.0 = Debug|Any CPU
+		{509756C6-BDE0-4964-B612-420C144337E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{509756C6-BDE0-4964-B612-420C144337E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{509756C6-BDE0-4964-B612-420C144337E9}.Release|x64.ActiveCfg = Release|Any CPU
+		{509756C6-BDE0-4964-B612-420C144337E9}.Release|x64.Build.0 = Release|Any CPU
+		{509756C6-BDE0-4964-B612-420C144337E9}.Release|x86.ActiveCfg = Release|Any CPU
+		{509756C6-BDE0-4964-B612-420C144337E9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
