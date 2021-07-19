@@ -15,13 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_11AC7784A5AB44B598F3A1F3A326FF43"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_077DCA67C64066BB734B9C6DFD2C37FE"
+        "OwnerKey" = "8:_6F546B74E6854C3482054B6F40EB4BF7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_42C70FBE74224BFC85B087A3EC1C01A6"
+        "MsmKey" = "8:_11AC7784A5AB44B598F3A1F3A326FF43"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -29,18 +29,6 @@
         {
         "MsmKey" = "8:_6F546B74E6854C3482054B6F40EB4BF7"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_70BC675AEAE879AB0607FCCEC723DDE5"
-        "OwnerKey" = "8:_6F546B74E6854C3482054B6F40EB4BF7"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_70BC675AEAE879AB0607FCCEC723DDE5"
-        "OwnerKey" = "8:_7A2D75301337F08BC8F983B00BEE7594"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -57,30 +45,36 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7A2D75301337F08BC8F983B00BEE7594"
-        "OwnerKey" = "8:_6F546B74E6854C3482054B6F40EB4BF7"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_943A5222E3EDE2373A1D29D8C4E486F7"
-        "OwnerKey" = "8:_6F546B74E6854C3482054B6F40EB4BF7"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_943A5222E3EDE2373A1D29D8C4E486F7"
-        "OwnerKey" = "8:_7A2D75301337F08BC8F983B00BEE7594"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_A842BCD329B3A49C6840C72D5D8B4725"
         "OwnerKey" = "8:_6F546B74E6854C3482054B6F40EB4BF7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
+        "MsmKey" = "8:_C8B2522663E081FD0994490E337A1623"
+        "OwnerKey" = "8:_6F546B74E6854C3482054B6F40EB4BF7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C8B2522663E081FD0994490E337A1623"
+        "OwnerKey" = "8:_077DCA67C64066BB734B9C6DFD2C37FE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E2CF9F0476C2207159C12073804325EA"
+        "OwnerKey" = "8:_6F546B74E6854C3482054B6F40EB4BF7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E2CF9F0476C2207159C12073804325EA"
+        "OwnerKey" = "8:_077DCA67C64066BB734B9C6DFD2C37FE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_6F546B74E6854C3482054B6F40EB4BF7"
         "MsmSig" = "8:_UNDEFINED"
@@ -88,19 +82,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7A2D75301337F08BC8F983B00BEE7594"
+        "OwnerKey" = "8:_077DCA67C64066BB734B9C6DFD2C37FE"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_943A5222E3EDE2373A1D29D8C4E486F7"
+        "OwnerKey" = "8:_C8B2522663E081FD0994490E337A1623"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_70BC675AEAE879AB0607FCCEC723DDE5"
+        "OwnerKey" = "8:_E2CF9F0476C2207159C12073804325EA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -149,7 +143,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\NeathCopySetup_x86.msi"
+        "OutputFilename" = "8:..\\..\\Target\\Setup_x86\\NeathCopySetup_x86.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -209,6 +203,37 @@
         }
         "File"
         {
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_077DCA67C64066BB734B9C6DFD2C37FE"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NeathCopyEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_077DCA67C64066BB734B9C6DFD2C37FE"
+                    {
+                    "Name" = "8:NeathCopyEngine.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:NeathCopyEngine.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_EC0BCF2D7346451491E0D7634405F5AF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_11AC7784A5AB44B598F3A1F3A326FF43"
             {
             "SourcePath" = "8:..\\..\\Folders\\Publish\\Sounds\\cancell.wav"
@@ -227,57 +252,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_42C70FBE74224BFC85B087A3EC1C01A6"
-            {
-            "SourcePath" = "8:..\\..\\Folders\\Publish\\FilesList.txt"
-            "TargetName" = "8:FilesList.txt"
-            "Tag" = "8:"
-            "Folder" = "8:_BD22527711874420AD3E748C2AA5B10E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_70BC675AEAE879AB0607FCCEC723DDE5"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:AlphaFS, Version=2.0.0.0, Culture=neutral, PublicKeyToken=4d31a58f7d7ad5c9, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_70BC675AEAE879AB0607FCCEC723DDE5"
-                    {
-                    "Name" = "8:AlphaFS.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:AlphaFS.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_EC0BCF2D7346451491E0D7634405F5AF"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_751F179D387944E186C0DC8612470236"
@@ -320,20 +294,20 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7A2D75301337F08BC8F983B00BEE7594"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A842BCD329B3A49C6840C72D5D8B4725"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NeathCopyEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
                 "ScatterAssemblies"
                 {
-                    "_7A2D75301337F08BC8F983B00BEE7594"
+                    "_A842BCD329B3A49C6840C72D5D8B4725"
                     {
-                    "Name" = "8:NeathCopyEngine.dll"
+                    "Name" = "8:System.Net.Http.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:NeathCopyEngine.dll"
+            "SourcePath" = "8:System.Net.Http.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EC0BCF2D7346451491E0D7634405F5AF"
@@ -351,14 +325,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_943A5222E3EDE2373A1D29D8C4E486F7"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C8B2522663E081FD0994490E337A1623"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Delimon.Win32.IO, Version=0.5.2574.27179, Culture=neutral, PublicKeyToken=6f601db60ebd9657, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_943A5222E3EDE2373A1D29D8C4E486F7"
+                    "_C8B2522663E081FD0994490E337A1623"
                     {
                     "Name" = "8:Delimon.Win32.IO.dll"
                     "Attributes" = "3:512"
@@ -382,20 +356,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A842BCD329B3A49C6840C72D5D8B4725"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E2CF9F0476C2207159C12073804325EA"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+            "AssemblyAsmDisplayName" = "8:AlphaFS, Version=2.0.0.0, Culture=neutral, PublicKeyToken=4d31a58f7d7ad5c9, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_A842BCD329B3A49C6840C72D5D8B4725"
+                    "_E2CF9F0476C2207159C12073804325EA"
                     {
-                    "Name" = "8:System.Net.Http.dll"
+                    "Name" = "8:AlphaFS.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:System.Net.Http.dll"
+            "SourcePath" = "8:AlphaFS.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EC0BCF2D7346451491E0D7634405F5AF"
@@ -428,17 +402,6 @@
             "Property" = "8:AppDataFolder"
                 "Folders"
                 {
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_BD22527711874420AD3E748C2AA5B10E"
-                    {
-                    "Name" = "8:NeathCopy"
-                    "AlwaysCreate" = "11:FALSE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_80616A336D624C3380FF3F5C36E8508E"
-                        "Folders"
-                        {
-                        }
-                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_8F141DC50DEB4400B240EDFB1A2BB155"
@@ -514,7 +477,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NeathCopy"
         "ProductCode" = "8:{7BF628FA-A5DC-4DFB-A961-0F96B7CEE262}"
-        "PackageCode" = "8:{D2DE44CD-BA7D-4B0F-AB1D-3CAEF2997C0F}"
+        "PackageCode" = "8:{B2FA4A98-9FB2-411F-B754-8E7A77E7C6B2}"
         "UpgradeCode" = "8:{1FFFB6B4-5C9E-4383-8734-63EF5400EAE2}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -820,7 +783,7 @@
                                             "Condition" = "8:"
                                             "Transitive" = "11:FALSE"
                                             "ValueTypes" = "3:1"
-                                            "Value" = "8:C:\\Users\\eneleich\\AppData\\Roaming\\\\NeathCopy"
+                                            "Value" = "8:C:\\Users\\Public\\AppData\\NeathCopy"
                                             }
                                             "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_B5012097980041D7B0B78C82D02DF4B1"
                                             {
@@ -836,7 +799,7 @@
                                             "Condition" = "8:"
                                             "Transitive" = "11:FALSE"
                                             "ValueTypes" = "3:1"
-                                            "Value" = "8:C:\\Users\\eneleich\\AppData\\Roaming\\\\NeathCopy\\FilesList.txt"
+                                            "Value" = "8:C:\\Users\\Public\\AppData\\NeathCopy\\FilesList.txt"
                                             }
                                         }
                                     }
@@ -1291,7 +1254,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4E581B6EA32C4B2FBB78B9EEEFA4AB34"
             {
-            "SourcePath" = "8:..\\..\\Release\\NeathCopyShell.dll"
+            "SourcePath" = "8:..\\..\\Target\\ShellExt_x86\\NeathCopyShell.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EC0BCF2D7346451491E0D7634405F5AF"

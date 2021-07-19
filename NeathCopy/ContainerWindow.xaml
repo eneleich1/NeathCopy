@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Style="{DynamicResource ContainerStyle}"
         Loaded="Window_Loaded"
-        Title="NeathCopy" Height="185.333" SizeToContent="WidthAndHeight"  MaxHeight="600" Icon="neathcopy_J6I_icon.ico" >
+        Title="NeathCopy" Height="185.333" SizeToContent="WidthAndHeight"  MaxHeight="600" Icon="neathcopy.ico" >
 
     <Grid >
         <ListBox Name="listbox1" BorderBrush="Transparent" HorizontalAlignment="Center">

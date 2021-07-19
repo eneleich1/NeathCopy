@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Configuration.Install;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
+using System.Windows.Forms;
 
 namespace InstallerActions
 {
@@ -14,6 +16,28 @@ namespace InstallerActions
         public Installer1()
         {
             InitializeComponent();
+
+            CreateAppFolderAndFiles();
+        }
+
+        //C:\Users\Public\AppData\NeathCopy\FilesList.txt
+        void CreateAppFolderAndFiles()
+        {
+            try
+            {
+                string winDrive = Path.GetPathRoot(Environment.SystemDirectory);
+
+                var appDir = Path.Combine(winDrive, @"Users\Public\AppData\NeathCopy");
+                var filesList = Path.Combine(appDir, "FilesList.txt");
+
+                Directory.CreateDirectory(appDir);
+                File.Create(filesList);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
     }
 }

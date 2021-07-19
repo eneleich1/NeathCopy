@@ -37,7 +37,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Target\Builds Files\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -55,7 +55,7 @@
     <StartupObject>NeathCopy.StartupClass</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>neathcopy_J6I_icon.ico</ApplicationIcon>
+    <ApplicationIcon>neathcopy.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>E3702530E595B38828A225C12EBA5619F1605BD1</ManifestCertificateThumbprint>
@@ -556,10 +556,10 @@
     <Resource Include="Brushes\Images\Dark\squares.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="neathcopy.ico" />
+    <Resource Include="appicon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="neathcopy_J6I_icon.ico" />
+    <Resource Include="neathcopy.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
