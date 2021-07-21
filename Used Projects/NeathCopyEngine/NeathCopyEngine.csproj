@@ -61,6 +61,7 @@
     <Compile Include="CopyHandlers\NeathCopyHandle.cs" />
     <Compile Include="DataTools\DataInfo.cs" />
     <Compile Include="DataTools\DirectoryDataInfo.cs" />
+    <Compile Include="DataTools\DriveInfoFactory.cs" />
     <Compile Include="DataTools\Extensions.cs" />
     <Compile Include="DataTools\FileDataInfo.cs" />
     <Compile Include="DataTools\LongPath.cs" />

@@ -23,6 +23,7 @@ namespace NeathCopy.ViewModels
 
         //Other Fields
         VisualCopy visualCopy;
+
         public VisualCopy VisualCopy
         {
             get => visualCopy;
@@ -372,7 +373,7 @@ namespace NeathCopy.ViewModels
                     To = Alphaleonis.Win32.Filesystem.Path.GetDirectoryName(CurrentFile.DestinyPath);
 
                     //Drive Info
-                    VisualCopy.driveInfo = new System.IO.DriveInfo(System.IO.Path.GetPathRoot(To));
+                    VisualCopy.driveInfo = DriveInfoFactory.CreateDriveInfo(System.IO.Path.GetPathRoot(To));
                     if (VisualCopy.driveInfo != null)
                         TargetDevice = string.Format("{0}({1}) {2}"
                             , VisualCopy.driveInfo.VolumeLabel.ShortVersion(4)
@@ -532,7 +533,7 @@ namespace NeathCopy.ViewModels
                 try
                 {
                     //Update DriveInfo
-                    VisualCopy.driveInfo = new System.IO.DriveInfo(VisualCopy.driveInfo.Name);
+                    VisualCopy.driveInfo = DriveInfoFactory.CreateDriveInfo(VisualCopy.driveInfo.Name);
 
                     //Driver Size ProgressBar
                     DriverSizePorcent = 100 - (VisualCopy.driveInfo.TotalFreeSpace * 100f) / VisualCopy.driveInfo.TotalSize;

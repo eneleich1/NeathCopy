@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,11 +30,6 @@ using System.Windows.Shapes;
 
 namespace NeathCopy
 {
-
-    public class Info
-    {
-        public string Name { get; set; }
-    }
 
     /// <summary>
     /// Interaction logic for VisualCopy.xaml
@@ -112,7 +108,7 @@ namespace NeathCopy
         /// <summary>
         /// 
         /// </summary>
-        public DriveInfo driveInfo { get; set; }
+        public IDriveInfo driveInfo { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -256,17 +252,6 @@ namespace NeathCopy
 
         #region My Methods
 
-        ///// <summary>
-        ///// Set the pauseButtonContent acording to specific valid action.
-        ///// </summary>
-        //private void SetPauseButtonContent()
-        //{
-        //    if (PauseAction == PauseButtonAction.Pause)
-        //        displayInfo.PauseButtonBrush = (Brush)this.FindResource("pauseBrush");
-        //    else
-        //        displayInfo.PauseButtonBrush = (Brush)this.FindResource("resumeStartBrush");
-
-        //}
 
         Object pauseBtLock = new Object();
 
@@ -490,7 +475,7 @@ namespace NeathCopy
             if (driveInfo == null)
                 return DiskSpaceOptions.IGNORE;
 
-            driveInfo = new DriveInfo(driveInfo.RootDirectory.FullName);
+            driveInfo = driveInfo.Clone();
 
             while (driveInfo.TotalFreeSpace < NeathCopy.DiscoverdList.SizeOfFilesToCopy.Bytes)// while (freeSpace < requireSpace)
             {
@@ -513,6 +498,8 @@ namespace NeathCopy
             return DiskSpaceOptions.OK;
         }
 
+        public Alphaleonis.Win32.Network.DriveConnection nd;
+
         /// <summary>
         /// Analize and prepare for perform a operation.
         /// args = { operation, source, destiny, sourcesContainer }.
@@ -520,6 +507,9 @@ namespace NeathCopy
         /// <param name="args"></param>
         public void AceptRequest(RequestInfo info, bool sameThread, bool loadFromList)
         {
+            long availableFreeSpace, totalFreeSpace,totalSize;
+            string rootDirectory;
+
             var action = new Action(() =>
               {
                   try
@@ -535,7 +525,8 @@ namespace NeathCopy
 
                       //Get Driver Info of Destiny
                       if (RequestInf.Destiny != null)
-                          driveInfo = new DriveInfo(Alphaleonis.Win32.Filesystem.Path.GetPathRoot(RequestInf.Destiny));
+                          driveInfo = DriveInfoFactory.CreateDriveInfo(RequestInf.Destiny);
+                         
                       if (driveInfo != null)
                           InitialFreeSpace = driveInfo.TotalFreeSpace;
 
@@ -569,7 +560,7 @@ namespace NeathCopy
                       }
                       else if (opt == DiskSpaceOptions.FIT_CONTENT)
                       {
-                          driveInfo = new DriveInfo(driveInfo.RootDirectory.FullName);
+                          driveInfo = driveInfo.Clone();
 
                           long freeSpace = driveInfo.TotalFreeSpace - NeathCopy.DiscoverdList.TrueFilesToCopySize.Bytes;
 
@@ -650,7 +641,7 @@ namespace NeathCopy
                     }
                     else if (opt == DiskSpaceOptions.FIT_CONTENT)
                     {
-                        driveInfo = new DriveInfo(driveInfo.RootDirectory.FullName);
+                        driveInfo = driveInfo.Clone();
 
                         long freeSpace = driveInfo.TotalFreeSpace - NeathCopy.DiscoverdList.TrueFilesToCopySize.Bytes;
 
@@ -766,8 +757,6 @@ namespace NeathCopy
                 if (errors.Count > 0)
                 {
                     PauseAction = PauseButtonAction.Resume;
-                    //SetPauseButtonContent();==============================================================================================
-
                     NeathCopy.Errors.Clear();
 
                     if (Configuration.Main.AffterErrorAction.Method.Name == "Close_AffterErrorAction")
@@ -777,10 +766,10 @@ namespace NeathCopy
                 }
 
                 float cost = 0;
-                DriveInfo di = null;
+                IDriveInfo di = null;
                 if (RequestInf.Destiny != null)
                 {
-                    di = new DriveInfo(Alphaleonis.Win32.Filesystem.Path.GetPathRoot(RequestInf.Destiny));
+                    di = DriveInfoFactory.CreateDriveInfo(Alphaleonis.Win32.Filesystem.Path.GetPathRoot(RequestInf.Destiny));
                     cost = EstimateCopyCost(NeathCopy.DiscoverdList.Count, NeathCopy.DiscoverdList.Size, di);
                 }
 
@@ -823,7 +812,7 @@ namespace NeathCopy
             }
         }
 
-        private float EstimateCopyCost(int filesCount, MySize copiedSize, DriveInfo di)
+        private float EstimateCopyCost(int filesCount, MySize copiedSize, IDriveInfo di)
         {
             if (filesCount == 0) return 0;
             if (copiedSize.Bytes == 0) return 0;
@@ -942,7 +931,7 @@ namespace NeathCopy
                 if (NeathCopy.Operation == null)
                 {
                     //Get Driver Info of Destiny
-                    driveInfo = new DriveInfo(Delimon.Win32.IO.Path.GetPathRoot(list.Destinys[0]));
+                    driveInfo = DriveInfoFactory.CreateDriveInfo(Delimon.Win32.IO.Path.GetPathRoot(list.Destinys[0]));
                     InitialFreeSpace = driveInfo.TotalFreeSpace;
 
                     //Check free disk space
@@ -958,7 +947,7 @@ namespace NeathCopy
                     }
                     else if (opt == DiskSpaceOptions.FIT_CONTENT)
                     {
-                        driveInfo = new DriveInfo(driveInfo.RootDirectory.FullName);
+                        driveInfo = driveInfo.Clone();
 
                         long freeSpace = driveInfo.TotalFreeSpace - NeathCopy.DiscoverdList.TrueFilesToCopySize.Bytes;
 

@@ -1,4 +1,5 @@
-﻿using NeathCopyEngine.Helpers;
+﻿using NeathCopyEngine.DataTools;
+using NeathCopyEngine.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -52,7 +53,7 @@ namespace NeathCopy.UsedWindows
             UserSelectedAction = UserAction.Fit;
             Hide();
         }
-        public void ShowMessage(DriveInfo driveInfo, long freeSpace, long requireSpace)
+        public void ShowMessage(IDriveInfo driveInfo, long freeSpace, long requireSpace)
         {
             //message_tb.Text = message;
             message_rb.Dispatcher.Invoke(new Action(() =>
@@ -94,7 +95,7 @@ namespace NeathCopy.UsedWindows
         public MySize NeedMore { get; set; }
         public DriveType VolumenType { get; set; }
 
-        public FormattedDriveInfo(DriveInfo info, long freeSpace, long requireSpace)
+        public FormattedDriveInfo(IDriveInfo info, long freeSpace, long requireSpace)
         {
             Volumen = string.Format("[{2}]: {0} ({1})", info.VolumeLabel, info.Name.Substring(0, info.Name.Length - 1), info.DriveFormat);
             VolumenType = info.DriveType;
