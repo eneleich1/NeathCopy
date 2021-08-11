@@ -507,9 +507,6 @@ namespace NeathCopy
         /// <param name="args"></param>
         public void AceptRequest(RequestInfo info, bool sameThread, bool loadFromList)
         {
-            long availableFreeSpace, totalFreeSpace,totalSize;
-            string rootDirectory;
-
             var action = new Action(() =>
               {
                   try
@@ -568,7 +565,7 @@ namespace NeathCopy
                           long free = 0;
                           while (freeSpace < requiredSpace)
                           {
-                              free = NeathCopy.DiscoverdList.RemoveLast();
+                              Dispatcher.Invoke(() => { free = NeathCopy.DiscoverdList.RemoveLast(); });
                               requiredSpace -= free;
                           }
                           NeathCopy.DiscoverdList.CommitTransaction();

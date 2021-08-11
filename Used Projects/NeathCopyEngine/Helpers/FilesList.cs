@@ -603,7 +603,7 @@ namespace NeathCopyEngine.Helpers
             }
             catch (Exception ex)
             {
-                MessageBox.Show(Error.GetErrorLogInLine(ex.Message, "NeathCopyEngine", "FilesList", "RemoveAt"));
+                MessageBox.Show(Error.GetErrorLogInLine(ex.Message, "NeathCopyEngine", "FilesList", "RemoveLast"));
                 return 0;
             }
         }
