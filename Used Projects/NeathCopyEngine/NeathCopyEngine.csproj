@@ -59,6 +59,7 @@
     <Compile Include="CopyHandlers\Error.cs" />
     <Compile Include="CopyHandlers\FileCopier.cs" />
     <Compile Include="CopyHandlers\NeathCopyHandle.cs" />
+    <Compile Include="DataTools\cNetworkDrives0015.cs" />
     <Compile Include="DataTools\DataInfo.cs" />
     <Compile Include="DataTools\DirectoryDataInfo.cs" />
     <Compile Include="DataTools\DriveInfoFactory.cs" />

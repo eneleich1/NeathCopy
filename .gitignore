@@ -2,9 +2,10 @@ Folders
 Release
 Target
 x64
-*/Debug/
-*/Release/
-*/bin/Debug/
-*/bin/Release/
-**/bin/Debug/
-**/bin/Release/
+*/bin/
+*/obj/
+*/*/bin/
+*/*/obj/
+.vs/
+*.suo
+*.user

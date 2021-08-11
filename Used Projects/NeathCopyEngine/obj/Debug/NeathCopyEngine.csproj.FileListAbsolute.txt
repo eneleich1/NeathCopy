@@ -1,6 +1,0 @@
-D:\Company\Projects\NeathCopy\Target\Builds Files\NeathCopyEngine.dll
-D:\Company\Projects\NeathCopy\Target\Builds Files\NeathCopyEngine.pdb
-D:\Company\Projects\NeathCopy\Used Projects\NeathCopyEngine\obj\Debug\NeathCopyEngine.csproj.CoreCompileInputs.cache
-D:\Company\Projects\NeathCopy\Used Projects\NeathCopyEngine\obj\Debug\NeathCopyEngine.csproj.CopyComplete
-D:\Company\Projects\NeathCopy\Used Projects\NeathCopyEngine\obj\Debug\NeathCopyEngine.dll
-D:\Company\Projects\NeathCopy\Used Projects\NeathCopyEngine\obj\Debug\NeathCopyEngine.pdb
