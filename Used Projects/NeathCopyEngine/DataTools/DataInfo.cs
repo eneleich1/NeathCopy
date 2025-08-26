@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using NeathCopyEngine.CopyHandlers;
 using NeathCopyEngine.Exceptions;
-using Delimon.Win32.IO;
 
 namespace NeathCopyEngine.DataTools
 {
@@ -22,7 +22,7 @@ namespace NeathCopyEngine.DataTools
         public string Destiny { get; set; }
         public int SourceDirectoryLength { get; set; }
 
-        public Delimon.Win32.IO.FileAttributes FileAttributes { get; set; }
+        public FileAttributes FileAttributes { get; set; }
         public DateTime CreationTime;
         public DateTime LastAccessTime;
         public DateTime LastWriteTime;
@@ -63,17 +63,17 @@ namespace NeathCopyEngine.DataTools
 
             var resultingDestinyPath = Path.Combine(destinyPath, Path.GetFileName(fileSystemName));
 
-            var di = new Delimon.Win32.IO.DirectoryInfo(fileSystemName);
+            var di = new DirectoryInfo(PathUtils.ToLongPath(fileSystemName));
 
             //If is directory
-            if (Alphaleonis.Win32.Filesystem.Directory.Exists(fileSystemName))
+            if (Directory.Exists(PathUtils.ToLongPath(fileSystemName)))
             {
                 if (resultingDestinyPath == fileSystemName)
                 {
                     resultingDestinyPath += " - Copy";
 
                     for (int i = 1; DestinyPathsNames.Contains(resultingDestinyPath)
-                           || Directory.Exists(resultingDestinyPath); i++)
+                           || Directory.Exists(PathUtils.ToLongPath(resultingDestinyPath)); i++)
                     {
                         resultingDestinyPath += i.ToString();
                     }
@@ -89,7 +89,7 @@ namespace NeathCopyEngine.DataTools
                 };
             }
             //if is a file
-            else if (Alphaleonis.Win32.Filesystem.File.Exists(fileSystemName))
+            else if (File.Exists(PathUtils.ToLongPath(fileSystemName)))
             {
                 if (resultingDestinyPath == fileSystemName)
                 {
@@ -98,16 +98,14 @@ namespace NeathCopyEngine.DataTools
                     resultingDestinyPath = string.Format("{0} - Copy{1}", extLess, ext);
 
                     for (int i = 1; DestinyPathsNames.Contains(resultingDestinyPath)
-                        || File.Exists(resultingDestinyPath); i++)
+                        || File.Exists(PathUtils.ToLongPath(resultingDestinyPath)); i++)
                     {
                         extLess = resultingDestinyPath.Remove(resultingDestinyPath.Length - 4, 4);
                         resultingDestinyPath = string.Format("{0}_{1}{2}", extLess, i, ext);
                     }
                 }
 
-                var finfo = new FileInfo(fileSystemName);
-
-                //Delimon.Win32.IO.File.GetCreationTime(fileSystemName);
+                var finfo = new FileInfo(PathUtils.ToLongPath(fileSystemName));
                 var res = new FileDataInfo
                 {
                     SourceDirectoryLength = Path.GetDirectoryName(fileSystemName).Length,

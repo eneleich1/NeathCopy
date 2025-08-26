@@ -26,23 +26,22 @@ namespace NeathCopyEngine.DataTools
         }
         public FileStream GetStreamToRead()
         {
-           return Delimon.Win32.IO.File.Open(FullName, Delimon.Win32.IO.FileMode.Open,
-                Delimon.Win32.IO.FileAccess.Read, Delimon.Win32.IO.FileShare.ReadWrite);
+            return new FileStream(PathUtils.ToLongPath(FullName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         }
         public FileStream GetStreamToWrite(FileMode mode)
         {
-            return new Delimon.Win32.IO.FileInfo(DestinyPath).Create();
+            return new FileStream(PathUtils.ToLongPath(DestinyPath), mode, FileAccess.ReadWrite);
         }
 
         public override void FastMove()
         {
-            File.Move(FullName, DestinyPath);
+            File.Move(PathUtils.ToLongPath(FullName), PathUtils.ToLongPath(DestinyPath));
         }
 
         public static bool Md5Check(string file1, string file2)
         {
-            var finfo1 = new Alphaleonis.Win32.Filesystem.FileInfo(file1);
-            var finfo2 = new Alphaleonis.Win32.Filesystem.FileInfo(file2);
+            var finfo1 = new FileInfo(PathUtils.ToLongPath(file1));
+            var finfo2 = new FileInfo(PathUtils.ToLongPath(file2));
 
             if (finfo1.Length != finfo2.Length) return false;
 
@@ -54,7 +53,7 @@ namespace NeathCopyEngine.DataTools
 
             using (var md5 = MD5.Create())
             {
-                using (var stream = Alphaleonis.Win32.Filesystem.File.OpenRead(fileName))
+                using (var stream = File.OpenRead(PathUtils.ToLongPath(fileName)))
                 {
                     return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", String.Empty);
                 }
@@ -68,7 +67,7 @@ namespace NeathCopyEngine.DataTools
         /// </summary>
         /// <param name="finfo"></param>
         /// <returns></returns>
-        private static string NeathCheckSum(Alphaleonis.Win32.Filesystem.FileInfo finfo)
+        private static string NeathCheckSum(FileInfo finfo)
         {
             int bytesCount = 1024;
             int totalBytes = bytesCount * 2;
