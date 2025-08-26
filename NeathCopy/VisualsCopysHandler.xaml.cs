@@ -1,4 +1,4 @@
-﻿using Alphaleonis.Win32.Filesystem;
+﻿using System.IO;
 using NeathCopy.Module1_ShellExt;
 using NeathCopy.Module2_Configuration;
 using NeathCopy.Themes;
@@ -80,7 +80,7 @@ namespace NeathCopy
             }
 
             //Destiny
-            else if (!Alphaleonis.Win32.Filesystem.Directory.Exists(StartupClass.requestInfo.Destiny))
+            else if (!Directory.Exists(StartupClass.requestInfo.Destiny))
             {
                 browseDestiny.Title = string.Format("Destiny: {0} do not exist. Browse other", StartupClass.requestInfo.Destiny); ;
                 browseDestiny.OptionComboBox.SelectedIndex = StartupClass.requestInfo.Operation == "copy" ? 0 : 1;

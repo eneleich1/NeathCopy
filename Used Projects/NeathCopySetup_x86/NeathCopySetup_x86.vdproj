@@ -329,16 +329,13 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Delimon.Win32.IO, Version=0.5.2574.27179, Culture=neutral, PublicKeyToken=6f601db60ebd9657, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_C8B2522663E081FD0994490E337A1623"
                     {
-                    "Name" = "8:Delimon.Win32.IO.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Delimon.Win32.IO.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EC0BCF2D7346451491E0D7634405F5AF"
@@ -360,16 +357,13 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:AlphaFS, Version=2.0.0.0, Culture=neutral, PublicKeyToken=4d31a58f7d7ad5c9, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_E2CF9F0476C2207159C12073804325EA"
                     {
-                    "Name" = "8:AlphaFS.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:AlphaFS.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_EC0BCF2D7346451491E0D7634405F5AF"

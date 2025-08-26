@@ -88,14 +88,13 @@ namespace NeathCopyEngine.DataTools
             //if (!FileSystemsLoaded)
             //    LoadFileSystems();
 
-            var dinfo = new Delimon.Win32.IO.DirectoryInfo(FullName);
-            //var newFullName = Delimon.Win32.IO.Path.Combine(FullName, f.Name);
+            var dinfo = new DirectoryInfo(PathUtils.ToLongPath(FullName));
             Files = dinfo.GetFiles().Select(f => new FileDataInfo()
             {
-                FullName = Delimon.Win32.IO.Path.Combine(FullName, f.Name),
+                FullName = Path.Combine(FullName, f.Name),
                 DestinyDirectoryPath = DestinyPath,
                 Name = Path.GetFileName(f.Name),
-                DestinyPath = Path.Combine(DestinyPath, Path.GetFileName(Delimon.Win32.IO.Path.Combine(FullName, f.Name))),
+                DestinyPath = Path.Combine(DestinyPath, Path.GetFileName(Path.Combine(FullName, f.Name))),
                 Size = f.Length,
                 FileAttributes = f.Attributes,
                 CreationTime = f.CreationTime,
@@ -117,7 +116,7 @@ namespace NeathCopyEngine.DataTools
             //if (!FileSystemsLoaded)
             //    LoadFileSystems();
 
-            return Delimon.Win32.IO.Directory.GetDirectories(FullName).ToList();
+            return Directory.GetDirectories(PathUtils.ToLongPath(FullName)).ToList();
             //Files = dinfo.GetFiles().Select(f => new FileDataInfo() { }).ToList();
 
             //return Directories;

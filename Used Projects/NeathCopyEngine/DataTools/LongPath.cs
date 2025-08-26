@@ -129,7 +129,7 @@ namespace LongPath
         public static void CreateDirectoriesInPath(string path)
         {
             if (path != null)
-                Alphaleonis.Win32.Filesystem.Directory.CreateDirectory(path);
+                Directory.CreateDirectory(PathUtils.ToLongPath(path));
 
         }
 

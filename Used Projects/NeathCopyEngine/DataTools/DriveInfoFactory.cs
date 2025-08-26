@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Delimon.Win32.IO;
 
 namespace NeathCopyEngine.DataTools
 {
@@ -73,14 +72,13 @@ namespace NeathCopyEngine.DataTools
 
         public NetworkDriveInfo(string path)
         {
-            var nd = new Alphaleonis.Win32.Network.DriveConnection(path);
-            var driveInfo = new DriveInfo(nd.LocalName);
+            var root = System.IO.Path.GetPathRoot(path);
+            var driveInfo = new DriveInfo(root);
 
             availableFreeSpace=driveInfo.AvailableFreeSpace;
             totalFreeSpace = driveInfo.TotalFreeSpace;
             totalSize = driveInfo.TotalSize;
-            Path = nd.Share;
-            nd.Dispose();
+            Path = root;
         }
 
         public long AvailableFreeSpace => availableFreeSpace;

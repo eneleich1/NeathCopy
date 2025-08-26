@@ -7,6 +7,7 @@ using NeathCopyEngine.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -73,7 +74,7 @@ namespace NeathCopy.ViewModels
                 PropertyChanged?.Invoke(this, args);
 
                 if (currentFile != null)
-                    From = Alphaleonis.Win32.Filesystem.Path.GetDirectoryName(currentFile.FullName);
+                    From = Path.GetDirectoryName(currentFile.FullName);
             }
         }
 
@@ -370,7 +371,7 @@ namespace NeathCopy.ViewModels
                 //To
                 if (CurrentFile != null)
                 {
-                    To = Alphaleonis.Win32.Filesystem.Path.GetDirectoryName(CurrentFile.DestinyPath);
+                    To = Path.GetDirectoryName(CurrentFile.DestinyPath);
 
                     //Drive Info
                     VisualCopy.driveInfo = DriveInfoFactory.CreateDriveInfo(System.IO.Path.GetPathRoot(To));

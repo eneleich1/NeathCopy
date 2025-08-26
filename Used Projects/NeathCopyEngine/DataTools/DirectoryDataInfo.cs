@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using Delimon.Win32.IO;
 using System.Security.AccessControl;
 using System.Windows.Forms;
 using NeathCopyEngine.CopyHandlers;
@@ -22,7 +22,7 @@ namespace NeathCopyEngine.DataTools
         private int PostOrden(DirectoryDataInfo currentDir, List<FileDataInfo> filesList, ref int count)
         {
             //Push all directories
-            var subdirs = Delimon.Win32.IO.Directory.GetDirectories(currentDir.FullName);
+            var subdirs = Directory.GetDirectories(PathUtils.ToLongPath(currentDir.FullName));
 
             DirectoryDataInfo child = null;
             DirectoryInfo dinfo = null;
@@ -48,7 +48,7 @@ namespace NeathCopyEngine.DataTools
                 }
 
                 //Retrieve all files
-                dinfo = new DirectoryInfo(currentDir.FullName);
+                dinfo = new DirectoryInfo(PathUtils.ToLongPath(currentDir.FullName));
                 var files = dinfo.GetFiles();
                 filesCount += files.Length;
                 foreach (var f in files)
@@ -96,7 +96,7 @@ namespace NeathCopyEngine.DataTools
 
         public override void FastMove()
         {
-            Directory.Move(FullName, DestinyPath);
+            Directory.Move(PathUtils.ToLongPath(FullName), PathUtils.ToLongPath(DestinyPath));
         }
     }
 }
