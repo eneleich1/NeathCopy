@@ -355,14 +355,15 @@ namespace LongPath
             }
             return !fa.HasFlag(FileAttributes.FILE_ATTRIBUTE_DIRECTORY);
         }
+        /// <summary>
+        /// Copies a file using the managed <see cref="System.IO.File.Copy"/> method.
+        /// </summary>
+        /// <param name="sourceFile">The source file path.</param>
+        /// <param name="destinationFile">The destination file path.</param>
+        /// <param name="failIfDestinationExists">If true, the copy fails when the destination exists.</param>
         public static void Copy(string sourceFile, string destinationFile, bool failIfDestinationExists)
         {
-            bool result = CopyFile(sourceFile, destinationFile, failIfDestinationExists);
-            int lastWin32Error = Marshal.GetLastWin32Error();
-            if (!result)
-            {
-                throw new System.ComponentModel.Win32Exception(lastWin32Error);
-            }
+            System.IO.File.Copy(sourceFile, destinationFile, !failIfDestinationExists);
         }
         public static void Move(string sourceFile, string destinationFile, bool failIfDestinationExists)
         {
@@ -488,10 +489,6 @@ namespace LongPath
             ECreationDisposition dwCreationDisposition,
             EFileAttributes dwFlagsAndAttributes,
             IntPtr hTemplateFile);
-
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool CopyFile(string lpExistingFileName, string lpNewFileName, bool bFailIfExists);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         internal static extern IntPtr CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, int dwFlags);

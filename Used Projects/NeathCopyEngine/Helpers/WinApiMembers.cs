@@ -1,83 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Runtime.InteropServices;
-using System.Security;
-using System.Text;
 
 namespace WinApiMembers
 {
-    public class Kernel32
-    {
-        #region Callback Functions Declarations
-
-         public delegate int CopyProgressRoutine(
-            long TotalFileSize,
-            long TotalBytesTransferred,
-            long StreamSize,
-            long StreamBytesTransferred,
-            int StreamNumber,
-            int CallbackReason,
-            IntPtr hSourceFile,
-            IntPtr hDestinationFile,
-            IntPtr lpData
-            );
-
-         //        DWORD CALLBACK CopyProgressRoutine(
-         //  __in      LARGE_INTEGER TotalFileSize,
-         //  __in      LARGE_INTEGER TotalBytesTransferred,
-         //  __in      LARGE_INTEGER StreamSize,
-         //  __in      LARGE_INTEGER StreamBytesTransferred,
-         //  __in      DWORD dwStreamNumber,
-         //  __in      DWORD dwCallbackReason,
-         //  __in      HANDLE hSourceFile,
-         //  __in      HANDLE hDestinationFile,
-         //  __in_opt  LPVOID lpData
-         //);
-
-        #endregion
-       
-        #region Externs Functions
-
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport("Kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern unsafe IntPtr CopyFileEx
-        (
-            string ExistingFileName,
-            string NewFileName,
-            CopyProgressRoutine ProgressRoutine,
-            IntPtr Data,
-            ref bool Cancel,
-            CopyFlags CopyFlags
-        );
-
-        //        BOOL WINAPI CopyFileEx(
-        //  __in      LPCTSTR lpExistingFileName,
-        //  __in      LPCTSTR lpNewFileName,
-        //  __in_opt  LPPROGRESS_ROUTINE lpProgressRoutine,
-        //  __in_opt  LPVOID lpData,
-        //  __in_opt  LPBOOL pbCancel,
-        //  __in      DWORD dwCopyFlags
-        //);
-
-        #endregion
-
-        #region Enums
-
-        [Flags]
-        public enum CopyFlags
-        {
-            COPY_FILE_ALLOW_DECRYPTED_DESTINATION = 0x00000008,
-            COPY_FILE_COPY_SYMLINK = 0x00000800,
-            COPY_FILE_FAIL_IF_EXISTS = 0x00000001,
-            COPY_FILE_NO_BUFFERING = 0x00001000,
-            COPY_FILE_OPEN_SOURCE_FOR_WRITE = 0x00000004,
-            COPY_FILE_RESTARTABLE = 0x00000002
-        }
-
-        #endregion
-    }
-
+    /// <summary>
+    /// Provides P/Invoke signatures for basic Win32 file operations.
+    /// Native copy routines have been replaced by managed equivalents.
+    /// </summary>
     public class FileCopyMembers
     {
         #region Constants
@@ -133,79 +62,9 @@ namespace WinApiMembers
             System.IntPtr hObject // handle to object
         );
 
-        [System.Runtime.InteropServices.DllImport("Kernel32.dll", SetLastError = true)]
-        public static extern unsafe IntPtr CopyFile
-        (
-            string ExistingFileName,
-            string NewFileName,
-            bool FailIfExists
-        );
-
-        //[System.Runtime.InteropServices.DllImport("Kernel32.dll", SetLastError = true)]
-        [SuppressUnmanagedCodeSecurity]
-        [DllImport("Kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern unsafe IntPtr CopyFileEx
-        (
-            string ExistingFileName,
-            string NewFileName,
-            CopyProgressRoutine ProgressRoutine,
-            IntPtr Data,
-            ref bool Cancel,
-            CopyFlags CopyFlags
-        );
-
-        //        BOOL WINAPI CopyFileEx(
-        //  __in      LPCTSTR lpExistingFileName,
-        //  __in      LPCTSTR lpNewFileName,
-        //  __in_opt  LPPROGRESS_ROUTINE lpProgressRoutine,
-        //  __in_opt  LPVOID lpData,
-        //  __in_opt  LPBOOL pbCancel,
-        //  __in      DWORD dwCopyFlags
-        //);
-
-        public delegate int CopyProgressRoutine(
-            long TotalFileSize,
-            long TotalBytesTransferred,
-            long StreamSize,
-            long StreamBytesTransferred,
-            int StreamNumber,
-            int CallbackReason,
-            IntPtr hSourceFile,
-            IntPtr hDestinationFile,
-            IntPtr lpData
-            );
-
-        //        DWORD CALLBACK CopyProgressRoutine(
-        //  __in      LARGE_INTEGER TotalFileSize,
-        //  __in      LARGE_INTEGER TotalBytesTransferred,
-        //  __in      LARGE_INTEGER StreamSize,
-        //  __in      LARGE_INTEGER StreamBytesTransferred,
-        //  __in      DWORD dwStreamNumber,
-        //  __in      DWORD dwCallbackReason,
-        //  __in      HANDLE hSourceFile,
-        //  __in      HANDLE hDestinationFile,
-        //  __in_opt  LPVOID lpData
-        //);
-
-
         #endregion
 
         #region Enums
-
-        /// <summary>
-        /// Define CopyFile and CopyFileEx option flags.
-        /// </summary>
-        [Flags]
-        public enum CopyFlags
-        {
-            COPY_FILE_ALLOW_DECRYPTED_DESTINATION = 0x00000008,
-            COPY_FILE_COPY_SYMLINK = 0x00000800,
-            COPY_FILE_FAIL_IF_EXISTS = 0x00000001,
-            COPY_FILE_NO_BUFFERING = 0x00001000,
-            COPY_FILE_OPEN_SOURCE_FOR_WRITE = 0x00000004,
-            COPY_FILE_RESTARTABLE = 0x00000002
-        }
-
         /// <summary>
         /// An action to take on a file or device that exists or does not exist.
         /// </summary>
