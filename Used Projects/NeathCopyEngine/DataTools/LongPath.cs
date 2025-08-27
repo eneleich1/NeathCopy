@@ -357,11 +357,22 @@ namespace LongPath
         }
         public static void Copy(string sourceFile, string destinationFile, bool failIfDestinationExists)
         {
-            bool result = CopyFile(sourceFile, destinationFile, failIfDestinationExists);
-            int lastWin32Error = Marshal.GetLastWin32Error();
-            if (!result)
+            sourceFile = PathUtils.ToLongPath(sourceFile);
+            destinationFile = PathUtils.ToLongPath(destinationFile);
+
+            FileMode destMode = failIfDestinationExists ? FileMode.CreateNew : FileMode.Create;
+
+            using (FileStream sourceStream = new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (FileStream destStream = new FileStream(destinationFile, destMode, FileAccess.Write, FileShare.None))
             {
-                throw new System.ComponentModel.Win32Exception(lastWin32Error);
+                int bufferSize = new NeathCopyEngine.CopyHandlers.FasterBufferFileCopier(1024 * 1024).BufferSize;
+                byte[] buffer = new byte[bufferSize];
+
+                int read;
+                while ((read = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    destStream.Write(buffer, 0, read);
+                }
             }
         }
         public static void Move(string sourceFile, string destinationFile, bool failIfDestinationExists)
@@ -488,10 +499,6 @@ namespace LongPath
             ECreationDisposition dwCreationDisposition,
             EFileAttributes dwFlagsAndAttributes,
             IntPtr hTemplateFile);
-
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool CopyFile(string lpExistingFileName, string lpNewFileName, bool bFailIfExists);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         internal static extern IntPtr CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, int dwFlags);
