@@ -372,7 +372,7 @@ namespace NeathCopyEngine.CopyHandlers
                     
                     try
                     {
-                        LongPath.Directory.CreateDirectoriesInPath(CurrentFile.DestinyDirectoryPath);
+                        Directory.CreateDirectory(PathUtils.ToLongPath(CurrentFile.DestinyDirectoryPath));
                         //di.Attributes = att;
                     }
                     catch (Exception)

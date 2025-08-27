@@ -277,7 +277,7 @@ namespace NeathCopyEngine.Helpers
         {
             try
             {
-                if (!LongPath.File.Exists(fileName))
+                if (!File.Exists(PathUtils.ToLongPath(fileName)))
                     throw new ArgumentException("The specific file not exist");
 
                 return (SerializableFilesList)MySerializer.Deserialize(typeof(SerializableFilesList), fileName);
@@ -309,7 +309,7 @@ namespace NeathCopyEngine.Helpers
         {
             try {
 
-                if (!LongPath.File.Exists(fileName))
+                if (!File.Exists(PathUtils.ToLongPath(fileName)))
                     throw new ArgumentException("The specific file not exist");
 
                 return (SerializableFilesList)MySerializer.Deserialize(typeof(SerializableFilesList), fileName);
@@ -341,7 +341,7 @@ namespace NeathCopyEngine.Helpers
         {
             try
             {
-                if (!LongPath.File.Exists(fileName))
+                if (!File.Exists(PathUtils.ToLongPath(fileName)))
                     throw new ArgumentException("The specific file not exist");
 
                 return (SerializableFilesList)MySerializer.DeserializeCompressed(typeof(SerializableFilesList), fileName);
