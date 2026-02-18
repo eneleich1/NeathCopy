@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace NeathCopyEngine.DataTools
 {
@@ -46,7 +44,18 @@ namespace NeathCopyEngine.DataTools
 
             if (finfo1.Length != finfo2.Length) return false;
 
-            return NeathCheckSum(finfo1) == NeathCheckSum(finfo2);
+            // Full-file MD5 comparison (not partial checksum).
+            try
+            {
+                var hash1 = md5Checksum(file1);
+                var hash2 = md5Checksum(file2);
+
+                return string.Equals(hash1, hash2, StringComparison.OrdinalIgnoreCase);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         private static string md5Checksum(string fileName)
@@ -57,46 +66,6 @@ namespace NeathCopyEngine.DataTools
                 using (var stream = Alphaleonis.Win32.Filesystem.File.OpenRead(fileName))
                 {
                     return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", String.Empty);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Retrieve the NeathCheckSum Definition of the File.
-        /// NeathCheckSum Compare the length and starting 1024 bytes
-        /// and lastest 1024 bytes as well.
-        /// </summary>
-        /// <param name="finfo"></param>
-        /// <returns></returns>
-        private static string NeathCheckSum(Alphaleonis.Win32.Filesystem.FileInfo finfo)
-        {
-            int bytesCount = 1024;
-            int totalBytes = bytesCount * 2;
-            byte[] buffer = new byte[bytesCount];
-
-            byte[] start = new byte[bytesCount];
-            byte[] end = new byte[bytesCount];
-
-            if (finfo.Length <= totalBytes)
-            {
-                using (FileStream fs = finfo.OpenRead())
-                {
-                    fs.Read(buffer, 0, bytesCount);
-
-                    return BitConverter.ToString(buffer, 0);
-                }
-            }
-            else
-            {
-                using (FileStream fs = finfo.OpenRead())
-                {
-                    fs.Read(start, 0, bytesCount);
-
-                    fs.Position = finfo.Length - bytesCount;
-
-                    fs.Read(end, 0, bytesCount);
-
-                    return BitConverter.ToString(start, 0) + BitConverter.ToString(end, 0);
                 }
             }
         }
