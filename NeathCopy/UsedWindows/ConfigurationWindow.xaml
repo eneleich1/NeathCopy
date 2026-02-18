@@ -21,16 +21,16 @@
                     <StackPanel Orientation="Horizontal">
                         <GroupBox Header="{DynamicResource t61}">
                             <StackPanel Margin="3">
-                                <RadioButton Margin="0,3,0,0" Name="addToFirsth_rb" Checked="addToFirsth_rb_Checked"  Content="{DynamicResource t62}"/>
-                                <RadioButton Margin="0,3,0,0" Name="addToLast_rb" Content="{DynamicResource t63}" Checked="addToLast_rb_Checked"/>
-                                <RadioButton Margin="0,3,0,0" Name="add_SameDestiny_rb"  Content="{DynamicResource t64}" Checked="add_SameDestiny_rb_Checked" />
-                                <RadioButton Margin="0,3,0,0" Name="add_SameVolumen_rb"   Content="{DynamicResource t65}" Checked="add_SameVolumen_rb_Checked"/>
+                                <RadioButton Margin="0,3,0,0" Name="addToFirsth_rb" Content="{DynamicResource t62}" IsChecked="{Binding AddToFirsth}"/>
+                                <RadioButton Margin="0,3,0,0" Name="addToLast_rb" Content="{DynamicResource t63}" IsChecked="{Binding AddToLast}"/>
+                                <RadioButton Margin="0,3,0,0" Name="add_SameDestiny_rb"  Content="{DynamicResource t64}" IsChecked="{Binding AddToSameDestiny}" />
+                                <RadioButton Margin="0,3,0,0" Name="add_SameVolumen_rb"   Content="{DynamicResource t65}" IsChecked="{Binding AddToSameVolumen}"/>
                             </StackPanel>
                         </GroupBox>
                         <GroupBox Margin="5,0,0,0" Header="{DynamicResource t66}">
                             <StackPanel Margin="3">
-                                <RadioButton Margin="0,3,0,0" Name="sob_AutomatlyStart_rb" Checked="sob_AutomatlyStart_rb_Checked"  Content="{DynamicResource t67}" />
-                                <RadioButton Margin="0,3,0,0" Name="sob_WaitInQueve_rb" Checked="sob_WaitInQueve_rb_Checked"  Content="{DynamicResource t68}"/>
+                                <RadioButton Margin="0,3,0,0" Name="sob_AutomatlyStart_rb" Content="{DynamicResource t67}" IsChecked="{Binding StartAutomatically}" />
+                                <RadioButton Margin="0,3,0,0" Name="sob_WaitInQueve_rb" Content="{DynamicResource t68}" IsChecked="{Binding WaitInQueue}"/>
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>
@@ -39,12 +39,14 @@
                         <StackPanel Margin="3" Orientation="Horizontal">
                             <StackPanel>
                                 <TextBlock Text="{DynamicResource t70}"/>
-                                <ComboBox Name="copyEngine_cb" SelectionChanged="copyEngine_cb_SelectionChanged" Background="Transparent" Width="209"></ComboBox>
+                                <ComboBox Name="copyEngine_cb" Background="Transparent" Width="209"
+                                          ItemsSource="{Binding FileCopiers}" SelectedItem="{Binding SelectedFileCopier}"/>
                             </StackPanel>
                             <Separator Width="30" Background="Transparent"/>
                             <StackPanel >
                                 <TextBlock Text="{DynamicResource t71}"/>
-                                <TextBox Width="105"  Name="bufferSize_textBox" HorizontalAlignment="Left" TextAlignment="Right" TextChanged="bufferSize_textBox_TextChanged"
+                                <TextBox Width="105"  Name="bufferSize_textBox" HorizontalAlignment="Left" TextAlignment="Right"
+                                         Text="{Binding BufferSizeText, UpdateSourceTrigger=PropertyChanged}"
                                          
                                          />
                             </StackPanel>
@@ -54,15 +56,18 @@
                     <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Height="90">
                         <GroupBox Header="{DynamicResource t72}" >
                             <StackPanel Margin="3">
-                                <CheckBox Margin="0,3,0,0" Name="ps_affter_ADD_DATA_cb"  Content="{DynamicResource t73}" HorizontalAlignment="Left" Click="ps_affter_ADD_DATA_cb_Click"/>
-                                <CheckBox Margin="0,3,0,0" Name="ps_affter_Finish_cb"  Content="{DynamicResource t74}" HorizontalAlignment="Left" Click="ps_affter_Finish_cb_Click"/>
-                                <CheckBox Margin="0,3,0,0" Name="ps_When_Cancel_cb"  Content="{DynamicResource t75}" HorizontalAlignment="Left" Click="ps_When_Cancel_cb_Click"/>
+                                <CheckBox Margin="0,3,0,0" Name="ps_affter_ADD_DATA_cb"  Content="{DynamicResource t73}" HorizontalAlignment="Left"
+                                          IsChecked="{Binding PlaySoundAfterAddData}"/>
+                                <CheckBox Margin="0,3,0,0" Name="ps_affter_Finish_cb"  Content="{DynamicResource t74}" HorizontalAlignment="Left"
+                                          IsChecked="{Binding PlaySoundAfterFinish}"/>
+                                <CheckBox Margin="0,3,0,0" Name="ps_When_Cancel_cb"  Content="{DynamicResource t75}" HorizontalAlignment="Left"
+                                          IsChecked="{Binding PlaySoundAfterCancel}"/>
                             </StackPanel>
                         </GroupBox>
                         <GroupBox Margin="5,0,0,0" Header="{DynamicResource t76}">
                             <StackPanel Margin="3">
-                                <RadioButton Margin="0,3,0,0" Name="ancb_All_In_One_rb" Checked="ancb_All_In_One_rb_Checked"  Content="{DynamicResource t77}"/>
-                                <RadioButton Margin="0,3,0,0" Name="ancb_Use_Separate_Windos_rb" Checked="ancb_Use_Separate_Windos_rb_Checked"  Content="{DynamicResource t78}" />
+                                <RadioButton Margin="0,3,0,0" Name="ancb_All_In_One_rb" Content="{DynamicResource t77}" IsChecked="{Binding AllInOne}"/>
+                                <RadioButton Margin="0,3,0,0" Name="ancb_Use_Separate_Windos_rb" Content="{DynamicResource t78}" IsChecked="{Binding SeparateWindows}" />
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>
@@ -70,8 +75,8 @@
                     <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Height="90">
                         <GroupBox Margin="5,0,0,0" Header="{DynamicResource t117}">
                             <StackPanel Margin="3,3,30,3">
-                                <RadioButton Margin="0,3,0,0" Name="closeAffterError_rb" Checked="closeAffterError_rb_Checked" Content="{DynamicResource t118}"/>
-                                <RadioButton Margin="0,3,0,0" Name="keepAffterError_rb" Checked="keepAffterError_rb_Checked"  Content="{DynamicResource t119}" />
+                                <RadioButton Margin="0,3,0,0" Name="closeAffterError_rb" Content="{DynamicResource t118}" IsChecked="{Binding CloseAfterError}"/>
+                                <RadioButton Margin="0,3,0,0" Name="keepAffterError_rb" Content="{DynamicResource t119}" IsChecked="{Binding KeepAfterError}" />
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>
@@ -82,7 +87,8 @@
                     <GroupBox Header="{DynamicResource t80}">
                         <StackPanel  Orientation="Horizontal">
                             <Label Content="{DynamicResource t81}" />
-                            <ComboBox Name="language_cb" SelectionChanged="language_cb_SelectionChanged" Width="160"  Height="23" SelectedIndex="0" Margin="3,0,0,0"/>
+                            <ComboBox Name="language_cb" Width="160"  Height="23" SelectedIndex="0" Margin="3,0,0,0"
+                                      ItemsSource="{Binding Languages}" SelectedItem="{Binding SelectedLanguage}"/>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox Header="{DynamicResource t82}" Margin="0,3,0,0">
@@ -90,19 +96,23 @@
                             <StackPanel Canvas.Top="13" Canvas.Left="0">
                                 <StackPanel Orientation="Horizontal" Grid.Row="0" Height="23">
                                     <TextBlock Text="{DynamicResource t83}" Width="130"/>
-                                    <ComboBox Width="200" SelectionChanged="theme_cb_SelectionChanged"  Name="theme_cb"  SelectedIndex="0"/>
+                                    <ComboBox Width="200" Name="theme_cb" SelectedIndex="0"
+                                              ItemsSource="{Binding Themes}" SelectedItem="{Binding SelectedTheme}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Grid.Row="1" Height="23" Margin="0,5,0,5">
                                     <TextBlock Text="{DynamicResource t84}" Width="130"/>
-                                    <ComboBox Width="200" SelectionChanged="skins_cb_SelectionChanged"  Name="skins_cb"  SelectedIndex="0"/>
+                                    <ComboBox Width="200" Name="skins_cb"  SelectedIndex="0"
+                                              ItemsSource="{Binding Skins}" SelectedItem="{Binding SelectedSkin}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Grid.Row="2" Height="23">
                                     <TextBlock Text="{DynamicResource t85}" Width="130"/>
-                                    <ComboBox Width="200" SelectionChanged="brushes_cb_SelectionChanged"  Name="brushes_cb"  SelectedIndex="0"/>
+                                    <ComboBox Width="200" Name="brushes_cb"  SelectedIndex="0"
+                                              ItemsSource="{Binding Brushes}" SelectedItem="{Binding SelectedBrush}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Grid.Row="2" Height="23" Margin="0,5,0,5">
                                     <TextBlock Text="{DynamicResource t86}" Width="130"/>
-                                    <ComboBox Width="200" SelectionChanged="font_cb_SelectionChanged"  SelectedIndex="0" Name="font_cb" />
+                                    <ComboBox Width="200" SelectedIndex="0" Name="font_cb"
+                                              ItemsSource="{Binding Fonts}" SelectedItem="{Binding SelectedFont}"/>
                                 </StackPanel>
                             </StackPanel>
                         </Canvas>
@@ -138,7 +148,8 @@
                         </Grid.RowDefinitions>
 
                         <Label Content="{DynamicResource t103}"/>
-                        <TextBox Name="updateTime_tb" TextChanged="updateTime_tb_TextChanged" Grid.Column="1" Width="60" Margin="3"/>
+                        <TextBox Name="updateTime_tb" Grid.Column="1" Width="60" Margin="3"
+                                 Text="{Binding UpdateTimeText, UpdateSourceTrigger=PropertyChanged}"/>
 
                       
                     </Grid>

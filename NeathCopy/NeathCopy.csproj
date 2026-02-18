@@ -110,6 +110,7 @@
     <Compile Include="Module2_Configuration\AddDataBehaviour\AddToSameVolumen.cs" />
     <Compile Include="Module2_Configuration\AddDataBehaviour\AddDataFactory.cs" />
     <Compile Include="Module2_Configuration\Configuration.cs" />
+    <Compile Include="Helpers\RichTextBoxBinding.cs" />
     <Compile Include="Resources\Converters.cs" />
     <Compile Include="Themes\ControlsStyles\Theme1ToolBarPanel.xaml.cs">
       <DependentUpon>Theme1ToolBarPanel.xaml</DependentUpon>
@@ -156,8 +157,22 @@
       <DependentUpon>UserDropUIWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ConfigurationWindow_VM.cs" />
+    <Compile Include="ViewModels\ConfigurationWindowViewModel.cs" />
+    <Compile Include="ViewModels\ContainerWindowViewModel.cs" />
     <Compile Include="ViewModels\CopyList_VM.cs" />
+    <Compile Include="ViewModels\CopyListWindowViewModel.cs" />
+    <Compile Include="ViewModels\DiskIsFullWindowViewModel.cs" />
+    <Compile Include="ViewModels\ErrorWindowViewModel.cs" />
+    <Compile Include="ViewModels\FileExistOptionsWindowViewModel.cs" />
+    <Compile Include="ViewModels\FileNotFoundWindowViewModel.cs" />
+    <Compile Include="ViewModels\FormattedDriveInfo.cs" />
+    <Compile Include="ViewModels\InformationWindowViewModel.cs" />
+    <Compile Include="ViewModels\MessageWindowViewModel.cs" />
+    <Compile Include="ViewModels\RelayCommand.cs" />
+    <Compile Include="ViewModels\UserDropUIWindowViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\VisualCopyVM.cs" />
+    <Compile Include="ViewModels\VisualsCopysHandlerViewModel.cs" />
     <Compile Include="VisualCopy.xaml.cs">
       <DependentUpon>VisualCopy.xaml</DependentUpon>
     </Compile>

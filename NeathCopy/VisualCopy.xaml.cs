@@ -386,11 +386,7 @@ namespace NeathCopy
         {
             errorDlg.Dispatcher.Invoke(new Action(() =>
             {
-                // Create a simple FlowDocument to serve as content.
-                FlowDocument flowDoc = new FlowDocument(new Paragraph(new Run(string.Format("An error occurs when copy the {0} file: {1}", currentFile.Name, error))));
-
-                // This call sets the contents of the RichTextBox to the specified FlowDocument.
-                errorDlg.info_tb.Document = flowDoc;
+                errorDlg.SetMessage(string.Format("An error occurs when copy the {0} file: {1}", currentFile.Name, error));
 
                 errorDlg.ShowDialog();
             }));
@@ -402,11 +398,7 @@ namespace NeathCopy
         {
             fileNFDlg.Dispatcher.Invoke(new Action(() =>
             {
-                // Create a simple FlowDocument to serve as content.
-                FlowDocument flowDoc = new FlowDocument(new Paragraph(new Run(string.Format("The system cold not find the specific file: {0}", currentFile.FullName))));
-
-                // This call sets the contents of the RichTextBox to the specified FlowDocument.
-                fileNFDlg.info_tb.Document = flowDoc;
+                fileNFDlg.SetMessage(string.Format("The system cold not find the specific file: {0}", currentFile.FullName));
 
                 fileNFDlg.ShowDialog();
             }));
@@ -432,11 +424,7 @@ namespace NeathCopy
         {
             fileExistDlg.Dispatcher.Invoke(new Action(() =>
             {
-                // Create a simple FlowDocument to serve as content.
-                FlowDocument flowDoc = new FlowDocument(new Paragraph(new Run(string.Format("The File: {0} already exist", currentFile.FullName))));
-
-                // This call sets the contents of the RichTextBox to the specified FlowDocument.
-                fileExistDlg.info_tb.Document = flowDoc;
+                fileExistDlg.SetMessage(string.Format("The File: {0} already exist", currentFile.FullName));
 
                 fileExistDlg.ShowDialog();
             }));
@@ -481,13 +469,13 @@ namespace NeathCopy
             {
                 infoWnd.ShowMessage(driveInfo, driveInfo.TotalFreeSpace, NeathCopy.DiscoverdList.SizeOfFilesToCopy.Bytes);
 
-                if (infoWnd.UserSelectedAction != InformationWindow.UserAction.Try)
+                if (infoWnd.UserSelectedAction != ViewModels.InformationWindowUserAction.Try)
                     InqueveState = oldState;
-                if (infoWnd.UserSelectedAction == InformationWindow.UserAction.Ignore)
+                if (infoWnd.UserSelectedAction == ViewModels.InformationWindowUserAction.Ignore)
                     return DiskSpaceOptions.IGNORE;
-                else if (infoWnd.UserSelectedAction == InformationWindow.UserAction.Cancel)
+                else if (infoWnd.UserSelectedAction == ViewModels.InformationWindowUserAction.Cancel)
                     return DiskSpaceOptions.CANCEL;
-                else if (infoWnd.UserSelectedAction == InformationWindow.UserAction.Fit)
+                else if (infoWnd.UserSelectedAction == ViewModels.InformationWindowUserAction.Fit)
                     return DiskSpaceOptions.FIT_CONTENT;
             }
 

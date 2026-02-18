@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using NeathCopy.ViewModels;
 
 namespace NeathCopy.UsedWindows
 {
@@ -19,14 +8,20 @@ namespace NeathCopy.UsedWindows
     /// </summary>
     public partial class MessageWindow : Window
     {
+        private readonly MessageWindowViewModel viewModel;
+
         public MessageWindow()
         {
             InitializeComponent();
+
+            viewModel = new MessageWindowViewModel();
+            viewModel.RequestClose += () => Hide();
+            DataContext = viewModel;
         }
 
-        private void fit_button_Click(object sender, RoutedEventArgs e)
+        public void SetMessage(string message)
         {
-            Hide();
+            viewModel.Message = message;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

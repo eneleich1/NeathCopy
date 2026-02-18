@@ -1,17 +1,8 @@
-﻿using NeathCopyEngine.CopyHandlers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using NeathCopy.ViewModels;
+using NeathCopyEngine.CopyHandlers;
 
 namespace NeathCopy.UsedWindows
 {
@@ -20,28 +11,23 @@ namespace NeathCopy.UsedWindows
     /// </summary>
     public partial class FileNotFoundWindows : Window
     {
-        public FileNotFoundOption Option;
+        private readonly FileNotFoundWindowViewModel viewModel;
+
+        public FileNotFoundOption Option => viewModel.Option;
+
         public FileNotFoundWindows()
         {
             InitializeComponent();
+
+            viewModel = new FileNotFoundWindowViewModel();
+            viewModel.RequestClose += () => Hide();
+            DataContext = viewModel;
         }
 
-        private void try_button_Click(object sender, RoutedEventArgs e)
+        public void SetMessage(string message)
         {
-            Option = FileNotFoundOption.Skip;
-            Hide();
-        }
-
-        private void skip_button_Click(object sender, RoutedEventArgs e)
-        {
-            Option = FileNotFoundOption.Skip;
-            Hide();
-        }
-
-        private void cancel_button_Click(object sender, RoutedEventArgs e)
-        {
-            Option = FileNotFoundOption.Cancel;
-            Hide();
+            var flowDoc = new FlowDocument(new Paragraph(new Run(message)));
+            viewModel.InfoDocument = flowDoc;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

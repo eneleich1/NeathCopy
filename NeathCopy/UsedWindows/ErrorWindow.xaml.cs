@@ -1,17 +1,8 @@
-﻿using NeathCopyEngine.CopyHandlers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using NeathCopy.ViewModels;
+using NeathCopyEngine.CopyHandlers;
 
 namespace NeathCopy.UsedWindows
 {
@@ -20,32 +11,23 @@ namespace NeathCopy.UsedWindows
     /// </summary>
     public partial class ErrorWindow : Window
     {
-        public TransferErrorOption Option;
+        private readonly ErrorWindowViewModel viewModel;
+
+        public TransferErrorOption Option => viewModel.Option;
+
         public ErrorWindow()
         {
             InitializeComponent();
+
+            viewModel = new ErrorWindowViewModel();
+            viewModel.RequestClose += () => Hide();
+            DataContext = viewModel;
         }
 
-        private void skipAll_button_Click(object sender, RoutedEventArgs e)
+        public void SetMessage(string message)
         {
-            Option = TransferErrorOption.SkipAll;
-            Hide();
-        }
-        private void skip_button_Click(object sender, RoutedEventArgs e)
-        {
-            Option = TransferErrorOption.SkipCurrentFile;
-            Hide();
-        }
-        private void cancel_button_Click(object sender, RoutedEventArgs e)
-        {
-            Option = TransferErrorOption.Cancel;
-            Hide();
-        }
-
-        private void try_bt_Click(object sender, RoutedEventArgs e)
-        {
-            Option = TransferErrorOption.Try;
-            Hide();
+            var flowDoc = new FlowDocument(new Paragraph(new Run(message)));
+            viewModel.InfoDocument = flowDoc;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -53,7 +35,5 @@ namespace NeathCopy.UsedWindows
             e.Cancel = true;
             Hide();
         }
-
-      
     }
 }

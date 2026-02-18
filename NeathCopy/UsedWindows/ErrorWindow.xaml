@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NeathCopy.UsedWindows"  WindowStartupLocation="CenterOwner" Closing="Window_Closing"
+        xmlns:helpers="clr-namespace:NeathCopy.Helpers"
         mc:Ignorable="d" Style="{DynamicResource UsedWindowStyle}" Topmost="True" SizeToContent="WidthAndHeight"
         Title="ErrorWindow" Icon="/NeathCopy;component/Themes/Images/Windows8Images/info.png">
 
@@ -20,16 +21,17 @@
                 <StackPanel Margin="7,7,7,3" Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock VerticalAlignment="Center"  Width="30" FontSize="32" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap">!</TextBlock>
                     <Separator/>
-                <RichTextBox IsReadOnly="True"  Name="info_tb" Width="285" Height="49" Foreground="{DynamicResource TextBrush}" Background="{DynamicResource ControlBackgroundBrush}"/>
+                <RichTextBox IsReadOnly="True" Width="285" Height="49" Foreground="{DynamicResource TextBrush}" Background="{DynamicResource ControlBackgroundBrush}"
+                             helpers:RichTextBoxBinding.BindableDocument="{Binding InfoDocument}"/>
                 </StackPanel>
             <StackPanel Margin="15"  Orientation="Horizontal" HorizontalAlignment="Center" Height="23">
-                <Button Background="Transparent" FontWeight="Bold" Name="try_bt" MinWidth="70" Click="try_bt_Click"  Foreground="Blue"
+                <Button Background="Transparent" FontWeight="Bold" MinWidth="70" Command="{Binding TryCommand}"  Foreground="Blue"
                      Content="{DynamicResource t41}"   />
-                <Button Background="Transparent" FontWeight="Bold" Margin="10,0,10,0" Name="skipAll_button" MinWidth="70" Click="skipAll_button_Click" Foreground="Blue"
+                <Button Background="Transparent" FontWeight="Bold" Margin="10,0,10,0" MinWidth="70" Command="{Binding SkipAllCommand}" Foreground="Blue"
                      Content="{DynamicResource t32}"   />
-                <Button Background="Transparent" FontWeight="Bold" Name="skip_button" MinWidth="45"  Click="skip_button_Click" Foreground="Blue"
+                <Button Background="Transparent" FontWeight="Bold" MinWidth="45" Command="{Binding SkipCommand}" Foreground="Blue"
                      Content="{DynamicResource t33}"   />
-                <Button Background="Transparent" FontWeight="Bold" Name="cancel_button" Foreground="Red" MinWidth="55" Margin="10,0,0,0" Click="cancel_button_Click"
+                <Button Background="Transparent" FontWeight="Bold" Foreground="Red" MinWidth="55" Margin="10,0,0,0" Command="{Binding CancelCommand}"
                      Content="{DynamicResource t34}"   /> 
             </StackPanel>
             </StackPanel>

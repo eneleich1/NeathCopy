@@ -10,7 +10,8 @@
         Title="NeathCopy" Height="185.333" SizeToContent="WidthAndHeight"  MaxHeight="600" Icon="neathcopy.ico" >
 
     <Grid >
-        <ListBox Name="listbox1" BorderBrush="Transparent" HorizontalAlignment="Center">
+        <ListBox Name="listbox1" BorderBrush="Transparent" HorizontalAlignment="Center"
+                 ItemsSource="{Binding VisualsCopys}">
             <!--<local:VisualCopy/>
             <local:VisualCopy/>-->
         </ListBox>

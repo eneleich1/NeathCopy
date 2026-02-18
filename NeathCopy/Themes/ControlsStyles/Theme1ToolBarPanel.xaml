@@ -79,37 +79,37 @@
 
                         <!--MoveFirst-->
                         <Button  Name="moveFirst_button" Background="{DynamicResource moveFirstBrush}" SnapsToDevicePixels="True" 
-                                 Foreground="Red" Command="{x:Static tools:MyCommands.MoveFirstCommand}" ToolTip="{DynamicResource t23}" >
+                                 Foreground="Red" Command="{Binding MoveFirstCommand}" ToolTip="{DynamicResource t23}" >
                         </Button>
                         
                         <!--MoveUp-->
                         <Button Name="moveUp_button" ToolTip="{DynamicResource t24}" Background="{DynamicResource moveUpBrush}"  
-                                Command="{x:Static tools:MyCommands.MoveUpCommand}">
+                                Command="{Binding MoveUpCommand}">
                         </Button>
                         
                         <!--MoveDown-->
                         <Button Name="moveDown_button" Background="{DynamicResource moveDownBrush}" ToolTip="{DynamicResource t25}"  
-                                Command="{x:Static tools:MyCommands.MoveDownCommand}">
+                                Command="{Binding MoveDownCommand}">
                         </Button>
                         
                         <!--MoveLast-->
                         <Button Name="moveLast_button" Background="{DynamicResource moveLastBrush}" ToolTip="{DynamicResource t26}"  
-                               Command="{x:Static tools:MyCommands.MoveLastCommand}">
+                               Command="{Binding MoveLastCommand}">
                         </Button>
                         
                         <!--Remove-->
                         <Button Name="remove_button" Background="{DynamicResource removeFromListBrush}" ToolTip="{DynamicResource t27}"  
-                                Command="{x:Static tools:MyCommands.RemoveCommand}">
+                                Command="{Binding RemoveCommand}">
                         </Button>
                         
                         <!--SaveList-->
                         <Button Name="saveList_button" Background="{DynamicResource saveListBrush}" ToolTip="{DynamicResource t20}"  
-                               Command="{x:Static tools:MyCommands.SaveCommand}">
+                               Command="{Binding SaveCommand}">
                         </Button>
                         
                         <!--LoadList-->
                         <Button Name="loadList_button" Background="{DynamicResource loadListBrush}"  ToolTip="{DynamicResource t19}"  
-                                Command="{x:Static tools:MyCommands.LoadCommand}">
+                                Command="{Binding LoadCommand}">
                         </Button>
                         
                         

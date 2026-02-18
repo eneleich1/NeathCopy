@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NeathCopy.UsedWindows"
+        xmlns:helpers="clr-namespace:NeathCopy.Helpers"
         mc:Ignorable="d" Closing="Window_Closing"
         Title="FileExistOptionsWindow" Style="{DynamicResource UsedWindowStyle}" Topmost="True" SizeToContent="WidthAndHeight" Icon="/NeathCopy;component/Themes/Images/Windows8Images/info.png">
 
@@ -18,10 +19,11 @@
             </StackPanel.Resources>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock VerticalAlignment="Center"  Width="30" FontSize="32" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap">!</TextBlock>
-                <RichTextBox IsReadOnly="True"  Name="info_tb" Width="275" Height="49" Foreground="{DynamicResource TextBrush}" Background="{DynamicResource ControlBackgroundBrush}"/>
+                <RichTextBox IsReadOnly="True" Width="275" Height="49" Foreground="{DynamicResource TextBrush}" Background="{DynamicResource ControlBackgroundBrush}"
+                             helpers:RichTextBoxBinding.BindableDocument="{Binding InfoDocument}"/>
             </StackPanel>
             <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                <ComboBox SelectedIndex="0" Name="option_cb" MinWidth="140" Background="White" HorizontalAlignment="Center" Margin="10,0,0,0">
+                <ComboBox SelectedIndex="{Binding SelectedOptionIndex}" MinWidth="140" Background="White" HorizontalAlignment="Center" Margin="10,0,0,0">
                     <ComboBoxItem Content="{DynamicResource t37}"/>
                     <ComboBoxItem Content="{DynamicResource t38}"/>
                     <ComboBoxItem Content="{DynamicResource t111}"/>
@@ -29,8 +31,8 @@
                     <ComboBoxItem Content="{DynamicResource t39}"/>
                     <ComboBoxItem Content="{DynamicResource t40}"/> 
                 </ComboBox>
-                <Button Name="ok_button" Background="Transparent" FontWeight="Bold" Content="{DynamicResource t35}" Foreground="Blue" Margin="10,0,0,0" Width="70" Click="ok_button_Click" />
-                <Button Name="cancel_button" Background="Transparent" FontWeight="Bold"  Content="{DynamicResource t36}" Foreground="Red" Margin="10,0,0,0" Width="70" Click="cancel_button_Click" />
+                <Button Background="Transparent" FontWeight="Bold" Content="{DynamicResource t35}" Foreground="Blue" Margin="10,0,0,0" Width="70" Command="{Binding OkCommand}" />
+                <Button Background="Transparent" FontWeight="Bold"  Content="{DynamicResource t36}" Foreground="Red" Margin="10,0,0,0" Width="70" Command="{Binding CancelCommand}" />
             </StackPanel>
         </StackPanel>
     </Grid>

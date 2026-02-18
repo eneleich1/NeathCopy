@@ -22,6 +22,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using NeathCopy.ViewModels;
 
 namespace NeathCopy
 {
@@ -31,6 +32,7 @@ namespace NeathCopy
     public partial class VisualsCopysHandler : Window
     {
         public static HwndSource hwndCopy;
+        private readonly VisualsCopysHandlerViewModel viewModel;
 
         public static VisualsCopysHandler MainHandler { get; private set; }
         public static ContainerWindow MainContainer { get; set; }
@@ -58,47 +60,10 @@ namespace NeathCopy
         public VisualsCopysHandler()
         {
             InitializeComponent();
+            viewModel = new VisualsCopysHandlerViewModel();
+            DataContext = viewModel;
         }
 
-        private void CheckAndFixRequest()
-        {
-            var browseDestiny = new UserDropUIWindow();
-
-            if (StartupClass.requestInfo.Operation != "copy" 
-                && StartupClass.requestInfo.Operation != "move" && StartupClass.requestInfo.Operation != "fastmove")
-            {
-                browseDestiny.Title = string.Format("Invalid Operation: {0}, select Copy or Move.",StartupClass.requestInfo.Operation);
-                browseDestiny.DestinyTextBox.Text = StartupClass.requestInfo.Destiny;
-                browseDestiny.ShowDialog();
-                if (browseDestiny.DlgResult)
-                {
-                    StartupClass.requestInfo.Destiny = browseDestiny.Destiny;
-                    StartupClass.requestInfo.Operation = browseDestiny.Operation;
-                    StartupClass.requestInfo.Content = RquestContent.Sources | RquestContent.Operation;
-                }
-                else Process.GetCurrentProcess().Kill();
-            }
-
-            //Destiny
-            else if (!Alphaleonis.Win32.Filesystem.Directory.Exists(StartupClass.requestInfo.Destiny))
-            {
-                browseDestiny.Title = string.Format("Destiny: {0} do not exist. Browse other", StartupClass.requestInfo.Destiny); ;
-                browseDestiny.OptionComboBox.SelectedIndex = StartupClass.requestInfo.Operation == "copy" ? 0 : 1;
-                browseDestiny.DestinyTextBox.Text = StartupClass.requestInfo.Destiny;
-
-                browseDestiny.ShowDialog();
-
-                if (browseDestiny.DlgResult)
-                {
-                    StartupClass.requestInfo.Destiny = browseDestiny.Destiny;
-                    StartupClass.requestInfo.Content = RquestContent.All;
-                }
-                else Process.GetCurrentProcess().Kill();
-            }
-            else StartupClass.requestInfo.Content = RquestContent.All;
-
-            browseDestiny.Close();
-        }
         private void MyInitialize()
         {
             try
@@ -115,7 +80,7 @@ namespace NeathCopy
 
                 //If Destiny not exist
                 if (StartupClass.requestInfo.Content != RquestContent.None)
-                    CheckAndFixRequest();
+                    viewModel.CheckAndFixRequest();
 
                 //Start operation
                 if (StartupClass.requestInfo.Content == RquestContent.All)
@@ -197,8 +162,7 @@ namespace NeathCopy
                     Visibility = System.Windows.Visibility.Hidden;
                     break;
                 case WM_ADD_DATAINFO:
-                    //Configuration.Main.Process_ADD_DATA(VisualsCopys);
-                    Configuration.Main.addDataBehaviour.Execute(VisualsCopys);
+                    viewModel.HandleAddDataInfo(VisualsCopys);
                     break;
 
             }

@@ -19,12 +19,13 @@
             <StackPanel Margin="10,5,10,3" Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock VerticalAlignment="Center"  Width="30" FontSize="32" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap">!</TextBlock>
                 <Separator/>
-                <TextBox IsReadOnly="True"  Name="message_tb" Width="285" Height="49" Foreground="{DynamicResource TextBrush}" Background="{DynamicResource ControlBackgroundBrush}"/>
+                <TextBox IsReadOnly="True" Width="285" Height="49" Foreground="{DynamicResource TextBrush}" Background="{DynamicResource ControlBackgroundBrush}"
+                         Text="{Binding Message}"/>
             </StackPanel>
             <StackPanel Margin="15" Orientation="Horizontal" HorizontalAlignment="Center" Height="23">
-                <Button Background="Transparent" FontWeight="Bold" Name="delete_bt" Foreground="Red" MinWidth="200"  Click="delete_bt_Click" 
+                <Button Background="Transparent" FontWeight="Bold" Foreground="Red" MinWidth="200" Command="{Binding DeleteCommand}" 
                         Content="{DynamicResource t30}" />
-                <Button Background="Transparent" FontWeight="Bold" Name="keep_bt" Foreground="Blue"  MinWidth="100"  Margin="10,0,0,0" Click="keep_bt_Click"
+                <Button Background="Transparent" FontWeight="Bold" Foreground="Blue"  MinWidth="100"  Margin="10,0,0,0" Command="{Binding KeepCommand}"
                         Content="{DynamicResource t31}"/> 
             </StackPanel>
         </StackPanel>

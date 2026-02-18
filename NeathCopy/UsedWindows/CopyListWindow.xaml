@@ -3,40 +3,20 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:NeathCopy.UsedWindows" 
-        xmlns:usedwindows="clr-namespace:NeathCopy.UsedWindows"
-        xmlns:tools="clr-namespace:NeathCopy.Tools"
+        xmlns:local="clr-namespace:NeathCopy.UsedWindows"
         AllowDrop="True" Drop="Window_Drop"
         Style="{DynamicResource UsedWindowStyle}"  WindowStartupLocation="CenterOwner" Closing="Window_Closing" Name="copyWnd"
         Title="CopyListWindow" Height="300" Width="545.51" SizeToContent="Width" ResizeMode="CanResize" Icon="/NeathCopy;component/Themes/Images/Windows8Images/listwnd.png">
 
-    <Window.DataContext>
-        <usedwindows:CopyListWindow/>
-    </Window.DataContext>
-
-    <Window.CommandBindings>
-        <CommandBinding Command="{x:Static tools:MyCommands.MoveFirstCommand}" Executed="MoveFirst"/>
-        <CommandBinding Command="{x:Static tools:MyCommands.MoveUpCommand}" Executed="MoveUp"/>
-        <CommandBinding Command="{x:Static tools:MyCommands.MoveDownCommand}" Executed="MoveDown"/>
-        <CommandBinding Command="{x:Static tools:MyCommands.MoveLastCommand}" Executed="MoveLast"/>
-        <CommandBinding Command="{x:Static tools:MyCommands.RemoveCommand}" Executed="Remove"/>
-        <CommandBinding Command="{x:Static tools:MyCommands.SaveCommand}" Executed="save_menuItem_Click"/>
-        <CommandBinding Command="{x:Static tools:MyCommands.LoadCommand}" Executed="load_menuItem_Click"/>
-    </Window.CommandBindings>
-
-    <Window.Resources>
-        <CollectionViewSource x:Key="filesVS"/>
-    </Window.Resources>
-
     <DockPanel Margin="3" Background="{DynamicResource ControlBackgroundBrush}">
         <Menu Background="{DynamicResource MenuBackground}"  DockPanel.Dock="Top">
             <MenuItem Header="{DynamicResource t15}">
-                <MenuItem Name="loadOd_menuItem" Header="{DynamicResource t113}"  Click="loadOneDestiny_menuItem_Click"></MenuItem>
-                <MenuItem Name="saveOd_menuItem" Header="{DynamicResource t114}" Click="saveOneDestiny_menuItem_Click"></MenuItem>
-                <MenuItem Name="load_menuItem" Header="{DynamicResource t19}"  Click="load_menuItem_Click"></MenuItem>
-                <MenuItem Name="save_menuItem" Header="{DynamicResource t20}" Click="save_menuItem_Click"></MenuItem>
-                <MenuItem Name="loadCompressed_menuItem" Header="{DynamicResource t21}" Click="loadCompressed_menuItem_Click"></MenuItem>
-                <MenuItem Name="saveCompressed_menuItem" Header="{DynamicResource t22}" Click="saveCompressed_menuItem_Click"></MenuItem>
+                <MenuItem Name="loadOd_menuItem" Header="{DynamicResource t113}" Command="{Binding LoadOneDestinyCommand}"></MenuItem>
+                <MenuItem Name="saveOd_menuItem" Header="{DynamicResource t114}" Command="{Binding SaveOneDestinyCommand}"></MenuItem>
+                <MenuItem Name="load_menuItem" Header="{DynamicResource t19}" Command="{Binding LoadCommand}"></MenuItem>
+                <MenuItem Name="save_menuItem" Header="{DynamicResource t20}" Command="{Binding SaveCommand}"></MenuItem>
+                <MenuItem Name="loadCompressed_menuItem" Header="{DynamicResource t21}" Command="{Binding LoadCompressedCommand}"></MenuItem>
+                <MenuItem Name="saveCompressed_menuItem" Header="{DynamicResource t22}" Command="{Binding SaveCompressedCommand}"></MenuItem>
             </MenuItem>
         </Menu>
         <Grid Background="{DynamicResource ToolBarBackground}"  VerticalAlignment="Center" DockPanel.Dock="Right" >
@@ -47,11 +27,11 @@
             <Label Content="{DynamicResource t108}"/>
             <Border  BorderThickness="0.5">
                 <TextBlock Name="filesCount_tb"  TextAlignment="Right" Width="100" Margin="3" Background="{DynamicResource ControlBackgroundBrush}"
-                           Text="{Binding ElementName=copyWnd,Path=Tag.Count}"/>
+                           Text="{Binding FilesCount}"/>
             </Border>
         </StackPanel>
-        <ListView VerticalAlignment="Top" Name="MainListView"
-                   ItemsSource="{Binding Source={StaticResource filesVS}}" >
+        <ListView VerticalAlignment="Top" Name="MainListView" SelectionChanged="MainListView_SelectionChanged"
+                   ItemsSource="{Binding Files}" >
             <ListView.View>
                 <GridView AllowsColumnReorder="true">
                     <GridViewColumn  DisplayMemberBinding="{Binding Path=CopyState}" Header="{DynamicResource t16}" Width="70"/>
