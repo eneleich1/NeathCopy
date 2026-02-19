@@ -360,7 +360,7 @@ namespace NeathCopy.Module2_Configuration
                 //Animate the window or play sound
                 soundPlayer.SoundLocation = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, sound);
 
-                if (File.Exists(soundPlayer.SoundLocation))
+                if (File.Exists(LongPathHelper.Normalize(soundPlayer.SoundLocation)))
                     soundPlayer.Play();
 
                 System.Threading.Thread.Sleep(850);

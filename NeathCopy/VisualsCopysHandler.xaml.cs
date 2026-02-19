@@ -1,4 +1,3 @@
-﻿using Alphaleonis.Win32.Filesystem;
 using NeathCopy.Module1_ShellExt;
 using NeathCopy.Module2_Configuration;
 using NeathCopy.Themes;
@@ -260,3 +259,4 @@ namespace NeathCopy
     }
 
 }
+

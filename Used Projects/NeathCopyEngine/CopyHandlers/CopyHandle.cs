@@ -62,15 +62,16 @@ namespace NeathCopyEngine.CopyHandlers
 
             foreach (var source in requestInfo.Sources)
             {
-                if (File.Exists(source))
+                var normalizedSource = LongPathHelper.Normalize(source);
+                if (File.Exists(normalizedSource))
                 {
-                    finfo = new FileInfo(source);
-                    File.Move(source, Path.Combine(requestInfo.Destiny, finfo.Name));
+                    finfo = new FileInfo(normalizedSource);
+                    File.Move(normalizedSource, LongPathHelper.Normalize(Path.Combine(requestInfo.Destiny, finfo.Name)));
                 }
-                else if (Directory.Exists(source))
+                else if (Directory.Exists(normalizedSource))
                 {
-                    dinfo = new DirectoryInfo(source);
-                    Directory.Move(source, Path.Combine(requestInfo.Destiny, dinfo.Name));
+                    dinfo = new DirectoryInfo(normalizedSource);
+                    Directory.Move(normalizedSource, LongPathHelper.Normalize(Path.Combine(requestInfo.Destiny, dinfo.Name)));
                 }
             }
         }

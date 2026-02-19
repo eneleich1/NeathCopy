@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace NeathCopy.ViewModels
 {
-    public class CopyList_VM : INotifyPropertyChanged
+    public class CopyList_VM : ViewModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using NeathCopyEngine.DataTools;
 using NeathCopyEngine;
+using NeathCopyEngine.Helpers;
 
 namespace LongPath
 {    
@@ -46,7 +47,7 @@ namespace LongPath
                     }
                     else // it's a file; add it to the results
                     {
-                        File.Delete(System.IO.Path.Combine(directory, currentFileName));
+                        File.Delete(LongPathHelper.Normalize(System.IO.Path.Combine(directory, currentFileName)));
                     }
 
                     // find next
@@ -129,7 +130,10 @@ namespace LongPath
         public static void CreateDirectoriesInPath(string path)
         {
             if (path != null)
-                Alphaleonis.Win32.Filesystem.Directory.CreateDirectory(path);
+            {
+                var normalized = LongPathHelper.Normalize(path);
+                System.IO.Directory.CreateDirectory(normalized);
+            }
 
         }
 
@@ -295,7 +299,7 @@ namespace LongPath
             //I need convert from FILETIME to DataTime
             //and still may not work, when DataInfo have a longPath this  ;
             var lastAccesTime = dataInfo.LastAccessTime;
-            System.IO.File.SetLastAccessTime(dataInfo.DestinyPath, DateTime.Now);
+            System.IO.File.SetLastAccessTime(LongPathHelper.Normalize(dataInfo.DestinyPath), DateTime.Now);
 
             //SafeFileHandle fileHandle = CreateFile(dataInfo.DestinyPath
             //    , getAccessFromAccess(System.IO.FileAccess.Write)

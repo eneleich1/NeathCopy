@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Delimon.Win32.IO;
+using System.IO;
 using System.Security.AccessControl;
 using System.Windows.Forms;
 using NeathCopyEngine.CopyHandlers;
+using NeathCopyEngine.Helpers;
 
 namespace NeathCopyEngine.DataTools
 {
@@ -22,7 +23,8 @@ namespace NeathCopyEngine.DataTools
         private int PostOrden(DirectoryDataInfo currentDir, List<FileDataInfo> filesList, ref int count)
         {
             //Push all directories
-            var subdirs = Delimon.Win32.IO.Directory.GetDirectories(currentDir.FullName);
+            var normalizedCurrentDir = LongPathHelper.Normalize(currentDir.FullName);
+            var subdirs = Directory.GetDirectories(normalizedCurrentDir);
 
             DirectoryDataInfo child = null;
             DirectoryInfo dinfo = null;
@@ -38,17 +40,18 @@ namespace NeathCopyEngine.DataTools
                 //All childs in PostOrden
                 foreach (var d in subdirs)
                 {
+                    var childFullName = Path.Combine(currentDir.FullName, Path.GetFileName(d));
                     child = new DirectoryDataInfo
                     {
-                        FullName = d,
-                        DestinyPath = Path.Combine(currentDir.DestinyPath, Path.GetFileName(d))
+                        FullName = childFullName,
+                        DestinyPath = Path.Combine(currentDir.DestinyPath, Path.GetFileName(childFullName))
                     };
 
                     filesCount += PostOrden(child, filesList, ref count);
                 }
 
                 //Retrieve all files
-                dinfo = new DirectoryInfo(currentDir.FullName);
+                dinfo = new DirectoryInfo(normalizedCurrentDir);
                 var files = dinfo.GetFiles();
                 filesCount += files.Length;
                 foreach (var f in files)
@@ -57,7 +60,7 @@ namespace NeathCopyEngine.DataTools
                     {
                         SourceDirectoryLength = this.SourceDirectoryLength,
                         Destiny = this.Destiny,
-                        FullName = Path.Combine(dinfo.FullName, f.Name),
+                        FullName = Path.Combine(currentDir.FullName, f.Name),
                         DestinyDirectoryPath = currentDir.DestinyPath,
                         Name = Path.GetFileName(f.Name),
                         DestinyPath = Path.Combine(currentDir.DestinyPath, f.Name),
@@ -96,7 +99,9 @@ namespace NeathCopyEngine.DataTools
 
         public override void FastMove()
         {
-            Directory.Move(FullName, DestinyPath);
+            var src = LongPathHelper.Normalize(FullName);
+            var dst = LongPathHelper.Normalize(DestinyPath);
+            Directory.Move(src, dst);
         }
     }
 }

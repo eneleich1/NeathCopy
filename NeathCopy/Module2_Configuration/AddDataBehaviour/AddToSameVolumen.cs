@@ -1,7 +1,6 @@
 ﻿using NeathCopyEngine.Helpers;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +22,7 @@ namespace NeathCopy.Module2_Configuration.AddDataBehaviour
             }
             else
             {
-                var visuals = VisualsCopys.Where(v => Path.GetPathRoot(v.RequestInf.Destiny) == Path.GetPathRoot(info.Destiny)
+                var visuals = VisualsCopys.Where(v => PathDisplayHelper.GetRootForDriveInfo(v.RequestInf.Destiny) == PathDisplayHelper.GetRootForDriveInfo(info.Destiny)
                 && v.RequestInf.Operation == info.Operation && v.State != VisualCopy.VisualCopyState.Finished);
 
                 if (visuals != null && visuals.Count() > 0)

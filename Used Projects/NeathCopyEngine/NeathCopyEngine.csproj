@@ -35,12 +35,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AlphaFS">
-      <HintPath>..\Used dlls\AlphaFS.dll</HintPath>
-    </Reference>
-    <Reference Include="Delimon.Win32.IO">
-      <HintPath>..\Used dlls\Delimon.Win32.IO.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -72,8 +66,10 @@
     <Compile Include="Exceptions\NotEnoughSpaceException.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\FilesList.cs" />
+    <Compile Include="Helpers\LongPathHelper.cs" />
     <Compile Include="Helpers\MySerializer.cs" />
     <Compile Include="Helpers\MySize.cs" />
+    <Compile Include="Helpers\PathDisplayHelper.cs" />
     <Compile Include="Helpers\MyThread.cs" />
     <Compile Include="Helpers\OnFinishFuncitons.cs" />
     <Compile Include="Helpers\RegisterAccess.cs" />

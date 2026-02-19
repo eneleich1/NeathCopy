@@ -207,7 +207,7 @@ namespace NeathCopyEngine.CopyHandlers
         void DoNothing(FileDataInfo currentFile)
         {
             //if is not readonly
-            if ((currentFile.FileAttributes & Delimon.Win32.IO.FileAttributes.ReadOnly) == 0)
+            if ((currentFile.FileAttributes & FileAttributes.ReadOnly) == 0)
                 SetAttributes(currentFile);
 
             SetAccessTimes(currentFile);
@@ -227,7 +227,7 @@ namespace NeathCopyEngine.CopyHandlers
             try
             {
                 //Delete the copied file
-                Alphaleonis.Win32.Filesystem.File.Delete(CurrentFile.FullName);
+                File.Delete(LongPathHelper.Normalize(CurrentFile.FullName));
             }
             catch (IOException ex)
             {
@@ -243,7 +243,7 @@ namespace NeathCopyEngine.CopyHandlers
         public void AllwaysAsk(bool fastMove)
         {
             //Copy the current file.
-            if (File.Exists(CurrentFile.DestinyPath))
+            if (File.Exists(LongPathHelper.Normalize(CurrentFile.DestinyPath)))
             {
                 if (FileCollisionAction == CancelCollision) return;
 
@@ -257,7 +257,7 @@ namespace NeathCopyEngine.CopyHandlers
                 DiscoverdList.SizeOfFilesToCopy -= CurrentFile.Size;
 
                 if (fastMove)
-                    Alphaleonis.Win32.Filesystem.File.Move(CurrentFile.FullName, CurrentFile.DestinyPath);
+                    File.Move(LongPathHelper.Normalize(CurrentFile.FullName), LongPathHelper.Normalize(CurrentFile.DestinyPath));
                 else
                     FileCopier.CopyFile(CurrentFile);
               
@@ -273,9 +273,9 @@ namespace NeathCopyEngine.CopyHandlers
 
             if (fastMove)
             {
-                if (Alphaleonis.Win32.Filesystem.File.Exists(CurrentFile.DestinyPath))
-                    Alphaleonis.Win32.Filesystem.File.Delete(CurrentFile.DestinyPath);
-                Alphaleonis.Win32.Filesystem.File.Move(CurrentFile.FullName, CurrentFile.DestinyPath);
+                if (File.Exists(LongPathHelper.Normalize(CurrentFile.DestinyPath)))
+                    File.Delete(LongPathHelper.Normalize(CurrentFile.DestinyPath));
+                File.Move(LongPathHelper.Normalize(CurrentFile.FullName), LongPathHelper.Normalize(CurrentFile.DestinyPath));
             }
             else
             {
@@ -285,13 +285,13 @@ namespace NeathCopyEngine.CopyHandlers
         }
         public void SkipAll(bool fastMove)
         {
-            if (!File.Exists(CurrentFile.DestinyPath))
+            if (!File.Exists(LongPathHelper.Normalize(CurrentFile.DestinyPath)))
             {
                 CurrentFile.CopyState = CopyState.Processing;
                 DiscoverdList.SizeOfFilesToCopy -= CurrentFile.Size;
 
                 if (fastMove)
-                    Alphaleonis.Win32.Filesystem.File.Move(CurrentFile.FullName, CurrentFile.DestinyPath);
+                    File.Move(LongPathHelper.Normalize(CurrentFile.FullName), LongPathHelper.Normalize(CurrentFile.DestinyPath));
                 else
                     FileCopier.CopyFile(CurrentFile);
 
@@ -302,13 +302,13 @@ namespace NeathCopyEngine.CopyHandlers
         }
         public void SkipCurrentFile(bool fastMove)
         {
-            if (!File.Exists(CurrentFile.DestinyPath))
+            if (!File.Exists(LongPathHelper.Normalize(CurrentFile.DestinyPath)))
             {
                 CurrentFile.CopyState = CopyState.Processing;
                 DiscoverdList.SizeOfFilesToCopy -= CurrentFile.Size;
 
                 if (fastMove)
-                    Alphaleonis.Win32.Filesystem.File.Move(CurrentFile.FullName, CurrentFile.DestinyPath);
+                    File.Move(LongPathHelper.Normalize(CurrentFile.FullName), LongPathHelper.Normalize(CurrentFile.DestinyPath));
                 else
                     FileCopier.CopyFile(CurrentFile);
 
@@ -336,7 +336,7 @@ namespace NeathCopyEngine.CopyHandlers
         }
         public void OverwriteAllDifferent(bool fastMove)
         {
-            if (Alphaleonis.Win32.Filesystem.File.Exists(CurrentFile.DestinyPath) && !FileDataInfo.Md5Check(CurrentFile.FullName, CurrentFile.DestinyPath))
+            if (File.Exists(LongPathHelper.Normalize(CurrentFile.DestinyPath)) && !FileDataInfo.Md5Check(CurrentFile.FullName, CurrentFile.DestinyPath))
                 OverwriteCurrentFile(fastMove);
             else SkipCurrentFile(fastMove);
 
@@ -375,7 +375,7 @@ namespace NeathCopyEngine.CopyHandlers
                     {
                         //di = new Alphaleonis.Win32.Filesystem.DirectoryInfo(Alphaleonis.Win32.Filesystem.Path.GetDirectoryName(CurrentFile.FullName));
                         //att = di.Attributes;
-                        LongPath.Directory.CreateDirectoriesInPath(CurrentFile.DestinyDirectoryPath);
+                        Directory.CreateDirectory(LongPathHelper.Normalize(CurrentFile.DestinyDirectoryPath));
                         //di=new Alphaleonis.Win32.Filesystem.DirectoryInfo(CurrentFile.DestinyDirectoryPath);
                         //di.Attributes = att;
                     }
@@ -497,8 +497,8 @@ namespace NeathCopyEngine.CopyHandlers
         {
             try
             {
-                Alphaleonis.Win32.Filesystem.File.SetLastAccessTime(file.DestinyPath, file.LastAccessTime);
-                Alphaleonis.Win32.Filesystem.File.SetLastWriteTime(file.DestinyPath, file.LastWriteTime);
+                File.SetLastAccessTime(LongPathHelper.Normalize(file.DestinyPath), file.LastAccessTime);
+                File.SetLastWriteTime(LongPathHelper.Normalize(file.DestinyPath), file.LastWriteTime);
             }
             catch (Exception)
             {
@@ -513,7 +513,7 @@ namespace NeathCopyEngine.CopyHandlers
         {
             try
             {
-                Delimon.Win32.IO.File.SetAttributes(file.DestinyPath, file.FileAttributes);
+                File.SetAttributes(LongPathHelper.Normalize(file.DestinyPath), file.FileAttributes);
             }
             catch (Exception)
             {
@@ -527,13 +527,13 @@ namespace NeathCopyEngine.CopyHandlers
 
         protected void CreateEmptysDirectories(FilesList list)
         {
-            Delimon.Win32.IO.DirectoryInfo di = null;
+            DirectoryInfo di = null;
 
             //Creating empty directories
             foreach (var d in list.EmptyDirectories)
             {
-                Alphaleonis.Win32.Filesystem.Directory.CreateDirectory(d.DestinyPath);
-                di = new Delimon.Win32.IO.DirectoryInfo(d.DestinyPath);
+                Directory.CreateDirectory(LongPathHelper.Normalize(d.DestinyPath));
+                di = new DirectoryInfo(LongPathHelper.Normalize(d.DestinyPath));
                 di.Attributes = d.FileAttributes;
             }
         }
@@ -576,7 +576,7 @@ namespace NeathCopyEngine.CopyHandlers
                     try
                     {
                         //LongPath.Directory.Delete(dir);
-                        Directory.Delete(dir, true);
+                        Directory.Delete(LongPathHelper.Normalize(dir), true);
                     }
                     catch (IOException ex)
                     {

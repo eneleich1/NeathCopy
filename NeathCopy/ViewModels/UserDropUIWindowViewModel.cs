@@ -2,6 +2,7 @@ using System;
 using System.Windows.Input;
 using System.Windows;
 using System.IO;
+using NeathCopyEngine.Helpers;
 
 namespace NeathCopy.ViewModels
 {
@@ -54,7 +55,7 @@ namespace NeathCopy.ViewModels
                 if (string.IsNullOrWhiteSpace(Destiny))
                     return;
 
-                if (!Directory.Exists(Destiny))
+                if (!Directory.Exists(LongPathHelper.Normalize(Destiny)))
                 {
                     MessageBox.Show("The specific Destiny is not valid");
                     return;

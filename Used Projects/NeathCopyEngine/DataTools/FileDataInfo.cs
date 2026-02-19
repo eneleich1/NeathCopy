@@ -24,23 +24,26 @@ namespace NeathCopyEngine.DataTools
         }
         public FileStream GetStreamToRead()
         {
-           return Delimon.Win32.IO.File.Open(FullName, Delimon.Win32.IO.FileMode.Open,
-                Delimon.Win32.IO.FileAccess.Read, Delimon.Win32.IO.FileShare.ReadWrite);
+            var src = LongPathHelper.Normalize(FullName);
+            return File.Open(src, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         }
         public FileStream GetStreamToWrite(FileMode mode)
         {
-            return new Delimon.Win32.IO.FileInfo(DestinyPath).Create();
+            var dst = LongPathHelper.Normalize(DestinyPath);
+            return new FileInfo(dst).Create();
         }
 
         public override void FastMove()
         {
-            File.Move(FullName, DestinyPath);
+            var src = LongPathHelper.Normalize(FullName);
+            var dst = LongPathHelper.Normalize(DestinyPath);
+            File.Move(src, dst);
         }
 
         public static bool Md5Check(string file1, string file2)
         {
-            var finfo1 = new Alphaleonis.Win32.Filesystem.FileInfo(file1);
-            var finfo2 = new Alphaleonis.Win32.Filesystem.FileInfo(file2);
+            var finfo1 = new FileInfo(LongPathHelper.Normalize(file1));
+            var finfo2 = new FileInfo(LongPathHelper.Normalize(file2));
 
             if (finfo1.Length != finfo2.Length) return false;
 
@@ -63,7 +66,7 @@ namespace NeathCopyEngine.DataTools
 
             using (var md5 = MD5.Create())
             {
-                using (var stream = Alphaleonis.Win32.Filesystem.File.OpenRead(fileName))
+                using (var stream = File.OpenRead(LongPathHelper.Normalize(fileName)))
                 {
                     return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", String.Empty);
                 }

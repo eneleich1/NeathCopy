@@ -73,7 +73,7 @@ namespace NeathCopy.ViewModels
                 PropertyChanged?.Invoke(this, args);
 
                 if (currentFile != null)
-                    From = Alphaleonis.Win32.Filesystem.Path.GetDirectoryName(currentFile.FullName);
+                    From = System.IO.Path.GetDirectoryName(currentFile.FullName);
             }
         }
 
@@ -370,10 +370,10 @@ namespace NeathCopy.ViewModels
                 //To
                 if (CurrentFile != null)
                 {
-                    To = Alphaleonis.Win32.Filesystem.Path.GetDirectoryName(CurrentFile.DestinyPath);
+                    To = System.IO.Path.GetDirectoryName(CurrentFile.DestinyPath);
 
                     //Drive Info
-                    VisualCopy.driveInfo = DriveInfoFactory.CreateDriveInfo(System.IO.Path.GetPathRoot(To));
+                    VisualCopy.driveInfo = DriveInfoFactory.CreateDriveInfo(PathDisplayHelper.GetRootForDriveInfo(To));
                     if (VisualCopy.driveInfo != null)
                         TargetDevice = string.Format("{0}({1}) {2}"
                             , VisualCopy.driveInfo.VolumeLabel.ShortVersion(4)

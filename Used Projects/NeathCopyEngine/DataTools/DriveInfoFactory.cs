@@ -4,7 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Delimon.Win32.IO;
+using System.Runtime.InteropServices;
+using NeathCopyEngine.Helpers;
 
 namespace NeathCopyEngine.DataTools
 {
@@ -27,7 +28,7 @@ namespace NeathCopyEngine.DataTools
 
         public static IDriveInfo CreateDriveInfo(string path)
         {
-            uri = new Uri(path);
+            uri = new Uri(PathDisplayHelper.ToDisplayPath(path));
             if (uri.IsUnc) return new NetworkDriveInfo(path);
             return new SystemDriveInfo(path);
         }
@@ -40,8 +41,8 @@ namespace NeathCopyEngine.DataTools
 
         public SystemDriveInfo(string path)
         {
-            Path = path;
-            driveInfo = new DriveInfo(path);
+            Path = PathDisplayHelper.ToDisplayPath(path);
+            driveInfo = new DriveInfo(PathDisplayHelper.GetRootForDriveInfo(Path));
         }
 
         public long AvailableFreeSpace => driveInfo.AvailableFreeSpace;
@@ -73,14 +74,15 @@ namespace NeathCopyEngine.DataTools
 
         public NetworkDriveInfo(string path)
         {
-            var nd = new Alphaleonis.Win32.Network.DriveConnection(path);
-            var driveInfo = new DriveInfo(nd.LocalName);
+            var displayPath = PathDisplayHelper.ToDisplayPath(path);
 
-            availableFreeSpace=driveInfo.AvailableFreeSpace;
-            totalFreeSpace = driveInfo.TotalFreeSpace;
-            totalSize = driveInfo.TotalSize;
-            Path = nd.Share;
-            nd.Dispose();
+            if (!DiskSpaceNative.GetDiskFreeSpaceEx(displayPath, out var freeBytesAvailable, out var totalNumberOfBytes, out var totalNumberOfFreeBytes))
+                throw new IOException("Unable to retrieve drive information for network path.");
+
+            availableFreeSpace = (long)freeBytesAvailable;
+            totalFreeSpace = (long)totalNumberOfFreeBytes;
+            totalSize = (long)totalNumberOfBytes;
+            Path = displayPath;
         }
 
         public long AvailableFreeSpace => availableFreeSpace;
@@ -104,5 +106,12 @@ namespace NeathCopyEngine.DataTools
            return new NetworkDriveInfo(Path);
         }
     }
+
+    internal static class DiskSpaceNative
+    {
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        internal static extern bool GetDiskFreeSpaceEx(string lpDirectoryName, out ulong lpFreeBytesAvailable, out ulong lpTotalNumberOfBytes, out ulong lpTotalNumberOfFreeBytes);
+    }
+
 
 }

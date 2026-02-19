@@ -27,6 +27,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IOPath = System.IO.Path;
 
 namespace NeathCopy
 {
@@ -416,8 +417,8 @@ namespace NeathCopy
             if (diskFullWmd.Option == DiskFullOption.DeleteFile)
             {
                 var file = NeathCopy.DiscoverdList.Files[NeathCopy.DiscoverdList.Index];
-                if (Alphaleonis.Win32.Filesystem.File.Exists(file.DestinyPath))
-                    Alphaleonis.Win32.Filesystem.File.Delete(file.DestinyPath);
+                if (File.Exists(LongPathHelper.Normalize(file.DestinyPath)))
+                    File.Delete(LongPathHelper.Normalize(file.DestinyPath));
             }
         }
         Action<bool> NeathCopy_FileExist(NeathCopyHandle copyHandle, NeathCopyEngine.DataTools.FileDataInfo currentFile)
@@ -485,8 +486,6 @@ namespace NeathCopy
 
             return DiskSpaceOptions.OK;
         }
-
-        public Alphaleonis.Win32.Network.DriveConnection nd;
 
         /// <summary>
         /// Analize and prepare for perform a operation.
@@ -754,7 +753,7 @@ namespace NeathCopy
                 IDriveInfo di = null;
                 if (RequestInf.Destiny != null)
                 {
-                    di = DriveInfoFactory.CreateDriveInfo(Alphaleonis.Win32.Filesystem.Path.GetPathRoot(RequestInf.Destiny));
+                    di = DriveInfoFactory.CreateDriveInfo(PathDisplayHelper.GetRootForDriveInfo(RequestInf.Destiny));
                     cost = EstimateCopyCost(NeathCopy.DiscoverdList.Count, NeathCopy.DiscoverdList.Size, di);
                 }
 
@@ -916,7 +915,7 @@ namespace NeathCopy
                 if (NeathCopy.Operation == null)
                 {
                     //Get Driver Info of Destiny
-                    driveInfo = DriveInfoFactory.CreateDriveInfo(Delimon.Win32.IO.Path.GetPathRoot(list.Destinys[0]));
+                    driveInfo = DriveInfoFactory.CreateDriveInfo(PathDisplayHelper.GetRootForDriveInfo(list.Destinys[0]));
                     InitialFreeSpace = driveInfo.TotalFreeSpace;
 
                     //Check free disk space
@@ -1008,7 +1007,7 @@ namespace NeathCopy
                 }
                 else
                 {
-                    var drive = new DriveInfo(Alphaleonis.Win32.Filesystem.Path.GetPathRoot(RequestInf.Destiny));
+                    var drive = new DriveInfo(PathDisplayHelper.GetRootForDriveInfo(RequestInf.Destiny));
                     if (!DriveInfo.GetDrives().Select(d=>d.Name).Contains(drive.Name))
                     {
                         MessageBox.Show(Error.GetErrorLog("The Destiny Drive do not exist", "NeathCopy", "VisualCopy", "HandleDrop"));
@@ -1101,26 +1100,26 @@ namespace NeathCopy
         {
             NeathCopy.DiscoverdList.DiscoveringState = FilesList.DiscoverState.Discovering;
             FileDataInfo file = null;
-            Alphaleonis.Win32.Filesystem.FileInfo finfo = null;
+            System.IO.FileInfo finfo = null;
 
             foreach (FileOnList f in loadedList.Files)
             {
-                finfo = new Alphaleonis.Win32.Filesystem.FileInfo(f.From);
+                finfo = new System.IO.FileInfo(LongPathHelper.Normalize(f.From));
                 file = new NeathCopyEngine.DataTools.FileDataInfo
                 {
                     SourceDirectoryLength=2,
                     FullName = f.From,
                     Name = finfo.Name,
                     //Remove the Dirver Letter: F://Videos/Series/12 monkeys 4x07.mp4 => [Destiny]//Videos/Series/12 monkeys 4x07.mp4
-                    DestinyPath = loadedList.MultipleDestiny?f.To:Alphaleonis.Win32.Filesystem.Path.Combine(RequestInf.Destiny, f.To.Remove(0,3)),
+                    DestinyPath = loadedList.MultipleDestiny?f.To:System.IO.Path.Combine(RequestInf.Destiny, f.To.Remove(0,3)),
                     CreationTime = finfo.CreationTime,
                     LastAccessTime = finfo.LastAccessTime,
                     LastWriteTime = finfo.LastWriteTime,
                     Size = finfo.Length,
-                    FileAttributes = (Delimon.Win32.IO.FileAttributes)finfo.Attributes
+                    FileAttributes = finfo.Attributes
                 };
 
-                file.DestinyDirectoryPath = Alphaleonis.Win32.Filesystem.Path.GetDirectoryName(file.DestinyPath);
+                file.DestinyDirectoryPath = System.IO.Path.GetDirectoryName(file.DestinyPath);
 
                 NeathCopy.DiscoverdList.Files.Add(file);
                 NeathCopy.DiscoverdList.Count++;

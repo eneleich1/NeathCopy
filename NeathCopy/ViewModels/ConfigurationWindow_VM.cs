@@ -1,18 +1,18 @@
-﻿using NeathCopy.Module2_Configuration;
-using System;
+using NeathCopy.Module2_Configuration;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NeathCopy.ViewModels
 {
-    public class ConfigurationWindow_VM : INotifyPropertyChanged
+    public class ConfigurationWindow_VM : ViewModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        private List<string> addDataBehaviours;
 
-        public List<string> AddDataBehaviours { get; set; }
+        public List<string> AddDataBehaviours
+        {
+            get => addDataBehaviours;
+            set => SetProperty(ref addDataBehaviours, value);
+        }
+
         public ConfigurationWindow_VM()
         {
             AddDataBehaviours = Configuration.addDataFac.AddDataBehaviours;

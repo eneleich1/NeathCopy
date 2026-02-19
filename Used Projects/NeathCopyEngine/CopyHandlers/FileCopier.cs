@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using NeathCopyEngine.DataTools;
 using System.Threading;
 using NeathCopyEngine.Exceptions;
+using NeathCopyEngine.Helpers;
 
 namespace NeathCopyEngine.CopyHandlers
 {
@@ -141,7 +142,7 @@ namespace NeathCopyEngine.CopyHandlers
             Monitor.Exit(Writer);
 
             if (CurrentFile.CopyState == CopyState.Processing)
-                System.IO.File.Delete(CurrentFile.DestinyPath);
+                System.IO.File.Delete(LongPathHelper.Normalize(CurrentFile.DestinyPath));
         }
 
         public override void Cancel()
@@ -168,7 +169,7 @@ namespace NeathCopyEngine.CopyHandlers
 
             finally
             {
-                Alphaleonis.Win32.Filesystem.File.Delete(CurrentFile.DestinyPath);
+                System.IO.File.Delete(LongPathHelper.Normalize(CurrentFile.DestinyPath));
             }
 
         }
@@ -349,7 +350,7 @@ namespace NeathCopyEngine.CopyHandlers
     /// </summary>
     public class FasterBufferFileCopier : BufferFileCopier
     {
-        Alphaleonis.Win32.Filesystem.DriveInfo driverInfo;
+        System.IO.DriveInfo driverInfo;
         string fileName;
         public FasterBufferFileCopier(int bufferSize)
             : base(bufferSize)
@@ -368,9 +369,8 @@ namespace NeathCopyEngine.CopyHandlers
         public override void CopyFile(FileDataInfo file)
         {
             CurrentFile = file;
-            fileName = Delimon.Win32.IO.Path.GetPathRoot(file.DestinyPath);
-            
-            driverInfo = new Alphaleonis.Win32.Filesystem.DriveInfo(fileName);
+            fileName = PathDisplayHelper.GetRootForDriveInfo(file.DestinyPath);
+            driverInfo = new System.IO.DriveInfo(fileName);
 
             using (Reader = file.GetStreamToRead())
             {
@@ -394,7 +394,7 @@ namespace NeathCopyEngine.CopyHandlers
         /// </summary>
         /// <param name="driverInfo"></param>
         /// <param name="file"></param>
-        protected virtual void ExecuteCopySafe(Alphaleonis.Win32.Filesystem.DriveInfo driverInfo, FileDataInfo file)
+        protected virtual void ExecuteCopySafe(System.IO.DriveInfo driverInfo, FileDataInfo file)
         {
             if (driverInfo.TotalFreeSpace < file.Size)
             {
@@ -438,7 +438,7 @@ namespace NeathCopyEngine.CopyHandlers
         }
 
         Exception executeCopyException;
-        protected virtual void ExecuteCopy(Alphaleonis.Win32.Filesystem.DriveInfo driverInfo, FileDataInfo file)
+        protected virtual void ExecuteCopy(System.IO.DriveInfo driverInfo, FileDataInfo file)
         {
             if (driverInfo.TotalFreeSpace < file.Size)
             {
@@ -496,7 +496,7 @@ namespace NeathCopyEngine.CopyHandlers
             Name = "DynamicBufferFileCopier";
         }
 
-        protected override void ExecuteCopy(Alphaleonis.Win32.Filesystem.DriveInfo driverInfo, FileDataInfo file)
+        protected override void ExecuteCopy(System.IO.DriveInfo driverInfo, FileDataInfo file)
         {
             buffer = new byte[CalculateBufferSize(file.Size)];
             base.ExecuteCopy(driverInfo, file);
@@ -531,12 +531,12 @@ namespace NeathCopyEngine.CopyHandlers
             Writer.Dispose();
 
             if (CurrentFile != null)
-                System.IO.File.Delete(CurrentFile.DestinyPath);
+                System.IO.File.Delete(LongPathHelper.Normalize(CurrentFile.DestinyPath));
         }
         public override void CopyFile(FileDataInfo file)
         {
             CurrentFile = file;
-            var driverInfo = new System.IO.DriveInfo(Delimon.Win32.IO.Path.GetPathRoot(file.DestinyPath));
+            var driverInfo = new System.IO.DriveInfo(PathDisplayHelper.GetRootForDriveInfo(file.DestinyPath));
             string tmp_file = "";
 
             using (Reader = file.GetStreamToRead())
@@ -544,9 +544,9 @@ namespace NeathCopyEngine.CopyHandlers
                 if (file.DestinyPath.Length > 248)
                 {
                     //Create the file in short name
-                    tmp_file = Delimon.Win32.IO.Path.Combine(file.DestinyDirectoryPath, "tmp_a19");
+                    tmp_file = Path.Combine(file.DestinyDirectoryPath, "tmp_a19");
 
-                    using (Writer = new FileStream(tmp_file, FileMode.Create, FileAccess.Write))
+                    using (Writer = new FileStream(LongPathHelper.Normalize(tmp_file), FileMode.Create, FileAccess.Write))
                     {
                         //if (driverInfo.DriveType == DriveType.Removable)
                         //{
@@ -557,9 +557,9 @@ namespace NeathCopyEngine.CopyHandlers
                     }
 
                     //Move the file to it's original destinyPath
-                    if (Delimon.Win32.IO.File.Exists(file.DestinyPath))
-                        Delimon.Win32.IO.File.Delete(file.DestinyPath);
-                    Delimon.Win32.IO.File.Move(tmp_file, file.DestinyPath);
+                    if (System.IO.File.Exists(LongPathHelper.Normalize(file.DestinyPath)))
+                        System.IO.File.Delete(LongPathHelper.Normalize(file.DestinyPath));
+                    System.IO.File.Move(LongPathHelper.Normalize(tmp_file), LongPathHelper.Normalize(file.DestinyPath));
                 }
                 else
                 {
@@ -684,11 +684,11 @@ namespace NeathCopyEngine.CopyHandlers
             Name = "NotCopyFileCopier";
         }
 
-        protected override void ExecuteCopySafe(Alphaleonis.Win32.Filesystem.DriveInfo driverInfo, FileDataInfo file)
+        protected override void ExecuteCopySafe(System.IO.DriveInfo driverInfo, FileDataInfo file)
         {
             CurrentFile = null;
         }
-        protected override void ExecuteCopy(Alphaleonis.Win32.Filesystem.DriveInfo driverInfo, FileDataInfo file)
+        protected override void ExecuteCopy(System.IO.DriveInfo driverInfo, FileDataInfo file)
         {
             CurrentFile = null;
         }

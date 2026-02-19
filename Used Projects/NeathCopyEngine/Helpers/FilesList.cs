@@ -180,7 +180,7 @@ namespace NeathCopyEngine.Helpers
                     }
                 }
 
-                SourcesDirectories = new List<string>(info.Sources.Where(s => System.IO.Directory.Exists(s)));
+                SourcesDirectories = new List<string>(info.Sources.Where(s => System.IO.Directory.Exists(LongPathHelper.Normalize(s))));
                 DiscoveringState = DiscoverState.Normal;
                 RaiseDiscoverFinished();
             }
@@ -239,7 +239,7 @@ namespace NeathCopyEngine.Helpers
                     }
                 }
 
-                SourcesDirectories = new List<string>(info.Sources.Where(s => System.IO.Directory.Exists(s)));
+                SourcesDirectories = new List<string>(info.Sources.Where(s => System.IO.Directory.Exists(LongPathHelper.Normalize(s))));
                 DiscoveringState = DiscoverState.Normal;
                 RaiseDiscoverFinished();
             }
@@ -277,7 +277,7 @@ namespace NeathCopyEngine.Helpers
         {
             try
             {
-                if (!LongPath.File.Exists(fileName))
+                if (!File.Exists(LongPathHelper.Normalize(fileName)))
                     throw new ArgumentException("The specific file not exist");
 
                 return (SerializableFilesList)MySerializer.Deserialize(typeof(SerializableFilesList), fileName);
@@ -309,7 +309,7 @@ namespace NeathCopyEngine.Helpers
         {
             try {
 
-                if (!LongPath.File.Exists(fileName))
+                if (!File.Exists(LongPathHelper.Normalize(fileName)))
                     throw new ArgumentException("The specific file not exist");
 
                 return (SerializableFilesList)MySerializer.Deserialize(typeof(SerializableFilesList), fileName);
@@ -341,7 +341,7 @@ namespace NeathCopyEngine.Helpers
         {
             try
             {
-                if (!LongPath.File.Exists(fileName))
+                if (!File.Exists(LongPathHelper.Normalize(fileName)))
                     throw new ArgumentException("The specific file not exist");
 
                 return (SerializableFilesList)MySerializer.DeserializeCompressed(typeof(SerializableFilesList), fileName);

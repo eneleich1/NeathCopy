@@ -59,6 +59,9 @@
     <ApplicationIcon>neathcopy.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
     <ManifestCertificateThumbprint>E3702530E595B38828A225C12EBA5619F1605BD1</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
@@ -71,16 +74,6 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AlphaFS">
-      <HintPath>..\Neathny Copy\Neathny Copy\bin\Debug\AlphaFS.dll</HintPath>
-    </Reference>
-    <Reference Include="Delimon.Win32.IO">
-      <HintPath>..\Neathny Copy\Neathny Copy\bin\Debug\Delimon.Win32.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="NeathCopyEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Target\Builds Files\NeathCopyEngine.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
@@ -378,6 +371,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="NeathCopy_TemporaryKey.pfx" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -576,6 +570,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="neathcopy.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Used Projects\NeathCopyEngine\NeathCopyEngine.csproj">
+      <Project>{8F30B57C-7E25-4ED6-A179-C1498A2D528D}</Project>
+      <Name>NeathCopyEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

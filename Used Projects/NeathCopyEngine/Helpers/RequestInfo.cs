@@ -37,7 +37,7 @@ namespace NeathCopyEngine.Helpers
             Destiny = destiny;
 
             //Detecting FastMove
-            if (Operation == "move" && Path.GetPathRoot(Sources[0]) == Path.GetPathRoot(Destiny))
+            if (Operation == "move" && PathDisplayHelper.GetRootForDriveInfo(Sources[0]) == PathDisplayHelper.GetRootForDriveInfo(Destiny))
                 Operation = "fastmove";
         }
 
@@ -70,7 +70,7 @@ namespace NeathCopyEngine.Helpers
             Sources = GetSources(SourceArg, Destiny, Container);
 
             //Detecting FastMove
-            if (Operation == "move" && Path.GetPathRoot(Sources[0]) == Path.GetPathRoot(Destiny))
+            if (Operation == "move" && PathDisplayHelper.GetRootForDriveInfo(Sources[0]) == PathDisplayHelper.GetRootForDriveInfo(Destiny))
                 Operation = "fastmove";
         }
 
@@ -83,12 +83,13 @@ namespace NeathCopyEngine.Helpers
         {
             var list = new List<string>();
 
-            if (!File.Exists(SourceArg) && !Directory.Exists(SourceArg))
+            var normalizedSourceArg = LongPathHelper.Normalize(SourceArg);
+            if (!File.Exists(normalizedSourceArg) && !Directory.Exists(normalizedSourceArg))
                 throw new InvalidOperationException(string.Format("The File od Directory {0} not exist", SourceArg));
 
             if (Container)
             {
-                var reader = new StreamReader(SourceArg,Encoding.Unicode);
+                var reader = new StreamReader(normalizedSourceArg,Encoding.Unicode);
 
                 char first= (char)reader.Read();
 
@@ -102,7 +103,7 @@ namespace NeathCopyEngine.Helpers
                 //Came from TeraCopyShellExt
                 else
                 {
-                    reader = new StreamReader(SourceArg, Encoding.Default);
+                    reader = new StreamReader(normalizedSourceArg, Encoding.Default);
                     while (!reader.EndOfStream)
                         list.Add(reader.ReadLine());
                 }

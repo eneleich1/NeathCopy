@@ -1,4 +1,3 @@
-using Alphaleonis.Win32.Filesystem;
 using NeathCopy.Module1_ShellExt;
 using NeathCopy.Module2_Configuration;
 using NeathCopy.UsedWindows;
@@ -8,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.IO;
 
 namespace NeathCopy.ViewModels
 {
@@ -33,7 +33,7 @@ namespace NeathCopy.ViewModels
             }
 
             //Destiny
-            else if (!Directory.Exists(StartupClass.requestInfo.Destiny))
+            else if (!Directory.Exists(LongPathHelper.Normalize(StartupClass.requestInfo.Destiny)))
             {
                 browseDestiny.SetTitle(string.Format("Destiny: {0} do not exist. Browse other", StartupClass.requestInfo.Destiny));
                 browseDestiny.SetOperation(StartupClass.requestInfo.Operation);

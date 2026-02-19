@@ -1,4 +1,3 @@
-using Alphaleonis.Win32.Filesystem;
 using System.Windows;
 using NeathCopy.ViewModels;
 
@@ -58,3 +57,4 @@ namespace NeathCopy.UsedWindows
         }
     }
 }
+

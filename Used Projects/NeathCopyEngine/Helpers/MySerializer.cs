@@ -13,13 +13,15 @@ namespace NeathCopyEngine.Helpers
         public static object DeserializeCompressed(Type type, string fileName)
         {
             object result = null;
+            var normalizedFileName = LongPathHelper.Normalize(fileName);
+            var tmpPath = LongPathHelper.Normalize("tmp");
 
             //Create the decompressed file.
-            using (FileStream compressedFile = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            using (FileStream compressedFile = new FileStream(normalizedFileName, FileMode.Open, FileAccess.Read))
             {
                 using (GZipStream Decompress = new GZipStream(compressedFile, CompressionMode.Decompress))
                 {
-                    using (var xml = new FileStream("tmp", FileMode.Create, FileAccess.Write))
+                    using (var xml = new FileStream(tmpPath, FileMode.Create, FileAccess.Write))
                     {
                         // Copy the decompression stream 
                         // into the output file.
@@ -31,14 +33,14 @@ namespace NeathCopyEngine.Helpers
                     XmlSerializer serializer = new XmlSerializer(type);
 
                     //Create the stream to write.
-                    using (var reader = new FileStream("tmp", FileMode.Open, FileAccess.Read))
+                    using (var reader = new FileStream(tmpPath, FileMode.Open, FileAccess.Read))
                     {
                         // Serialize the object, and close the TextWriter.
                         result = serializer.Deserialize(reader);
                         reader.Close();
                     }
 
-                    File.Delete("tmp");
+                    File.Delete(tmpPath);
 
                 }
             }
@@ -50,9 +52,11 @@ namespace NeathCopyEngine.Helpers
             // Create an instance of the XmlSerializer class;
             // specify the type of object to serialize.
             XmlSerializer serializer = new XmlSerializer(type);
+            var normalizedFileName = LongPathHelper.Normalize(fileName);
+            var tmpPath = LongPathHelper.Normalize("tmp");
 
             //Create the stream to write.
-            using (var writer = new FileStream("tmp", FileMode.Create, FileAccess.Write))
+            using (var writer = new FileStream(tmpPath, FileMode.Create, FileAccess.Write))
             {
                 try
                 {
@@ -62,17 +66,17 @@ namespace NeathCopyEngine.Helpers
                 catch (Exception ex)
                 {
                     writer.Dispose();
-                    File.Delete("tmp");
+                    File.Delete(tmpPath);
                     throw new Exception(string.Format("An error has ocurred in SaveList method of FilesList class: {0}", ex.Message));
                 }
             }
 
             // Create the compressed file.
-            using (FileStream outFile = File.Create(fileName))
+            using (FileStream outFile = File.Create(normalizedFileName))
             {
                 using (GZipStream Compress = new GZipStream(outFile,CompressionMode.Compress))
                 {
-                    using (var reader = new FileStream("tmp", FileMode.Open, FileAccess.Read))
+                    using (var reader = new FileStream(tmpPath, FileMode.Open, FileAccess.Read))
                     {
                         // Copy the source file into 
                         // the compression stream.
@@ -81,19 +85,20 @@ namespace NeathCopyEngine.Helpers
                 }
             }
 
-            File.Delete("tmp");
+            File.Delete(tmpPath);
         }
 
         public static object Deserialize(Type type, string fileName)
         {
             object result = null;
+            var normalizedFileName = LongPathHelper.Normalize(fileName);
 
             // Create an instance of the XmlSerializer class;
             // specify the type of object to serialize.
             XmlSerializer serializer = new XmlSerializer(type);
 
             //Create the stream to write.
-            using (var reader = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            using (var reader = new FileStream(normalizedFileName, FileMode.Open, FileAccess.Read))
             {
                 // Serialize the object, and close the TextWriter.
                 result = serializer.Deserialize(reader);
@@ -107,9 +112,10 @@ namespace NeathCopyEngine.Helpers
             // Create an instance of the XmlSerializer class;
             // specify the type of object to serialize.
             XmlSerializer serializer = new XmlSerializer(type);
+            var normalizedFileName = LongPathHelper.Normalize(fileName);
 
             //Create the stream to write.
-            using (var writer = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+            using (var writer = new FileStream(normalizedFileName, FileMode.Create, FileAccess.Write))
             {
                 try
                 {
