@@ -24,6 +24,8 @@ namespace NeathCopyEngine.CopyHandlers
         public FileDataInfo CurrentFile { get; protected set; }
         public FileStream Reader { get; protected set; }
         public FileStream Writer { get; protected set; }
+        protected ManualResetEventSlim PauseGate { get; private set; }
+        protected CancellationToken CancellationToken { get; private set; }
 
         /// <summary>
         /// Get the total bytes transferred of file is been copy.
@@ -44,6 +46,19 @@ namespace NeathCopyEngine.CopyHandlers
         public abstract void Cancel();
 
         public abstract void Skip();
+        public void ConfigureExecution(ManualResetEventSlim pauseGate, CancellationToken token)
+        {
+            PauseGate = pauseGate ?? new ManualResetEventSlim(true);
+            CancellationToken = token;
+        }
+        protected void WaitForResumeOrCancel()
+        {
+            var gate = PauseGate;
+            if (gate != null)
+                gate.Wait(CancellationToken);
+
+            CancellationToken.ThrowIfCancellationRequested();
+        }
         public override string ToString()
         {
             return Name;
@@ -97,17 +112,21 @@ namespace NeathCopyEngine.CopyHandlers
 
             unsafe
             {
-                do
+                while (true)
                 {
+                    WaitForResumeOrCancel();
+
                     //Dinamic bufferSize. Dynamic buffer size.
-                    readBytes = Reader.Read(buffer, 0, (int)(file.Size>BufferSize?BufferSize:file.Size));
+                    readBytes = Reader.Read(buffer, 0, (int)(file.Size > BufferSize ? BufferSize : file.Size));
+                    if (readBytes <= 0) break;
+
+                    WaitForResumeOrCancel();
                     Writer.Write(buffer, 0, readBytes);
 
                     //Status
                     FileBytesTransferred += readBytes;
                     TotalBytesTransferred += readBytes;
-
-                } while (readBytes > 0);
+                }
             }
 
             Reader.Close();
@@ -202,93 +221,18 @@ namespace NeathCopyEngine.CopyHandlers
     /// </summary>
     public class ProducerConsumerFileCopier : BufferFileCopier
     {
-        int buffersListCapacity = 1;
-        bool producerFinish = false;
-        bool finish = false;
-        Queue<Buffer_Length> queve = new Queue<Buffer_Length>();
-        static object thisobject = new Object();
-
         public ProducerConsumerFileCopier(int bufferSize)
             : base(bufferSize)
         {
             Name = "ProducerConsumerFileCopier";
         }
-        void Producer_ReadBytes(FileDataInfo file)
-        {
-            int length = 0;
-            var reader = file.GetStreamToRead();
-
-            while (reader.Position<reader.Length)
-            {
-                if (queve.Count < buffersListCapacity)
-                {
-                    lock (thisobject)
-                    {
-                        buffer = new byte[BufferSize];
-                        length = reader.Read(buffer, 0, BufferSize);
-                        queve.Enqueue(new Buffer_Length(buffer, length));
-                    }
-                }
-            }
-
-            producerFinish = true;
-        }
-        void Consumer_WriteBytes(FileDataInfo file)
-        {
-            Buffer_Length bl;
-            var writer = file.GetStreamToWrite(FileMode.Create);
-
-            while (!(queve.Count == 0 && producerFinish))
-            {
-                if (queve.Count > 0)
-                {
-                    lock (thisobject)
-                    {
-                        bl = queve.Dequeue();
-                    }
-
-                    writer.Write(bl.buffer, 0, bl.length);
-                    FileBytesTransferred += bl.length;
-                    TotalBytesTransferred += bl.length;
-                }
-            }
-
-            finish = true;
-        }
         public override void CopyFile(FileDataInfo file)
         {
-            CurrentFile = file;
-
-            finish = false;
-            producerFinish = false;
-            FileBytesTransferred = 0;
-
-            Task.Factory.StartNew(() => Producer_ReadBytes(file));
-            Task.Factory.StartNew(() => Consumer_WriteBytes(file));
-
-            while (!finish) { }
-        }
-        public override void ReleaseResources()
-        {
-            Reader.Dispose();
-            Writer.Dispose();
+            base.CopyFile(file);
         }
         public override FileCopier Clone()
         {
             return new ProducerConsumerFileCopier(BufferSize);
-        }
-
-        struct Buffer_Length
-        {
-            public byte[] buffer;
-            public int length;
-
-            public Buffer_Length(byte[] buffer_2, int length_2)
-            {
-                // TODO: Complete member initialization
-                this.buffer = buffer_2;
-                this.length = length_2;
-            }
         }
     }
     /// <summary>
@@ -314,17 +258,21 @@ namespace NeathCopyEngine.CopyHandlers
 
             unsafe
             {
-                do
+                while (true)
                 {
+                    WaitForResumeOrCancel();
+
                     //Dinamic bufferSize. Dynamic buffer size.
                     readBytes = Reader.Read(buffer, 0, (int)(file.Size > BufferSize ? BufferSize : file.Size));
+                    if (readBytes <= 0) break;
+
+                    WaitForResumeOrCancel();
                     writer1.Write(buffer, 0, readBytes);
 
                     //Status
                     FileBytesTransferred += readBytes;
                     TotalBytesTransferred += readBytes;
-
-                } while (readBytes > 0);
+                }
             }
 
             Reader.Close();
@@ -408,8 +356,15 @@ namespace NeathCopyEngine.CopyHandlers
             readBytes = 0;
             FileBytesTransferred = 0;
 
-            while ((readBytes = Reader.Read(buffer, 0, BufferSize)) > 0)
+            while (true)
             {
+                WaitForResumeOrCancel();
+
+                readBytes = Reader.Read(buffer, 0, BufferSize);
+                if (readBytes <= 0) break;
+
+                WaitForResumeOrCancel();
+
                 // Request the lock, and block until it is obtained.
                 Monitor.Enter(Writer);
 
@@ -457,8 +412,14 @@ namespace NeathCopyEngine.CopyHandlers
             try
             {
 
-                while ((readBytes = Reader.Read(buffer, 0, BufferSize)) > 0)
+                while (true)
                 {
+                    WaitForResumeOrCancel();
+
+                    readBytes = Reader.Read(buffer, 0, BufferSize);
+                    if (readBytes <= 0) break;
+
+                    WaitForResumeOrCancel();
                     Writer.Write(buffer, 0, readBytes);
 
                     //Status
@@ -597,8 +558,15 @@ namespace NeathCopyEngine.CopyHandlers
             readBytes = 0;
             FileBytesTransferred = 0;
 
-            while ((readBytes = Reader.Read(buffer, 0, BufferSize)) > 0)
+            while (true)
             {
+                WaitForResumeOrCancel();
+
+                readBytes = Reader.Read(buffer, 0, BufferSize);
+                if (readBytes <= 0) break;
+
+                WaitForResumeOrCancel();
+
                 // Request the lock, and block until it is obtained.
                 Monitor.Enter(Writer);
 
@@ -639,8 +607,15 @@ namespace NeathCopyEngine.CopyHandlers
             readBytes = 0;
             FileBytesTransferred = 0;
 
-            while ((readBytes = Reader.Read(buffer, 0, BufferSize)) > 0)
+            while (true)
             {
+                WaitForResumeOrCancel();
+
+                readBytes = Reader.Read(buffer, 0, BufferSize);
+                if (readBytes <= 0) break;
+
+                WaitForResumeOrCancel();
+
                 // Request the lock, and block until it is obtained.
                 Monitor.Enter(Writer);
 
@@ -716,8 +691,15 @@ namespace NeathCopyEngine.CopyHandlers
                 readBytes = 0;
                 FileBytesTransferred = 0;
 
-                while ((readBytes = Reader.Read(buffer, 0, BufferSize)) > 0)
+                while (true)
                 {
+                    WaitForResumeOrCancel();
+
+                    readBytes = Reader.Read(buffer, 0, BufferSize);
+                    if (readBytes <= 0) break;
+
+                    WaitForResumeOrCancel();
+
                     Writer.SetLength(Writer.Length + readBytes);
 
                     Writer.Write(buffer, 0, readBytes);

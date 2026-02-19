@@ -83,7 +83,10 @@ namespace NeathCopyEngine.CopyHandlers
         public OperationStatus operationStaus { get; set; }
         public TransferErrorOption transferErrorOption { get; set; }
 
-        MyThread myThread;
+        ManualResetEventSlim pauseGate = new ManualResetEventSlim(true);
+        CancellationTokenSource operationCts;
+        Task operationTask;
+        readonly object operationLock = new object();
         public Action Operation { get; set; }
         public Action<bool> FileCollisionAction { get; set; }
         public Action ErrorFoundAction { get; set; }
@@ -121,14 +124,6 @@ namespace NeathCopyEngine.CopyHandlers
             FileCollisionAction = AllwaysAsk;
             logsPath = Path.Combine(RegisterAccess.Acces.GetLogsDir(), "Errors Log.txt");
 
-            myThread = new MyThread(new Action(() =>
-            {
-                Operation.Invoke();
-
-                RaiseFinished(Errors);
-
-                Errors.Clear();
-            }));
         }
 
         #region Events
@@ -202,6 +197,54 @@ namespace NeathCopyEngine.CopyHandlers
         #endregion
 
         #region Methods
+
+        private void ConfigureExecutionContext()
+        {
+            if (FileCopier == null) return;
+
+            var token = operationCts == null ? CancellationToken.None : operationCts.Token;
+            FileCopier.ConfigureExecution(pauseGate, token);
+        }
+        private void WaitForResumeOrCancel()
+        {
+            if (operationCts == null) return;
+
+            pauseGate.Wait(operationCts.Token);
+            operationCts.Token.ThrowIfCancellationRequested();
+        }
+        private void StartOperationInternal()
+        {
+            if (Operation == null) return;
+
+            lock (operationLock)
+            {
+                operationCts?.Dispose();
+                operationCts = new CancellationTokenSource();
+                pauseGate.Set();
+                ConfigureExecutionContext();
+
+                operationTask = Task.Run(() =>
+                {
+                    try
+                    {
+                        Operation.Invoke();
+                        RaiseFinished(Errors);
+                        Errors.Clear();
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        // Cancellation is handled by the caller.
+                    }
+                });
+            }
+        }
+        private void CancelOperationForRestart()
+        {
+            if (operationCts == null) return;
+
+            operationCts.Cancel();
+            pauseGate.Set();
+        }
 
         #region Affter File Copy Action
         void DoNothing(FileDataInfo currentFile)
@@ -361,6 +404,7 @@ namespace NeathCopyEngine.CopyHandlers
             {
                 try
                 {
+                    WaitForResumeOrCancel();
                     if (State == CopyHandleState.Canceled) return CopyRoutineResult.Canceled;
 
                     //Get the file to copy.
@@ -429,6 +473,10 @@ namespace NeathCopyEngine.CopyHandlers
             {
                 Errors.Add(new DiskFullError { Message = string.Format("The file: {0} could not be copied, the disk is full or there are not enough space", CurrentFile.FullName) });
                 RaiseDiskFull(CurrentFile);
+                return AffterErrorAction.Cancel;
+            }
+            else if (ex is OperationCanceledException)
+            {
                 return AffterErrorAction.Cancel;
             }
             else if (ex is ThreadAbortException)
@@ -541,6 +589,7 @@ namespace NeathCopyEngine.CopyHandlers
         public override void Copy()
         {
             State = CopyHandleState.Runing;
+            ConfigureExecutionContext();
 
             AffterFileCopyAction = DoNothing;
             affeterOperationState = CopyState.Copied;
@@ -556,6 +605,7 @@ namespace NeathCopyEngine.CopyHandlers
         public override void Move()
         {
             State = CopyHandleState.Runing;
+            ConfigureExecutionContext();
 
             AffterFileCopyAction = DeleteFile;
             affeterOperationState = CopyState.Moved;
@@ -594,6 +644,7 @@ namespace NeathCopyEngine.CopyHandlers
         public override void FastMove()
         {
             State = CopyHandleState.Runing;
+            ConfigureExecutionContext();
 
             AffterFileCopyAction = DoNothing;
             affeterOperationState = CopyState.Moved;
@@ -611,7 +662,7 @@ namespace NeathCopyEngine.CopyHandlers
         {
             if (Operation == null && State == CopyHandleState.NotStarted) return;
 
-            myThread.Start();
+            StartOperationInternal();
 
         }
 
@@ -623,11 +674,6 @@ namespace NeathCopyEngine.CopyHandlers
         {
             try
             {
-                //if (State == CopyHandleState.Runing && FileCopier.Writer != null)
-                //{
-
-                myThread.Pause();
-
                 //If there is any file in copy process then stop copy,
                 //free resources and delete the file with Cancel method.
                 if (FileCopier.CurrentFile != null)
@@ -637,28 +683,28 @@ namespace NeathCopyEngine.CopyHandlers
                 }
 
                 //Terminate the copy process
-                myThread.Cancel();
+                CancelOperationForRestart();
 
-                myThread = new MyThread(new Action(() =>
-                            {
-                                if (Operation != null)
-                                {
-                                    Operation.Invoke();
-
-                                    RaiseFinished(Errors);
-
-                                    Errors.Clear();
-                                }
-                            }));
-
-                if (DiscoverdList.Index == index)
+                var previousTask = operationTask;
+                Task.Run(() =>
                 {
-                    DiscoverdList.Index++;
-                    CopiedsFiles++;
-                }
+                    try
+                    {
+                        previousTask?.Wait();
+                    }
+                    catch (Exception) { }
 
-                myThread.Start();
-                //}
+                    lock (operationLock)
+                    {
+                        if (DiscoverdList.Index == index)
+                        {
+                            DiscoverdList.Index++;
+                            CopiedsFiles++;
+                        }
+
+                        StartOperationInternal();
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -676,7 +722,7 @@ namespace NeathCopyEngine.CopyHandlers
         {
             if (State == CopyHandleState.Runing)
             {
-                myThread.Pause();
+                pauseGate.Reset();
 
                 State = CopyHandleState.Paused;
             }
@@ -685,7 +731,7 @@ namespace NeathCopyEngine.CopyHandlers
         {
             if (State == CopyHandleState.Paused)
             {
-                myThread.Resume();
+                pauseGate.Set();
 
                 State = CopyHandleState.Runing;
             }
@@ -698,9 +744,10 @@ namespace NeathCopyEngine.CopyHandlers
                 State = CopyHandleState.Canceled;
 
                 //Terminate the copy process
-                if (myThread != null)
+                if (operationCts != null)
                 {
-                    myThread.Cancel();
+                    operationCts.Cancel();
+                    pauseGate.Set();
                 }
 
                 if (previousState == CopyHandleState.Runing && FileCopier.Writer != null)
