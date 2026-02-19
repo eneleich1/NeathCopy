@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,43 @@ using static NeathCopy.VisualCopy;
 
 namespace NeathCopy.Resources
 {
+    public class TargetDeviceNameConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var text = value as string;
+            if (string.IsNullOrWhiteSpace(text)) return string.Empty;
+
+            var parts = text.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length <= 2) return text.Trim();
+
+            return string.Join(" ", parts.Take(parts.Length - 2));
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
+        }
+    }
+
+    public class TargetDeviceSizeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var text = value as string;
+            if (string.IsNullOrWhiteSpace(text)) return string.Empty;
+
+            var parts = text.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length < 2) return string.Empty;
+
+            return string.Join(" ", parts.Skip(parts.Length - 2));
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
+        }
+    }
     //public class ImagePauseResumeConverter : IValueConverter
     //{
     //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

@@ -191,9 +191,9 @@ namespace NeathCopy.Module2_Configuration
 
         static Configuration()
         {
-            Thems = new List<string> { "Windows8Theme.xaml", "WindowsStandar.xaml" };
-            VisualCopySkins = new List<string> { "Windows8.xaml", "Advance2017Fixed.xaml", "Advance2017.xaml"};
-            Brushes = new List<string> { "Windows8_Brushes.xaml", "Dark.xaml", "Light.xaml", "Blue.xaml"};
+            Thems = new List<string> { "Windows8Theme.xaml", "WindowsStandar.xaml", "AuroraTheme.xaml" };
+            VisualCopySkins = new List<string> { "Windows8.xaml", "Advance2017Fixed.xaml", "Advance2017.xaml", "Aurora.xaml"};
+            Brushes = new List<string> { "Windows8_Brushes.xaml", "Dark.xaml", "Light.xaml", "Blue.xaml", "Aurora.xaml"};
             Fonts = new List<string> { "Fonts1.xaml" };
             Languages = new List<string> { "English.xaml", "Spanish.xaml", "Frances.xaml", "Chino Tradicional.xaml" };
 
