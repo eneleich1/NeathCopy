@@ -105,6 +105,7 @@
     <Compile Include="Module2_Configuration\Configuration.cs" />
     <Compile Include="Helpers\RichTextBoxBinding.cs" />
     <Compile Include="Resources\Converters.cs" />
+    <Compile Include="Services\VideoConversionService.cs" />
     <Compile Include="Themes\ControlsStyles\Theme1ToolBarPanel.xaml.cs">
       <DependentUpon>Theme1ToolBarPanel.xaml</DependentUpon>
     </Compile>
@@ -152,6 +153,9 @@
     <Compile Include="UsedWindows\UserDropUIWindow.xaml.cs">
       <DependentUpon>UserDropUIWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UsedWindows\VideoConversionWindow.xaml.cs">
+      <DependentUpon>VideoConversionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\ConfigurationWindow_VM.cs" />
     <Compile Include="ViewModels\ConfigurationWindowViewModel.cs" />
     <Compile Include="ViewModels\ContainerWindowViewModel.cs" />
@@ -166,6 +170,7 @@
     <Compile Include="ViewModels\MessageWindowViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\UserDropUIWindowViewModel.cs" />
+    <Compile Include="ViewModels\VideoConversionViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\VisualCopyVM.cs" />
     <Compile Include="ViewModels\VisualsCopysHandlerViewModel.cs" />
@@ -333,6 +338,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UsedWindows\VideoConversionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="VisualCopy.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -395,6 +404,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Tools\ffmpeg-8.0.1-full_build\bin\ffmpeg.exe">
+      <Link>Tools\ffmpeg-8.0.1-full_build\bin\ffmpeg.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Tools\ffmpeg-8.0.1-full_build\bin\ffprobe.exe">
+      <Link>Tools\ffmpeg-8.0.1-full_build\bin\ffprobe.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Themes\Images\Windows8Images\close.png" />

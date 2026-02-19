@@ -13,7 +13,9 @@
         </Grid.RowDefinitions>
         <Menu VerticalAlignment="Top" Margin="0,2,0,0" Background="{DynamicResource MenuBackground}">
             <MenuItem Header="{DynamicResource t59}" Name="fileMenu"/>
-            <MenuItem Header="{DynamicResource t60}" Name="toolsMenu"/>
+            <MenuItem Header="{DynamicResource t60}" Name="toolsMenu">
+                <MenuItem Header="Video Conversion (FFmpeg)" Click="VideoConversionMenu_Click"/>
+            </MenuItem>
         </Menu>
         <TabControl Grid.Row="1" Margin="5">
             <TabItem Header="{DynamicResource t97}" >

@@ -1,5 +1,6 @@
 using System.Windows;
 using NeathCopy.ViewModels;
+using NeathCopy.UsedWindows;
 
 namespace NeathCopy.UsedWindows
 {
@@ -27,6 +28,15 @@ namespace NeathCopy.UsedWindows
         {
             e.Cancel = true;
             Hide();
+        }
+
+        private void VideoConversionMenu_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new VideoConversionWindow
+            {
+                Owner = this
+            };
+            window.Show();
         }
     }
 }
