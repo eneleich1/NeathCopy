@@ -37,14 +37,24 @@ namespace NeathCopyEngine.DataTools
             {
                 #region Algorihtmy
 
+                EnsureDirectoryMetadata(currentDir, normalizedCurrentDir);
+
                 //All childs in PostOrden
                 foreach (var d in subdirs)
                 {
                     var childFullName = Path.Combine(currentDir.FullName, Path.GetFileName(d));
+                    var normalizedChild = LongPathHelper.Normalize(childFullName);
+                    var childInfo = new DirectoryInfo(normalizedChild);
                     child = new DirectoryDataInfo
                     {
+                        SourceDirectoryLength = this.SourceDirectoryLength,
+                        Destiny = this.Destiny,
                         FullName = childFullName,
-                        DestinyPath = Path.Combine(currentDir.DestinyPath, Path.GetFileName(childFullName))
+                        DestinyPath = Path.Combine(currentDir.DestinyPath, Path.GetFileName(childFullName)),
+                        FileAttributes = childInfo.Attributes,
+                        CreationTime = childInfo.CreationTime,
+                        LastAccessTime = childInfo.LastAccessTime,
+                        LastWriteTime = childInfo.LastWriteTime
                     };
 
                     filesCount += PostOrden(child, filesList, ref count);
@@ -94,7 +104,26 @@ namespace NeathCopyEngine.DataTools
             if (filesCount==0)
                 EmptyDirs.Add(currentDir);
 
+            Directories.Add(currentDir);
+
             return filesCount;
+        }
+
+        private void EnsureDirectoryMetadata(DirectoryDataInfo currentDir, string normalizedCurrentDir)
+        {
+            if (currentDir == null) return;
+
+            if (currentDir.CreationTime == default(DateTime)
+                && currentDir.LastAccessTime == default(DateTime)
+                && currentDir.LastWriteTime == default(DateTime)
+                && currentDir.FileAttributes == default(FileAttributes))
+            {
+                var dinfo = new DirectoryInfo(normalizedCurrentDir);
+                currentDir.FileAttributes = dinfo.Attributes;
+                currentDir.CreationTime = dinfo.CreationTime;
+                currentDir.LastAccessTime = dinfo.LastAccessTime;
+                currentDir.LastWriteTime = dinfo.LastWriteTime;
+            }
         }
 
         public override void FastMove()

@@ -249,11 +249,13 @@ namespace NeathCopyEngine.CopyHandlers
         #region Affter File Copy Action
         void DoNothing(FileDataInfo currentFile)
         {
-            //if is not readonly
-            if ((currentFile.FileAttributes & FileAttributes.ReadOnly) == 0)
-                SetAttributes(currentFile);
-
-            SetAccessTimes(currentFile);
+            try
+            {
+                MetadataRestorer.RestoreFileMetadata(currentFile.FullName, currentFile.DestinyPath);
+            }
+            catch (Exception)
+            {
+            }
         }
         /// <summary>
         /// Delete the file thats was copied.
@@ -261,9 +263,13 @@ namespace NeathCopyEngine.CopyHandlers
         /// <param name="currentFile"></param>
         void DeleteFile(FileDataInfo currentFile)
         {
-            SetAttributes(currentFile);
-
-            SetAccessTimes(currentFile);
+            try
+            {
+                MetadataRestorer.RestoreFileMetadata(currentFile.FullName, currentFile.DestinyPath);
+            }
+            catch (Exception)
+            {
+            }
 
             #region Delete the file after copy finished
 
@@ -541,48 +547,78 @@ namespace NeathCopyEngine.CopyHandlers
 
             return AffterErrorAction.DoNothing;
         }
-        protected void SetAccessTimes(DataInfo file)
+        private void RestoreAllDirectoriesMetadata()
         {
-            try
-            {
-                File.SetLastAccessTime(LongPathHelper.Normalize(file.DestinyPath), file.LastAccessTime);
-                File.SetLastWriteTime(LongPathHelper.Normalize(file.DestinyPath), file.LastWriteTime);
-            }
-            catch (Exception)
-            {
+            if (DiscoverdList == null || DiscoverdList.Directories == null) return;
 
-            }
-            finally
+            foreach (var dir in DiscoverdList.Directories)
             {
+                if (dir == null) continue;
 
-            }
-        }
-        protected void SetAttributes(DataInfo file)
-        {
-            try
-            {
-                File.SetAttributes(LongPathHelper.Normalize(file.DestinyPath), file.FileAttributes);
-            }
-            catch (Exception)
-            {
+                var src = dir.FullName;
+                var dst = dir.DestinyPath;
 
-            }
-            finally
-            {
-
+                try
+                {
+                    MetadataRestorer.RestoreDirectoryMetadata(src, dst);
+                    LogDirectoryAttributes(src, dst);
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 
         protected void CreateEmptysDirectories(FilesList list)
         {
-            DirectoryInfo di = null;
-
             //Creating empty directories
             foreach (var d in list.EmptyDirectories)
             {
                 Directory.CreateDirectory(LongPathHelper.Normalize(d.DestinyPath));
-                di = new DirectoryInfo(LongPathHelper.Normalize(d.DestinyPath));
-                di.Attributes = d.FileAttributes;
+            }
+        }
+
+        private void LogDirectoryAttributes(string sourceDirPath, string destDirPath)
+        {
+            try
+            {
+                var src = LongPathHelper.Normalize(sourceDirPath);
+                var dst = LongPathHelper.Normalize(destDirPath);
+
+                if (!System.IO.Directory.Exists(src) || !System.IO.Directory.Exists(dst))
+                    return;
+
+                var a1 = File.GetAttributes(src);
+                var a2 = File.GetAttributes(dst);
+
+                if (a1 != a2)
+                {
+                    LogDebug(string.Format("ATTR MISMATCH: src={0}, dst={1}, srcAttr={2}, dstAttr={3}", src, dst, a1, a2));
+                }
+
+                if (string.Equals(Path.GetFileName(src), ".vs", StringComparison.OrdinalIgnoreCase))
+                {
+                    LogDebug(string.Format("VS ATTR: src={0}, dst={1}, srcAttr={2}, dstAttr={3}", src, dst, a1, a2));
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void LogDebug(string message)
+        {
+            try
+            {
+                using (var w = new StreamWriter(new FileStream(logsPath, FileMode.Append, FileAccess.Write)))
+                {
+                    w.WriteLine("-------------------------------");
+                    w.WriteLine(System.DateTime.Now);
+                    w.WriteLine(message);
+                }
+            }
+            catch (Exception)
+            {
             }
         }
 
@@ -597,7 +633,10 @@ namespace NeathCopyEngine.CopyHandlers
             CopyRoutine(DiscoverdList,false);
 
             if (Errors.Count == 0)
+            {
                 CreateEmptysDirectories(DiscoverdList);
+                RestoreAllDirectoriesMetadata();
+            }
 
             State = CopyHandleState.Finished;
 
@@ -614,7 +653,10 @@ namespace NeathCopyEngine.CopyHandlers
 
             //Creating empty directories
             if (Errors.Count == 0)
+            {
                 CreateEmptysDirectories(DiscoverdList);
+                RestoreAllDirectoriesMetadata();
+            }
 
             #region Delete all Directory in data info list
 
@@ -653,7 +695,10 @@ namespace NeathCopyEngine.CopyHandlers
 
             //Creating empty directories
             if (Errors.Count == 0)
+            {
                 CreateEmptysDirectories(DiscoverdList);
+                RestoreAllDirectoriesMetadata();
+            }
 
             State = CopyHandleState.Finished;
         }

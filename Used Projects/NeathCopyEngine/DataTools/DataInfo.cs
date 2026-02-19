@@ -35,6 +35,7 @@ namespace NeathCopyEngine.DataTools
         public CopyState CopyState { get; set; }
 
         public List<DirectoryDataInfo> EmptyDirs = new List<DirectoryDataInfo>();
+        public List<DirectoryDataInfo> Directories = new List<DirectoryDataInfo>();
 
         public DataInfo()
         {
@@ -80,13 +81,17 @@ namespace NeathCopyEngine.DataTools
                     }
                 }
 
+                var dirInfo = new DirectoryInfo(normalizedFileSystemName);
                 return new DirectoryDataInfo
                 {
                     SourceDirectoryLength=Path.GetDirectoryName(fileSystemName).Length,
                     Destiny=destinyPath,
                     FullName = fileSystemName,
                     DestinyPath = resultingDestinyPath,
-                    FileAttributes=new DirectoryInfo(normalizedFileSystemName).Attributes
+                    FileAttributes=dirInfo.Attributes,
+                    CreationTime = dirInfo.CreationTime,
+                    LastAccessTime = dirInfo.LastAccessTime,
+                    LastWriteTime = dirInfo.LastWriteTime
                 };
             }
             //if is a file

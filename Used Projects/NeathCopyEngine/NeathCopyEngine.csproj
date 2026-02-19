@@ -68,6 +68,7 @@
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\FilesList.cs" />
     <Compile Include="Helpers\LongPathHelper.cs" />
+    <Compile Include="Helpers\MetadataRestorer.cs" />
     <Compile Include="Helpers\MySerializer.cs" />
     <Compile Include="Helpers\MySize.cs" />
     <Compile Include="Helpers\PathDisplayHelper.cs" />

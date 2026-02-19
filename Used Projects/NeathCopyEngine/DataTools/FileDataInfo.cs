@@ -30,6 +30,7 @@ namespace NeathCopyEngine.DataTools
         public FileStream GetStreamToWrite(FileMode mode)
         {
             var dst = LongPathHelper.Normalize(DestinyPath);
+            MetadataRestorer.EnsureFileWritable(dst);
             return new FileInfo(dst).Create();
         }
 

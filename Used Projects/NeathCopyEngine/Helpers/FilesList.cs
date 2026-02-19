@@ -36,6 +36,10 @@ namespace NeathCopyEngine.Helpers
         /// </summary>
         public List<DirectoryDataInfo> EmptyDirectories { get; set; }
         /// <summary>
+        /// Get the List of all directories in post-order.
+        /// </summary>
+        public List<DirectoryDataInfo> Directories { get; set; }
+        /// <summary>
         /// Get the Count of files in the list.
         /// </summary>
         public int Count
@@ -134,6 +138,7 @@ namespace NeathCopyEngine.Helpers
         {
             Files = new ObservableCollection<FileDataInfo>();
             EmptyDirectories = new List<DirectoryDataInfo>();
+            Directories = new List<DirectoryDataInfo>();
             SourcesDirectories = new List<string>();
             Destinys = new List<string>();
             Sources = new List<string>();
@@ -172,6 +177,7 @@ namespace NeathCopyEngine.Helpers
                     }
 
                     EmptyDirectories = EmptyDirectories.Concat(dataInfo.EmptyDirs).ToList();
+                    Directories = Directories.Concat(dataInfo.Directories).ToList();
 
                     //If this dataInfo is a emptydirectori
                     if (dataInfo is DirectoryDataInfo && (files.Count == 0))
@@ -231,6 +237,7 @@ namespace NeathCopyEngine.Helpers
                     }
 
                     EmptyDirectories = EmptyDirectories.Concat(dataInfo.EmptyDirs).ToList();
+                    Directories = Directories.Concat(dataInfo.Directories).ToList();
 
                     //If this dataInfo is a emptydirectori
                     if (dataInfo is DirectoryDataInfo && (files.Count == 0))
