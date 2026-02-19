@@ -564,12 +564,6 @@ namespace LongPath
         #region structs
 
         [StructLayout(LayoutKind.Sequential)]
-        internal struct FILETIME
-        {
-            internal uint dwLowDateTime;
-            internal uint dwHighDateTime;
-        };
-        [StructLayout(LayoutKind.Sequential)]
         public struct SECURITY_ATTRIBUTES
         {
             public int nLength;
@@ -609,9 +603,9 @@ namespace LongPath
     public struct _BY_HANDLE_FILE_INFORMATION
     {
         internal uint dwFileAttributes;
-        internal FILETIME ftCreationTime;
-        internal FILETIME ftLastAccessTime;
-        internal FILETIME ftLastWriteTime;
+        internal System.Runtime.InteropServices.ComTypes.FILETIME ftCreationTime;
+        internal System.Runtime.InteropServices.ComTypes.FILETIME ftLastAccessTime;
+        internal System.Runtime.InteropServices.ComTypes.FILETIME ftLastWriteTime;
         internal int dwVolumeSerialNumber;
         internal uint nFileSizeHigh;
         internal uint nFileSizeLow;
