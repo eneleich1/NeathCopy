@@ -1,7 +1,9 @@
 using NeathCopy.Module1_ShellExt;
 using NeathCopy.Module2_Configuration;
+using NeathCopy.Services.AppControl;
 using NeathCopy.Themes;
 using NeathCopy.UsedWindows;
+using NeathCopy.Services;
 using NeathCopyEngine.CopyHandlers;
 using NeathCopyEngine.Helpers;
 using System;
@@ -10,6 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,6 +25,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using NeathCopy.ViewModels;
+using System.Windows.Threading;
 
 namespace NeathCopy
 {
@@ -32,8 +36,9 @@ namespace NeathCopy
     {
         public static HwndSource hwndCopy;
         private readonly VisualsCopysHandlerViewModel viewModel;
+        internal IAppController Controller { get; }
 
-        public static VisualsCopysHandler MainHandler { get; private set; }
+        public static VisualsCopysHandler MainHandler { get; internal set; }
         public static ContainerWindow MainContainer { get; set; }
         public static List<ContainerWindow> ContainersList { get; private set; }
         public static IEnumerable<VisualCopy> VisualsCopys
@@ -57,10 +62,19 @@ namespace NeathCopy
             ThemesManager.Manager.SetThemes(Configuration.Main);
         }
         public VisualsCopysHandler()
+            : this(StartupClass.Controller)
         {
+        }
+
+        internal VisualsCopysHandler(IAppController controller)
+        {
+            Controller = controller ?? throw new ArgumentNullException(nameof(controller));
             InitializeComponent();
             viewModel = new VisualsCopysHandlerViewModel();
             DataContext = viewModel;
+
+            if (Controller is AppController appController)
+                appController.AttachMainWindow(this);
         }
 
         private void MyInitialize()
@@ -68,11 +82,27 @@ namespace NeathCopy
             try
             {
                 //Initialize some fields
-                MainContainer = new ContainerWindow();
-                ContainersList = new List<ContainerWindow>();
+                if (Controller is AppController appController)
+                    ContainersList = appController.ContainersList;
+                else
+                    ContainersList = new List<ContainerWindow>();
+
                 MainHandler = this;
                 hwndCopy = PresentationSource.FromVisual(this) as HwndSource;
                 hwndCopy.AddHook(WndProc);
+
+                //Ensure a main container exists for AllInOne mode before creating the first VisualCopy
+                if (Configuration.Main.AddNewVisualCopy != null &&
+                    string.Equals(Configuration.Main.AddNewVisualCopy.Method.Name, "AllInOne_AddNewVC", StringComparison.Ordinal))
+                {
+                    if (MainContainer == null || !MainContainer.IsLoaded)
+                    {
+                        MainContainer = new ContainerWindow(Controller);
+                        Controller.RegisterContainer(MainContainer);
+                        if (Controller is AppController controller)
+                            controller.SetMainContainer(MainContainer);
+                    }
+                }
 
                 //Add new VisualCopy
                 var vc = Configuration.Main.AddNewVisualCopy();
@@ -86,6 +116,10 @@ namespace NeathCopy
                     Configuration.Main.SetRunningState(vc, StartupClass.requestInfo);
 
                 //System.Windows.Forms.MessageBox.Show("after start operation");
+                IntegrationManager.EnsureMinimalRegistryKeysIfMissing(Configuration.Main);
+                ApplyIntegrationState();
+                if (Controller is AppController controllerInstance)
+                    controllerInstance.WarnIfElevated();
 
             }
             catch (Exception ex)
@@ -158,9 +192,11 @@ namespace NeathCopy
                     Process.GetCurrentProcess().Kill();
                     break;
                 case WM_CREATE:
-                    Visibility = System.Windows.Visibility.Hidden;
+                    if (StartupClass.IsTrayLaunch && IntegrationManager.IsResident(Configuration.Main))
+                        Visibility = System.Windows.Visibility.Hidden;
                     break;
                 case WM_ADD_DATAINFO:
+                    Controller.RequestShowMainWindow("WM_ADD_DATAINFO");
                     viewModel.HandleAddDataInfo(VisualsCopys);
                     break;
 
@@ -173,16 +209,64 @@ namespace NeathCopy
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            RegisterAccess.Acces.UnregisterCopyHandler();
-            Process.GetCurrentProcess().Kill();
+            var appController = Controller as AppController;
+            if (IntegrationManager.IsResident(Configuration.Main) && !(appController?.IsExitAllowed() ?? false))
+            {
+                // Resident mode: closing the main window should NOT leave transfers alive in hidden containers.
+                // Cancel all transfers first, then hide to tray.
+                try { Controller.CancelAllTransfers(); } catch { }
+
+                e.Cancel = true;
+                Controller.RequestHideToTray("Main window closing");
+                return;
+            }
+
+            Controller.RequestExit("Main window closing");
+        }
+
+        public void ApplyIntegrationState()
+        {
+            Controller.ApplyIntegrationState();
+        }
+
+        internal void HandleAddDataInfo(IEnumerable<VisualCopy> visualsCopys)
+        {
+            viewModel.HandleAddDataInfo(visualsCopys);
+        }
+
+        public void HideToTray()
+        {
+            Controller.RequestHideToTray("HideToTray");
+        }
+
+        public void ExitToLegacy()
+        {
+            if (Controller is AppController controller)
+                controller.ExitToLegacy();
+            else
+                Controller.RequestExit("Exit to legacy");
+        }
+
+        public void RequestExitToLegacyAfterConfigClose()
+        {
+            if (Controller is AppController controller)
+                controller.RequestExitToLegacyAfterConfigClose();
+        }
+
+        public void ExecutePendingExitToLegacy()
+        {
+            if (Controller is AppController controller)
+                controller.ExecutePendingExitToLegacy();
         }
     }
 
     public class StartupClass
     {
+        internal static readonly AppController Controller = new AppController();
         public static int Id;
         public static CmdShellExtAgent cmdShellAgent;
         public static RequestInfo requestInfo=new RequestInfo();
+        public static bool IsTrayLaunch;
         public StartupClass() { }
         [STAThread]
         public static void Main(string[] arguments)
@@ -222,6 +306,12 @@ namespace NeathCopy
 
                 #endregion
 
+                Configuration.Main = Configuration.LoadFromRegister();
+                IntegrationManager.EnsureMinimalRegistryKeysIfMissing(Configuration.Main);
+                IsTrayLaunch = arguments != null && arguments.Any(a => string.Equals(a, "--tray", StringComparison.OrdinalIgnoreCase));
+                if (IsTrayLaunch && !IntegrationManager.IsResident(Configuration.Main))
+                    return;
+
                 App myApp = new App();
 
                 cmdShellAgent = new CmdShellExtAgent(arguments);
@@ -248,8 +338,12 @@ namespace NeathCopy
 
                 //MessageBox.Show("Hello NeathCopy");
 
-                var nc = new VisualsCopysHandler();
-                myApp.Run(nc);
+                var nc = new VisualsCopysHandler(Controller);
+                myApp.MainWindow = nc;
+                Controller.Start();
+                if (!IsTrayLaunch)
+                    nc.Show();
+                myApp.Run();
             //}
             //catch (Exception ex)
             //{

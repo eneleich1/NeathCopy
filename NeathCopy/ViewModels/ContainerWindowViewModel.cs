@@ -4,6 +4,7 @@ using NeathCopyEngine.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -16,13 +17,17 @@ namespace NeathCopy.ViewModels
         private static readonly Mutex mut = new Mutex();
         private readonly Dispatcher dispatcher;
         private readonly Action closeIfEmpty;
+        private readonly Action hideWindow;
+        private readonly Func<bool> shouldKeepPlaceholder;
 
         public ObservableCollection<VisualCopy> VisualsCopys { get; }
 
-        public ContainerWindowViewModel(Dispatcher dispatcher, Action closeIfEmpty)
+        public ContainerWindowViewModel(Dispatcher dispatcher, Action closeIfEmpty, Action hideWindow, Func<bool> shouldKeepPlaceholder)
         {
             this.dispatcher = dispatcher;
             this.closeIfEmpty = closeIfEmpty;
+            this.hideWindow = hideWindow;
+            this.shouldKeepPlaceholder = shouldKeepPlaceholder;
             VisualsCopys = new ObservableCollection<VisualCopy>();
         }
 
@@ -57,7 +62,21 @@ namespace NeathCopy.ViewModels
             try
             {
                 ManipulateList(vc, ListManipulation.Remove);
-                if (VisualsCopys.Count == 0)
+                var keep = shouldKeepPlaceholder != null && shouldKeepPlaceholder();
+                if (keep && VisualsCopys.Count == 0)
+                {
+                    VisualCopy placeholder = null;
+                    dispatcher.Invoke(new Action(() =>
+                    {
+                        placeholder = AddNew();
+                    }));
+                    if (placeholder != null)
+                        LogPlaceholder("ResidentMode placeholder created after last VC removed.", null);
+
+                    if (hideWindow != null)
+                        dispatcher.Invoke(hideWindow);
+                }
+                else if (VisualsCopys.Count == 0)
                 {
                     var closeAction = closeWindowIfEmpty ?? closeIfEmpty;
                     if (closeAction != null)
@@ -180,6 +199,27 @@ namespace NeathCopy.ViewModels
             catch (Exception ex)
             {
                 MessageBox.Show(Error.GetErrorLog(ex.Message, "NeathCopy", "ContainerWindowViewModel", "Vc_AfterCancel"));
+            }
+        }
+
+        private void LogPlaceholder(string message, Exception ex)
+        {
+            try
+            {
+                var logsDir = RegisterAccess.Acces.GetLogsDir();
+                if (string.IsNullOrWhiteSpace(logsDir))
+                    logsDir = AppDomain.CurrentDomain.BaseDirectory;
+
+                var path = Path.Combine(logsDir, "ContainerWindow.log");
+                var line = string.Format("[{0:yyyy-MM-dd HH:mm:ss}] {1}", DateTime.Now, message);
+                if (ex != null)
+                    line = line + Environment.NewLine + ex.ToString();
+
+                File.AppendAllText(path, line + Environment.NewLine);
+            }
+            catch (Exception logEx)
+            {
+                System.Diagnostics.Trace.WriteLine("Container placeholder log failure: " + logEx);
             }
         }
     }

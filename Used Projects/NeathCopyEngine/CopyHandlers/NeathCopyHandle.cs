@@ -228,8 +228,11 @@ namespace NeathCopyEngine.CopyHandlers
                     try
                     {
                         Operation.Invoke();
-                        RaiseFinished(Errors);
-                        Errors.Clear();
+                        if (State != CopyHandleState.Canceled)
+                        {
+                            RaiseFinished(Errors);
+                            Errors.Clear();
+                        }
                     }
                     catch (OperationCanceledException)
                     {
@@ -441,16 +444,27 @@ namespace NeathCopyEngine.CopyHandlers
 
                         //If the File was Processed succefully=============================
                         //Set the currentFile copy state as Copied.
-                        CurrentFile.CopyState = affeterOperationState;
+                        if (CurrentFile.CopyState == CopyState.Skiped)
+                        {
+                            // Skip counts as processed but must not be marked as copied/moved.
+                            CopiedsFiles++;
+                        }
+                        else
+                        {
+                            CurrentFile.CopyState = affeterOperationState;
 
-                        //Status.
-                        CopiedsFiles++;
+                            //Status.
+                            CopiedsFiles++;
+                        }
 
                     }
 
                 }
                 catch (Exception ex)
                 {
+                    if (CurrentFile != null && CurrentFile.CopyState == CopyState.Skiped)
+                        continue;
+
                     opt = ErrorsCheck(ex);
 
                     if (opt == AffterErrorAction.Cancel)
@@ -630,7 +644,17 @@ namespace NeathCopyEngine.CopyHandlers
             AffterFileCopyAction = DoNothing;
             affeterOperationState = CopyState.Copied;
 
-            CopyRoutine(DiscoverdList,false);
+            CopyRoutineResult copyResult = CopyRoutine(DiscoverdList,false);
+            if (copyResult == CopyRoutineResult.Canceled)
+            {
+                State = CopyHandleState.Canceled;
+                return;
+            }
+            if (copyResult == CopyRoutineResult.Error)
+            {
+                State = CopyHandleState.Finished;
+                return;
+            }
 
             if (Errors.Count == 0)
             {
@@ -649,7 +673,17 @@ namespace NeathCopyEngine.CopyHandlers
             AffterFileCopyAction = DeleteFile;
             affeterOperationState = CopyState.Moved;
 
-            var copyResult=CopyRoutine(DiscoverdList,false);
+            CopyRoutineResult copyResult=CopyRoutine(DiscoverdList,false);
+            if (copyResult == CopyRoutineResult.Canceled)
+            {
+                State = CopyHandleState.Canceled;
+                return;
+            }
+            if (copyResult == CopyRoutineResult.Error)
+            {
+                State = CopyHandleState.Finished;
+                return;
+            }
 
             //Creating empty directories
             if (Errors.Count == 0)
@@ -691,7 +725,17 @@ namespace NeathCopyEngine.CopyHandlers
             AffterFileCopyAction = DoNothing;
             affeterOperationState = CopyState.Moved;
 
-            CopyRoutine(DiscoverdList,true);
+            CopyRoutineResult copyResult = CopyRoutine(DiscoverdList,true);
+            if (copyResult == CopyRoutineResult.Canceled)
+            {
+                State = CopyHandleState.Canceled;
+                return;
+            }
+            if (copyResult == CopyRoutineResult.Error)
+            {
+                State = CopyHandleState.Finished;
+                return;
+            }
 
             //Creating empty directories
             if (Errors.Count == 0)
@@ -726,41 +770,33 @@ namespace NeathCopyEngine.CopyHandlers
                     FileCopier.CurrentFile.CopyState = CopyState.Skiped;
                     FileCopier.Skip();
                 }
-
-                //Terminate the copy process
-                CancelOperationForRestart();
-
-                var previousTask = operationTask;
-                Task.Run(() =>
-                {
-                    try
-                    {
-                        previousTask?.Wait();
-                    }
-                    catch (Exception) { }
-
-                    lock (operationLock)
-                    {
-                        if (DiscoverdList.Index == index)
-                        {
-                            DiscoverdList.Index++;
-                            CopiedsFiles++;
-                        }
-
-                        StartOperationInternal();
-                    }
-                });
+                // Ensure we are not blocked on pause so the current copy can exit.
+                pauseGate.Set();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(Error.GetErrorLog(ex.Message, "NeathCopyEngine", "NeathCopyHandle", "Skip"));
-                using (var w = new StreamWriter(new FileStream(logsPath, FileMode.Append, FileAccess.Write)))
+                using (StreamWriter w = new StreamWriter(new FileStream(logsPath, FileMode.Append, FileAccess.Write)))
                 {
                     w.WriteLine("-------------------------------");
                     w.WriteLine(System.DateTime.Now);
                     w.WriteLine(Error.GetErrorLogInLine(ex.Message, "NeathCopyEngine", "NeathCopyHandle", "Skip"));
                 }
 
+            }
+        }
+        private void LogSkip(int previousIndex, int newIndex, CopyHandleState previousState, CopyHandleState currentState)
+        {
+            try
+            {
+                using (StreamWriter w = new StreamWriter(new FileStream(logsPath, FileMode.Append, FileAccess.Write)))
+                {
+                    w.WriteLine("-------------------------------");
+                    w.WriteLine(System.DateTime.Now);
+                    w.WriteLine(string.Format("Skip: index {0} -> {1}, State {2} -> {3}", previousIndex, newIndex, previousState, currentState));
+                }
+            }
+            catch (Exception)
+            {
             }
         }
         public void Pause()

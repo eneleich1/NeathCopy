@@ -13,32 +13,44 @@ public:
 	PathWriter(char* fileListPath)
 	{
 		this->fileListPath = fileListPath;
-
+		outFile = nullptr;
+		buf = nullptr;
 		Reset();
 	}
 	~PathWriter() {
-		delete buf;
+		delete[] buf;
+		buf = nullptr;
 	}
 
 	//Methods
-	void OpenFile(char* access)
+	bool OpenFile(char* access)
 	{
 		//Open the File
-		outFile = fopen(fileListPath, access);
+		outFile = nullptr;
+		if (fopen_s(&outFile, fileListPath, access) != 0)
+			outFile = nullptr;
+		return outFile != nullptr;
 	}
 
 	void CloseFile()
 	{
-		fclose(outFile);
+		if (outFile)
+		{
+			fclose(outFile);
+			outFile = nullptr;
+		}
 	}
 
-	void ClearFilesList()
+	bool ClearFilesList()
 	{
-		OpenFile("w+,ccs=UNICODE");
+		if (!OpenFile("w+,ccs=UNICODE"))
+			return false;
 
-		fwrite(L"|", wcslen(L"|") * sizeof(wchar_t), 1, outFile);
+		if (outFile)
+			fwrite(L"|", wcslen(L"|") * sizeof(wchar_t), 1, outFile);
 
 		CloseFile();
+		return true;
 	}
 
 	void RegisterPath(wchar_t* path)
@@ -46,14 +58,15 @@ public:
 		//Write path or store in the buffer
 		if (wcslen(buf) + wcslen(path) > capacity)
 		{
-			fwrite(buf, wcslen(buf) * sizeof(wchar_t), 1, outFile);
+			if (outFile)
+				fwrite(buf, wcslen(buf) * sizeof(wchar_t), 1, outFile);
 
 			Reset();
 
-			wcscat(buf, path);
+			wcscat_s(buf, capacity, path);
 		}
 		else
-			wcscat(buf, path);
+			wcscat_s(buf, capacity, path);
 
 	}
 
@@ -73,13 +86,20 @@ public:
 		}
 		else
 		{
-			fwrite(buf, wcslen(buf) * sizeof(wchar_t), 1, outFile);
+			if (outFile)
+				fwrite(buf, wcslen(buf) * sizeof(wchar_t), 1, outFile);
 		}
 	}
 
 private:
 	void Reset() {
+		if (buf)
+		{
+			delete[] buf;
+			buf = nullptr;
+		}
 		buf = new wchar_t[capacity];
-		wcscpy_s(buf, 1, L"");
+		if (buf)
+			buf[0] = L'\0';
 	}
 };

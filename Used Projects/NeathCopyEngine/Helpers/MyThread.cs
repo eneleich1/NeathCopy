@@ -16,6 +16,7 @@ namespace NeathCopyEngine.Helpers
         public Action ActionToPerform { get; protected set; }
 
         Thread thread;
+        readonly ManualResetEventSlim pauseGate = new ManualResetEventSlim(true);
 
         /// <summary>
         /// 
@@ -31,12 +32,14 @@ namespace NeathCopyEngine.Helpers
         public void Reset()
         {
             thread = new Thread(new ThreadStart(mainMethod));
+            pauseGate.Set();
         }
 
         private void mainMethod()
         {
             try
             {
+                pauseGate.Wait();
                 ActionToPerform.Invoke();
             }
             catch (Exception ex)
@@ -51,6 +54,7 @@ namespace NeathCopyEngine.Helpers
         /// </summary>
         public virtual void Start()
         {
+            pauseGate.Set();
             thread.Start();
         }
         /// <summary>
@@ -58,11 +62,8 @@ namespace NeathCopyEngine.Helpers
         /// </summary>
         public virtual void Pause()
         {
-            thread.Suspend();
-            //if (thread.ThreadState == ThreadState.Running)
-            //{
-            //    thread.Suspend();
-            //}
+            // Cooperate: only blocks before ActionToPerform starts.
+            pauseGate.Reset();
         }
         /// <summary>
         /// Resume the action by Exit method of Monitor class.
@@ -70,8 +71,14 @@ namespace NeathCopyEngine.Helpers
         public virtual void Resume()
         {
              if (thread.ThreadState == ThreadState.Unstarted)
-                thread.Start();
-             else thread.Resume();
+             {
+                 pauseGate.Set();
+                 thread.Start();
+             }
+             else
+             {
+                 pauseGate.Set();
+             }
 
             //if (thread.ThreadState == ThreadState.Suspended)
             //{
@@ -93,6 +100,7 @@ namespace NeathCopyEngine.Helpers
             try
             {
                 thread = new Thread(new ThreadStart(mainMethod));
+                pauseGate.Set();
             }
             catch(Exception ex)
             {

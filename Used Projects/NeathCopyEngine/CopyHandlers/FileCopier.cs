@@ -26,6 +26,7 @@ namespace NeathCopyEngine.CopyHandlers
         public FileStream Writer { get; protected set; }
         protected ManualResetEventSlim PauseGate { get; private set; }
         protected CancellationToken CancellationToken { get; private set; }
+        protected int skipRequested;
 
         /// <summary>
         /// Get the total bytes transferred of file is been copy.
@@ -58,6 +59,14 @@ namespace NeathCopyEngine.CopyHandlers
                 gate.Wait(CancellationToken);
 
             CancellationToken.ThrowIfCancellationRequested();
+        }
+        protected bool IsSkipRequested()
+        {
+            return System.Threading.Volatile.Read(ref skipRequested) != 0;
+        }
+        protected bool ConsumeSkipRequested()
+        {
+            return Interlocked.Exchange(ref skipRequested, 0) == 1;
         }
         public override string ToString()
         {
@@ -115,12 +124,14 @@ namespace NeathCopyEngine.CopyHandlers
                 while (true)
                 {
                     WaitForResumeOrCancel();
+                    if (IsSkipRequested()) break;
 
                     //Dinamic bufferSize. Dynamic buffer size.
                     readBytes = Reader.Read(buffer, 0, (int)(file.Size > BufferSize ? BufferSize : file.Size));
                     if (readBytes <= 0) break;
 
                     WaitForResumeOrCancel();
+                    if (IsSkipRequested()) break;
                     Writer.Write(buffer, 0, readBytes);
 
                     //Status
@@ -131,6 +142,9 @@ namespace NeathCopyEngine.CopyHandlers
 
             Reader.Close();
             Reader.Dispose();
+
+            if (ConsumeSkipRequested() && Writer != null && Writer.CanWrite)
+                Writer.SetLength(FileBytesTransferred);
 
             Writer.Flush();
             Writer.Close();
@@ -166,31 +180,53 @@ namespace NeathCopyEngine.CopyHandlers
 
         public override void Cancel()
         {
+            // Capture a stable reference; CurrentFile may change during cancel.
+            var file = CurrentFile;
+            if (file == null)
+                return;
+
             try
             {
-                //Monitor.Enter(Writer);
+                // Close writer safely. Writer can already be disposed/closed.
+                if (Writer != null)
+                {
+                    try
+                    {
+                        if (Writer.CanWrite)
+                        {
+                            Writer.SetLength(FileBytesTransferred);
+                            Writer.Flush();
+                        }
+                    }
+                    catch
+                    {
+                        // Ignore: writer may be closed or not writable.
+                    }
 
-                if (CurrentFile == null) return;
-
-                //If currentFile is not equals null but copy have finished.
-                //This Produce exception: Can not acces to a closed file.
-
-                Writer.SetLength(FileBytesTransferred);
-                Writer.Flush();
-                Writer.Close();
-
-                //Monitor.Exit(Writer);
+                    try { Writer.Close(); } catch { }
+                }
             }
             catch (Exception ex)
             {
-                //System.Windows.MessageBox.Show(ex.Message + " in FileCopier.Cancel");
+                // Avoid MessageBox in engine threads if possible.
+                System.Windows.MessageBox.Show(ex.Message + " in FileCopier.Cancel");
             }
-
             finally
             {
-                System.IO.File.Delete(LongPathHelper.Normalize(CurrentFile.DestinyPath));
+                try
+                {
+                    // Use the captured file reference, not CurrentFile.
+                    var dest = file.DestinyPath;
+                    if (!string.IsNullOrWhiteSpace(dest))
+                    {
+                        System.IO.File.Delete(LongPathHelper.Normalize(dest));
+                    }
+                }
+                catch
+                {
+                    // Ignore cleanup failures (file may not exist, path invalid, permissions, etc.)
+                }
             }
-
         }
 
         public override void Skip()
@@ -199,19 +235,12 @@ namespace NeathCopyEngine.CopyHandlers
 
             try
             {
-                //If currentFile is not equals null but copy have finished.
-                //This Produce exception: Can not acces to a closed file.
-                if (Writer != null && Writer.CanWrite)
-                {
-                    Writer.SetLength(FileBytesTransferred);
-                    Writer.Flush();
-                    Writer.Close();
-                }
+                Interlocked.Exchange(ref skipRequested, 1);
             }
             catch (Exception) { }
             finally
             {
-                CurrentFile = null;
+                // Streams are closed by the copy loop after it observes the skip flag.
             }
         }
 
@@ -261,12 +290,14 @@ namespace NeathCopyEngine.CopyHandlers
                 while (true)
                 {
                     WaitForResumeOrCancel();
+                    if (IsSkipRequested()) break;
 
                     //Dinamic bufferSize. Dynamic buffer size.
                     readBytes = Reader.Read(buffer, 0, (int)(file.Size > BufferSize ? BufferSize : file.Size));
                     if (readBytes <= 0) break;
 
                     WaitForResumeOrCancel();
+                    if (IsSkipRequested()) break;
                     writer1.Write(buffer, 0, readBytes);
 
                     //Status
@@ -277,6 +308,9 @@ namespace NeathCopyEngine.CopyHandlers
 
             Reader.Close();
             Reader.Dispose();
+
+            if (ConsumeSkipRequested() && Writer != null && Writer.CanWrite)
+                Writer.SetLength(FileBytesTransferred);
 
             Writer.Flush();
             Writer.Close();
@@ -359,11 +393,13 @@ namespace NeathCopyEngine.CopyHandlers
             while (true)
             {
                 WaitForResumeOrCancel();
+                if (IsSkipRequested()) break;
 
                 readBytes = Reader.Read(buffer, 0, BufferSize);
                 if (readBytes <= 0) break;
 
                 WaitForResumeOrCancel();
+                if (IsSkipRequested()) break;
 
                 // Request the lock, and block until it is obtained.
                 Monitor.Enter(Writer);
@@ -415,11 +451,13 @@ namespace NeathCopyEngine.CopyHandlers
                 while (true)
                 {
                     WaitForResumeOrCancel();
+                    if (IsSkipRequested()) break;
 
                     readBytes = Reader.Read(buffer, 0, BufferSize);
                     if (readBytes <= 0) break;
 
                     WaitForResumeOrCancel();
+                    if (IsSkipRequested()) break;
                     Writer.Write(buffer, 0, readBytes);
 
                     //Status
@@ -434,6 +472,10 @@ namespace NeathCopyEngine.CopyHandlers
             }
             finally
             {
+                if (ConsumeSkipRequested() && Writer != null && Writer.CanWrite)
+                {
+                    try { Writer.SetLength(FileBytesTransferred); } catch { }
+                }
                 ReleaseResources();
                 CurrentFile = null;
                 if(executeCopyException!=null)throw executeCopyException;
@@ -561,11 +603,13 @@ namespace NeathCopyEngine.CopyHandlers
             while (true)
             {
                 WaitForResumeOrCancel();
+                if (IsSkipRequested()) break;
 
                 readBytes = Reader.Read(buffer, 0, BufferSize);
                 if (readBytes <= 0) break;
 
                 WaitForResumeOrCancel();
+                if (IsSkipRequested()) break;
 
                 // Request the lock, and block until it is obtained.
                 Monitor.Enter(Writer);
@@ -581,7 +625,7 @@ namespace NeathCopyEngine.CopyHandlers
                     FileBytesTransferred += readBytes;
                     TotalBytesTransferred += readBytes;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return;
                 }
@@ -610,11 +654,13 @@ namespace NeathCopyEngine.CopyHandlers
             while (true)
             {
                 WaitForResumeOrCancel();
+                if (IsSkipRequested()) break;
 
                 readBytes = Reader.Read(buffer, 0, BufferSize);
                 if (readBytes <= 0) break;
 
                 WaitForResumeOrCancel();
+                if (IsSkipRequested()) break;
 
                 // Request the lock, and block until it is obtained.
                 Monitor.Enter(Writer);
@@ -630,10 +676,9 @@ namespace NeathCopyEngine.CopyHandlers
                     FileBytesTransferred += readBytes;
                     TotalBytesTransferred += readBytes;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return;
-                    //MessageBox.Show(ex.Message + " in FileCopier.Copy");
                 }
 
                 // Ensure that the lock is released.
@@ -694,11 +739,13 @@ namespace NeathCopyEngine.CopyHandlers
                 while (true)
                 {
                     WaitForResumeOrCancel();
+                    if (IsSkipRequested()) break;
 
                     readBytes = Reader.Read(buffer, 0, BufferSize);
                     if (readBytes <= 0) break;
 
                     WaitForResumeOrCancel();
+                    if (IsSkipRequested()) break;
 
                     Writer.SetLength(Writer.Length + readBytes);
 
@@ -710,6 +757,9 @@ namespace NeathCopyEngine.CopyHandlers
 
                 }
             }
+
+            if (ConsumeSkipRequested() && Writer != null && Writer.CanWrite)
+                Writer.SetLength(FileBytesTransferred);
 
             Reader.Dispose();
         }

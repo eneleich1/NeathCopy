@@ -29,7 +29,9 @@ WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
 
 #include <windows.h>
 #include <shlobj.h>     // For IShellExtInit and IContextMenu
+#include <comdef.h>
 
+class ShellLogger;
 
 class FileDragDropExt : public IShellExtInit, public IContextMenu
 {
@@ -66,4 +68,16 @@ private:
     void OnCreateHardLink(HWND hWnd);
 
     PWSTR m_pszMenuText;
+
+    wchar_t m_sourcesJson[MAX_PATH * 16];
+    wchar_t m_integrationMode[64];
+    bool m_isDefaultHandler;
+    bool m_shouldHandle;
+
+    HRESULT InitializeImpl(LPCITEMIDLIST pidlFolder, LPDATAOBJECT pDataObj, HKEY hKeyProgID, ShellLogger& log);
+    HRESULT QueryContextMenuImpl(HMENU hMenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags, ShellLogger& log);
+    HRESULT InvokeCommandImpl(LPCMINVOKECOMMANDINFO pCmdInfo, ShellLogger& log);
+    HRESULT InitializeSehGuard(LPCITEMIDLIST pidlFolder, LPDATAOBJECT pDataObj, HKEY hKeyProgID, ShellLogger& log);
+    HRESULT QueryContextMenuSehGuard(HMENU hMenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags, ShellLogger& log);
+    HRESULT InvokeCommandSehGuard(LPCMINVOKECOMMANDINFO pCmdInfo, ShellLogger& log);
 };

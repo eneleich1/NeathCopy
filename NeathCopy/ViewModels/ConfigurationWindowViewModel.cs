@@ -1,8 +1,10 @@
 using NeathCopy.Module2_Configuration;
 using NeathCopy.Themes;
+using NeathCopy.Services;
 using NeathCopyEngine.CopyHandlers;
 using System;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace NeathCopy.ViewModels
 {
@@ -178,7 +180,7 @@ namespace NeathCopy.ViewModels
             set
             {
                 if (SetProperty(ref addToFirsth, value) && value && !loading)
-                    Configuration.Main.addDataBehaviour = Configuration.addDataFac.GetBehaviour("AddToFirsth");
+                    Configuration.Main.SetAddDataBehaviour(Configuration.addDataFac.GetBehaviour("AddToFirsth"));
             }
         }
 
@@ -189,7 +191,7 @@ namespace NeathCopy.ViewModels
             set
             {
                 if (SetProperty(ref addToLast, value) && value && !loading)
-                    Configuration.Main.addDataBehaviour = Configuration.addDataFac.GetBehaviour("AddToLast");
+                    Configuration.Main.SetAddDataBehaviour(Configuration.addDataFac.GetBehaviour("AddToLast"));
             }
         }
 
@@ -200,7 +202,7 @@ namespace NeathCopy.ViewModels
             set
             {
                 if (SetProperty(ref addToSameDestiny, value) && value && !loading)
-                    Configuration.Main.addDataBehaviour = Configuration.addDataFac.GetBehaviour("AddToSameDestiny");
+                    Configuration.Main.SetAddDataBehaviour(Configuration.addDataFac.GetBehaviour("AddToSameDestiny"));
             }
         }
 
@@ -211,7 +213,7 @@ namespace NeathCopy.ViewModels
             set
             {
                 if (SetProperty(ref addToSameVolumen, value) && value && !loading)
-                    Configuration.Main.addDataBehaviour = Configuration.addDataFac.GetBehaviour("AddToSameVolumen");
+                    Configuration.Main.SetAddDataBehaviour(Configuration.addDataFac.GetBehaviour("AddToSameVolumen"));
             }
         }
 
@@ -281,6 +283,84 @@ namespace NeathCopy.ViewModels
             }
         }
 
+        private bool integrationTray;
+        public bool IntegrationTray
+        {
+            get => integrationTray;
+            set
+            {
+                if (!SetProperty(ref integrationTray, value))
+                    return;
+
+                if (loading || !value)
+                    return;
+
+                ApplyIntegrationMode(IntegrationManager.TrayIpcMode);
+            }
+        }
+
+        private bool integrationLegacy;
+        public bool IntegrationLegacy
+        {
+            get => integrationLegacy;
+            set
+            {
+                if (!SetProperty(ref integrationLegacy, value))
+                    return;
+
+                if (loading || !value)
+                    return;
+
+                ApplyIntegrationMode(IntegrationManager.LegacyMode);
+            }
+        }
+
+        private bool isDefaultCopyHandler;
+        public bool IsDefaultCopyHandler
+        {
+            get => isDefaultCopyHandler;
+            set
+            {
+                if (!SetProperty(ref isDefaultCopyHandler, value))
+                    return;
+
+                if (loading)
+                    return;
+
+                var desired = value;
+                if (desired)
+                {
+                    var question = GetResourceString("t126", "Are you sure you want to set NeathCopy as the default copy handler?");
+                    var result = MessageBox.Show(question, "NeathCopy", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+                    if (result != MessageBoxResult.OK)
+                    {
+                        SetProperty(ref isDefaultCopyHandler, false);
+                        return;
+                    }
+                }
+
+                string error;
+                if (!IntegrationManager.TrySetDefaultCopyHandler(desired, Application.Current?.MainWindow, out error))
+                {
+                    if (desired)
+                    {
+                        SetProperty(ref isDefaultCopyHandler, false);
+                        if (!string.IsNullOrWhiteSpace(error))
+                            MessageBox.Show(error, "NeathCopy", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(error))
+                        MessageBox.Show(error, "NeathCopy", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+
+                Configuration.Main.IsDefaultCopyHandler = desired;
+                IntegrationManager.ApplyRegistryKeysForDefaultHandler(Configuration.Main, desired);
+                IntegrationManager.UpdateAutoStart(Configuration.Main);
+                NeathCopy.VisualsCopysHandler.MainHandler?.ApplyIntegrationState();
+            }
+        }
+
         public void LoadFromConfiguration()
         {
             loading = true;
@@ -314,7 +394,43 @@ namespace NeathCopy.ViewModels
             PlaySoundAfterFinish = Configuration.Main.PlaySound_After_Finish;
             PlaySoundAfterCancel = Configuration.Main.PlaySound_After_Cancel;
 
+            IntegrationTray = string.Equals(Configuration.Main.IntegrationMode, IntegrationManager.TrayIpcMode, StringComparison.OrdinalIgnoreCase);
+            IntegrationLegacy = string.Equals(Configuration.Main.IntegrationMode, IntegrationManager.LegacyMode, StringComparison.OrdinalIgnoreCase);
+            if (!IntegrationTray && !IntegrationLegacy)
+                IntegrationTray = true;
+            IsDefaultCopyHandler = Configuration.Main.IsDefaultCopyHandler;
+
             loading = false;
+        }
+
+        private void ApplyIntegrationMode(string mode)
+        {
+            bool wasResident = IntegrationManager.IsResident(Configuration.Main);
+
+            if (wasResident && string.Equals(mode, IntegrationManager.LegacyMode, StringComparison.OrdinalIgnoreCase))
+            {
+                var message = GetResourceString("t139", "NeathCopy will switch to Legacy mode and exit after you close the Settings window.");
+                MessageBox.Show(message, "NeathCopy", MessageBoxButton.OK, MessageBoxImage.Information);
+                NeathCopy.VisualsCopysHandler.MainHandler?.RequestExitToLegacyAfterConfigClose();
+            }
+
+            Configuration.Main.IntegrationMode = mode;
+            IntegrationManager.EnsureMinimalRegistryKeysIfMissing(Configuration.Main);
+            IntegrationManager.UpdateAutoStart(Configuration.Main);
+            NeathCopy.VisualsCopysHandler.MainHandler?.ApplyIntegrationState();
+        }
+
+        private static string GetResourceString(string key, string fallback)
+        {
+            try
+            {
+                var value = Application.Current?.TryFindResource(key) as string;
+                return string.IsNullOrWhiteSpace(value) ? fallback : value;
+            }
+            catch (Exception)
+            {
+                return fallback;
+            }
         }
     }
 }

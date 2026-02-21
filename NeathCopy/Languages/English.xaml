@@ -126,6 +126,26 @@
     <sys:String x:Key="t117">When an Error Occur Action</sys:String>
     <sys:String x:Key="t118">Close NeathCopy</sys:String>
     <sys:String x:Key="t119">Keep NeathCopy Open</sys:String>
+
+    <sys:String x:Key="t120">Integration Mode</sys:String>
+    <sys:String x:Key="t121">Tray + IPC (recommended)</sys:String>
+    <sys:String x:Key="t122">Legacy (file queue + launch per operation)</sys:String>
+    <sys:String x:Key="t123">Tray + IPC keeps NeathCopy in the tray and uses fast IPC.</sys:String>
+    <sys:String x:Key="t124">Legacy mode uses file queue and starts a new process each time.</sys:String>
+    <sys:String x:Key="t125">Use NeathCopy as default copy handler</sys:String>
+    <sys:String x:Key="t126">Are you sure you want to set NeathCopy as the default copy handler?</sys:String>
+    <sys:String x:Key="t127">NeathCopy is still running in the system tray.</sys:String>
+    <sys:String x:Key="t128">Default copy handler requires the shell extension to be registered. Please run the installer as admin.</sys:String>
+    <sys:String x:Key="t129">Failed to register the shell extension. Please run as administrator.</sys:String>
+    <sys:String x:Key="t131">Open</sys:String>
+    <sys:String x:Key="t132">Settings</sys:String>
+    <sys:String x:Key="t133">Disable default copy handler</sys:String>
+    <sys:String x:Key="t134">Exit</sys:String>
+    <sys:String x:Key="t135">NeathCopy is running as Administrator, drag &amp; drop from Explorer will not work. Please restart NeathCopy normally.</sys:String>
+    <sys:String x:Key="t136">Restart NeathCopy normally now?</sys:String>
+    <sys:String x:Key="t137">Administrator approval was canceled.</sys:String>
+    <sys:String x:Key="t138">Administrative helper not found. Please reinstall NeathCopy.</sys:String>
+    <sys:String x:Key="t139">NeathCopy will switch to Legacy mode and exit after you close the Settings window.</sys:String>
     
 
     <sys:String x:Key="t102">Update Times</sys:String>

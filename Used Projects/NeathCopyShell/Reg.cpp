@@ -21,7 +21,10 @@ WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
 \***************************************************************************/
 
 #include "Reg.h"
+#include "ShellLogger.h"
 #include <strsafe.h>
+#include <comdef.h>
+#include <exception>
 
 
 #pragma region Registry Helper Functions
@@ -46,6 +49,9 @@ WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
 HRESULT SetHKCRRegistryKeyAndValue(PCWSTR pszSubKey, PCWSTR pszValueName, 
     PCWSTR pszData)
 {
+    ShellLogger log;
+    SHELL_TRACE_ENTER(log, L"REG", L"REG-SET-01", L"SetHKCRRegistryKeyAndValue subKey=%s valueName=%s", pszSubKey ? pszSubKey : L"(null)", pszValueName ? pszValueName : L"(default)");
+
     HRESULT hr;
     HKEY hKey = NULL;
 
@@ -67,6 +73,7 @@ HRESULT SetHKCRRegistryKeyAndValue(PCWSTR pszSubKey, PCWSTR pszValueName,
         RegCloseKey(hKey);
     }
 
+    SHELL_TRACE_EXIT(log, L"REG", L"REG-SET-98", hr);
     return hr;
 }
 
@@ -94,6 +101,9 @@ HRESULT SetHKCRRegistryKeyAndValue(PCWSTR pszSubKey, PCWSTR pszValueName,
 HRESULT GetHKCRRegistryKeyAndValue(PCWSTR pszSubKey, PCWSTR pszValueName, 
     PWSTR pszData, DWORD cbData)
 {
+    ShellLogger log;
+    SHELL_TRACE_ENTER(log, L"REG", L"REG-GET-01", L"GetHKCRRegistryKeyAndValue subKey=%s valueName=%s", pszSubKey ? pszSubKey : L"(null)", pszValueName ? pszValueName : L"(default)");
+
     HRESULT hr;
     HKEY hKey = NULL;
 
@@ -110,12 +120,16 @@ HRESULT GetHKCRRegistryKeyAndValue(PCWSTR pszSubKey, PCWSTR pszValueName,
         RegCloseKey(hKey);
     }
 
+    SHELL_TRACE_EXIT(log, L"REG", L"REG-GET-98", hr);
     return hr;
 }
 
 HRESULT GetHKLMRegistryKeyAndValue(PCWSTR pszSubKey, PCWSTR pszValueName,
     PWSTR pszData, DWORD cbData)
 {
+    ShellLogger log;
+    SHELL_TRACE_ENTER(log, L"REG", L"REG-GETLM-01", L"GetHKLMRegistryKeyAndValue subKey=%s valueName=%s", pszSubKey ? pszSubKey : L"(null)", pszValueName ? pszValueName : L"(default)");
+
     HRESULT hr;
     HKEY hKey = NULL;
 
@@ -132,6 +146,7 @@ HRESULT GetHKLMRegistryKeyAndValue(PCWSTR pszSubKey, PCWSTR pszValueName,
         RegCloseKey(hKey);
     }
 
+    SHELL_TRACE_EXIT(log, L"REG", L"REG-GETLM-98", hr);
     return hr;
 }
 
@@ -168,6 +183,9 @@ HRESULT GetHKLMRegistryKeyAndValue(PCWSTR pszSubKey, PCWSTR pszValueName,
 HRESULT RegisterInprocServer(PCWSTR pszModule, const CLSID& clsid, 
     PCWSTR pszFriendlyName, PCWSTR pszThreadModel)
 {
+    ShellLogger log;
+    SHELL_TRACE_ENTER(log, L"REG", L"REG-INPROC-01", L"RegisterInprocServer module=%s", pszModule ? pszModule : L"(null)");
+
     if (pszModule == NULL || pszThreadModel == NULL)
     {
         return E_INVALIDARG;
@@ -206,6 +224,7 @@ HRESULT RegisterInprocServer(PCWSTR pszModule, const CLSID& clsid,
         }
     }
 
+    SHELL_TRACE_EXIT(log, L"REG", L"REG-INPROC-98", hr);
     return hr;
 }
 
@@ -222,6 +241,9 @@ HRESULT RegisterInprocServer(PCWSTR pszModule, const CLSID& clsid,
 //
 HRESULT UnregisterInprocServer(const CLSID& clsid)
 {
+    ShellLogger log;
+    SHELL_TRACE_ENTER(log, L"REG", L"REG-INPROC-UN-01", L"UnregisterInprocServer");
+
     HRESULT hr = S_OK;
 
     wchar_t szCLSID[MAX_PATH];
@@ -236,6 +258,7 @@ HRESULT UnregisterInprocServer(const CLSID& clsid)
         hr = HRESULT_FROM_WIN32(RegDeleteTree(HKEY_CLASSES_ROOT, szSubkey));
     }
 
+    SHELL_TRACE_EXIT(log, L"REG", L"REG-INPROC-UN-98", hr);
     return hr;
 }
 
@@ -287,6 +310,9 @@ HRESULT UnregisterInprocServer(const CLSID& clsid)
 //
 HRESULT RegisterShellExtDragDropHandler(const CLSID& clsid, PCWSTR pszFriendlyName)
 {
+    ShellLogger log;
+    SHELL_TRACE_ENTER(log, L"REG", L"REG-DRAG-01", L"RegisterShellExtDragDropHandler");
+
     wchar_t szCLSID[MAX_PATH];
     StringFromGUID2(clsid, szCLSID, ARRAYSIZE(szCLSID));
 
@@ -327,6 +353,7 @@ HRESULT RegisterShellExtDragDropHandler(const CLSID& clsid, PCWSTR pszFriendlyNa
         }
     }
 
+    SHELL_TRACE_EXIT(log, L"REG", L"REG-DRAG-98", hr);
     return hr;
 }
 
@@ -346,6 +373,9 @@ HRESULT RegisterShellExtDragDropHandler(const CLSID& clsid, PCWSTR pszFriendlyNa
 //
 HRESULT UnregisterShellExtDragDropHandler(const CLSID& clsid)
 {
+    ShellLogger log;
+    SHELL_TRACE_ENTER(log, L"REG", L"REG-DRAG-UN-01", L"UnregisterShellExtDragDropHandler");
+
     wchar_t szCLSID[MAX_PATH];
     StringFromGUID2(clsid, szCLSID, ARRAYSIZE(szCLSID));
 
@@ -381,5 +411,6 @@ HRESULT UnregisterShellExtDragDropHandler(const CLSID& clsid)
         }
     }
 
+    SHELL_TRACE_EXIT(log, L"REG", L"REG-DRAG-UN-98", hr);
     return hr;
 }

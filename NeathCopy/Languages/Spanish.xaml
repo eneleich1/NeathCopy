@@ -127,6 +127,26 @@
     <sys:String x:Key="t118">Cerrar NeathCopy</sys:String>
     <sys:String x:Key="t119">Mantener NeathCopy Abierto</sys:String>
 
+    <sys:String x:Key="t120">Modo de integración</sys:String>
+    <sys:String x:Key="t121">Bandeja + IPC (recomendado)</sys:String>
+    <sys:String x:Key="t122">Legado (cola de archivos + abrir por operación)</sys:String>
+    <sys:String x:Key="t123">Bandeja + IPC mantiene NeathCopy en la bandeja y usa IPC rápido.</sys:String>
+    <sys:String x:Key="t124">El modo legado usa cola de archivos y abre un proceso en cada operación.</sys:String>
+    <sys:String x:Key="t125">Usar NeathCopy como manejador de copia predeterminado</sys:String>
+    <sys:String x:Key="t126">¿Está seguro de que desea establecer NeathCopy como el manejador de copia predeterminado?</sys:String>
+    <sys:String x:Key="t127">NeathCopy sigue ejecutándose en la bandeja del sistema.</sys:String>
+    <sys:String x:Key="t128">El manejador predeterminado requiere que la extensión esté registrada. Ejecute el instalador como administrador.</sys:String>
+    <sys:String x:Key="t129">No se pudo registrar la extensión. Ejecute como administrador.</sys:String>
+    <sys:String x:Key="t131">Abrir</sys:String>
+    <sys:String x:Key="t132">Configuración</sys:String>
+    <sys:String x:Key="t133">Deshabilitar el manejador de copia predeterminado</sys:String>
+    <sys:String x:Key="t134">Salir</sys:String>
+    <sys:String x:Key="t135">NeathCopy se está ejecutando como Administrador, arrastrar y soltar desde Explorer no funcionará. Reinicie NeathCopy normalmente.</sys:String>
+    <sys:String x:Key="t136">¿Reiniciar NeathCopy normalmente ahora?</sys:String>
+    <sys:String x:Key="t137">Se canceló la aprobación de administrador.</sys:String>
+    <sys:String x:Key="t138">No se encontró el asistente administrativo. Vuelva a instalar NeathCopy.</sys:String>
+    <sys:String x:Key="t139">NeathCopy cambiará al modo Legacy y se cerrará después de cerrar la ventana de Configuración.</sys:String>
+
     <sys:String x:Key="t102">Tiempos de Actualización</sys:String>
     <sys:String x:Key="t103">Intervalo de Actualización de Tiempo</sys:String>
     <sys:String x:Key="t104">Intervalo de Actualización de Información de Copia</sys:String>
