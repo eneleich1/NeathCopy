@@ -127,6 +127,26 @@
     <sys:String x:Key="t118">Close NeathCopy</sys:String>
     <sys:String x:Key="t119">Keep NeathCopy Open</sys:String>
 
+    <sys:String x:Key="t120">Mode d'intégration</sys:String>
+    <sys:String x:Key="t121">Zone de notification + IPC (recommandé)</sys:String>
+    <sys:String x:Key="t122">Héritage (file d'attente + lancement par opération)</sys:String>
+    <sys:String x:Key="t123">Zone de notification + IPC garde NeathCopy dans la zone de notification et utilise un IPC rapide.</sys:String>
+    <sys:String x:Key="t124">Le mode hérité utilise une file de fichiers et lance un nouveau processus à chaque opération.</sys:String>
+    <sys:String x:Key="t125">Utiliser NeathCopy comme gestionnaire de copie par défaut</sys:String>
+    <sys:String x:Key="t126">Êtes-vous sûr de vouloir définir NeathCopy comme gestionnaire de copie par défaut ?</sys:String>
+    <sys:String x:Key="t127">NeathCopy est toujours en cours d’exécution dans la zone de notification.</sys:String>
+    <sys:String x:Key="t128">Le gestionnaire par défaut nécessite l'enregistrement de l'extension. Exécutez l'installateur en tant qu'administrateur.</sys:String>
+    <sys:String x:Key="t129">Échec de l'enregistrement de l'extension. Exécutez en tant qu'administrateur.</sys:String>
+    <sys:String x:Key="t131">Ouvrir</sys:String>
+    <sys:String x:Key="t132">Paramètres</sys:String>
+    <sys:String x:Key="t133">Désactiver le gestionnaire de copie par défaut</sys:String>
+    <sys:String x:Key="t134">Quitter</sys:String>
+    <sys:String x:Key="t135">NeathCopy s'exécute en tant qu'administrateur, le glisser-déposer depuis l'Explorateur ne fonctionnera pas. Veuillez redémarrer NeathCopy normalement.</sys:String>
+    <sys:String x:Key="t136">Redémarrer NeathCopy normalement maintenant ?</sys:String>
+    <sys:String x:Key="t137">L'approbation administrateur a été annulée.</sys:String>
+    <sys:String x:Key="t138">L'assistant administratif est introuvable. Veuillez réinstaller NeathCopy.</sys:String>
+    <sys:String x:Key="t139">NeathCopy passera en mode Legacy et se fermera après la fermeture de la fenêtre des Paramètres.</sys:String>
+
     <sys:String x:Key="t102">Update Times</sys:String>
     <sys:String x:Key="t103">Update Time Interval</sys:String>
     <sys:String x:Key="t104">Update Copy Information Interval</sys:String>

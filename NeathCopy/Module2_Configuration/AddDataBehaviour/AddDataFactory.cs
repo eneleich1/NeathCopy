@@ -12,7 +12,7 @@ namespace NeathCopy.Module2_Configuration.AddDataBehaviour
 
         public AddDataFactory()
         {
-            AddDataBehaviours = new List<string> { "AddToFirsth", "AddToLast", "AddToSameDestiny", "AddToSameVolumen" };
+            AddDataBehaviours = new List<string> { "AddToFirsth", "AddToLast", "AddToSameDestiny", "SameVolumen_Process_ADD_DATA" };
         }
         public AddData GetDefaultBehaviour()
         {
@@ -28,8 +28,8 @@ namespace NeathCopy.Module2_Configuration.AddDataBehaviour
                     return new AddToLast();
                 case "AddToSameDestiny":
                     return new AddToSameDestiny();
-                case "AddToSameVolumen":
-                    return new AddToLast();
+                case "SameVolumen_Process_ADD_DATA":
+                    return new AddToSameVolumen();
                 default:return new AddToSameVolumen();
             }
         }

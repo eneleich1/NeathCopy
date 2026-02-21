@@ -14,6 +14,8 @@ using System.Windows.Controls;
 using System.Xml;
 using NeathCopy.Module2_Configuration.AddDataBehaviour;
 
+using NeathCopy.Services;
+using NeathCopy.Services.AppControl;
 namespace NeathCopy.Module2_Configuration
 {
     public class Configuration
@@ -174,6 +176,31 @@ namespace NeathCopy.Module2_Configuration
             }
         }
 
+        string integrationMode;
+        public string IntegrationMode
+        {
+            get { return integrationMode; }
+            set
+            {
+                integrationMode = value;
+                RegisterAccess.Acces.SetConfigurationValue("IntegrationMode", integrationMode ?? "");
+                RegisterAccess.Acces.SetIntegrationMode(integrationMode ?? "");
+                RaiseSettingChanged();
+            }
+        }
+
+        bool isDefaultCopyHandler;
+        public bool IsDefaultCopyHandler
+        {
+            get { return isDefaultCopyHandler; }
+            set
+            {
+                isDefaultCopyHandler = value;
+                RegisterAccess.Acces.SetDefaultCopyHandlerFlag(isDefaultCopyHandler);
+                RaiseSettingChanged();
+            }
+        }
+
         public static Dictionary<string, FileCopier> FileCopiers;
             //new FasterBufferFileCopier(1024*1024)
             //,new NotCopyFileCopier(1024)
@@ -242,10 +269,12 @@ namespace NeathCopy.Module2_Configuration
 
         public VisualCopy AllInOne_AddNewVC()
         {
+            var controller = StartupClass.Controller;
             if (!VisualsCopysHandler.ContainersList.Contains(VisualsCopysHandler.MainContainer))
             {
                 VisualsCopysHandler.ContainersList.Add(VisualsCopysHandler.MainContainer);
-                VisualsCopysHandler.MainContainer.Closing += container_Closing;
+                VisualsCopysHandler.MainContainer.Closed += container_Closed;
+                controller.RegisterContainer(VisualsCopysHandler.MainContainer);
             }
 
             var vc = VisualsCopysHandler.MainContainer.AddNew();
@@ -259,25 +288,33 @@ namespace NeathCopy.Module2_Configuration
         }
         public VisualCopy SeparateWindows_AddNewVC()
         {
-            VisualsCopysHandler.MainContainer = new ContainerWindow();
-            VisualsCopysHandler.MainContainer.Closing += container_Closing;
+            var controller = StartupClass.Controller;
+            VisualsCopysHandler.MainContainer = new ContainerWindow(controller);
+            if (controller is AppController appController)
+                appController.SetMainContainer(VisualsCopysHandler.MainContainer);
+            VisualsCopysHandler.MainContainer.Closed += container_Closed;
 
             VisualsCopysHandler.ContainersList.Add(VisualsCopysHandler.MainContainer);
+            controller.RegisterContainer(VisualsCopysHandler.MainContainer);
 
             var vc = VisualsCopysHandler.MainContainer.AddNew();
             VisualsCopysHandler.MainContainer.Show();
 
             return vc;
         }
-        void container_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        void container_Closed(object sender, EventArgs e)
         {
-            VisualsCopysHandler.ContainersList.Remove((ContainerWindow)sender);
+            var window = sender as ContainerWindow;
+            if (window != null)
+                VisualsCopysHandler.ContainersList.Remove(window);
 
-            if (VisualsCopysHandler.ContainersList.Count == 0)
-                VisualsCopysHandler.MainHandler.Close();
+            // In resident mode, the process should stay alive in the tray.
+            // Only shutdown the main handler in legacy mode when no containers remain.
+            if (VisualsCopysHandler.ContainersList.Count == 0 && !IntegrationManager.IsResident(Configuration.Main))
+                VisualsCopysHandler.MainHandler?.Close();
         }
 
-        #endregion
+#endregion
 
         #region Affter Error Action
 
@@ -308,6 +345,15 @@ namespace NeathCopy.Module2_Configuration
 
         public static AddDataFactory addDataFac = new AddDataFactory();
         public AddData addDataBehaviour;
+        public void SetAddDataBehaviour(AddData behaviour)
+        {
+            if (behaviour == null)
+                behaviour = Configuration.addDataFac.GetDefaultBehaviour();
+
+            addDataBehaviour = behaviour;
+            RegisterAccess.Acces.SetConfigurationValue("Process_ADD_DATA", addDataBehaviour.Name);
+            RaiseSettingChanged();
+        }
 
 
         #endregion
@@ -439,6 +485,8 @@ namespace NeathCopy.Module2_Configuration
             config.Theme = "Windows8Theme.xaml";
             config.VisualCopySkin = "Windows8.xaml";
             config.UpdateTimeInterval = 200;
+            config.IntegrationMode = "TrayIPC";
+            config.IsDefaultCopyHandler = false;
 
             return config;
         }
@@ -475,6 +523,12 @@ namespace NeathCopy.Module2_Configuration
                 config.VisualCopySkin = RegisterAccess.Acces.GetConfigurationValue("VisualCopySkins");
 
                 config.UpdateTimeInterval = int.Parse(RegisterAccess.Acces.GetConfigurationValue("UpdateTimeInterval"));
+                var modeValue = RegisterAccess.Acces.GetConfigurationValue("IntegrationMode");
+                if (string.IsNullOrWhiteSpace(modeValue))
+                    modeValue = RegisterAccess.Acces.GetIntegrationMode();
+                config.IntegrationMode = string.IsNullOrWhiteSpace(modeValue) ? "TrayIPC" : modeValue;
+
+                config.isDefaultCopyHandler = RegisterAccess.Acces.IsDefaultCopyHandlerFlag();
 
                 return config;
 

@@ -324,7 +324,7 @@ namespace NeathCopy.ViewModels
         {
             //Change the brush
             if (visualCopy == null) return;
-            if (state == VisualCopyState.Paused || state == VisualCopyState.None || state == VisualCopyState.Finished)
+            if (state == VisualCopyState.Paused || state == VisualCopyState.None || state == VisualCopyState.Finished || state == VisualCopyState.Canceled)
                 PauseButtonBrush = (Brush)visualCopy.FindResource("resumeStartBrush");
             else PauseButtonBrush = (Brush)visualCopy.FindResource("pauseBrush");
         }
@@ -465,9 +465,9 @@ namespace NeathCopy.ViewModels
             {
                 if (VisualCopy == null || VisualCopy.NeathCopy.DiscoverdList == null) return;
 
-                //Total of Files Copieds
+                //Current file number (1-based) over total count
                 FilesCount = string.Format("{0} of {1}"
-                    , Math.Min(VisualCopy.NeathCopy.CopiedsFiles + 1, VisualCopy.NeathCopy.DiscoverdList.Count)
+                    , Math.Min(VisualCopy.NeathCopy.DiscoverdList.Index + 1, VisualCopy.NeathCopy.DiscoverdList.Count)
                     , VisualCopy.NeathCopy.DiscoverdList.Count);
             }
             catch (Exception) { }

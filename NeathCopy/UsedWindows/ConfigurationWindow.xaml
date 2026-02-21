@@ -82,6 +82,16 @@
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>
+                    <Separator/>
+                    <GroupBox Header="{DynamicResource t120}" HorizontalAlignment="Left">
+                        <StackPanel Margin="3">
+                            <RadioButton Margin="0,3,0,0" GroupName="IntegrationModeGroup" Content="{DynamicResource t121}" IsChecked="{Binding IntegrationTray}"/>
+                            <TextBlock Margin="20,0,0,3" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" Text="{DynamicResource t123}"/>
+                            <RadioButton Margin="0,3,0,0" GroupName="IntegrationModeGroup" Content="{DynamicResource t122}" IsChecked="{Binding IntegrationLegacy}"/>
+                            <TextBlock Margin="20,0,0,3" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" Text="{DynamicResource t124}"/>
+                            <CheckBox Margin="0,6,0,0" Content="{DynamicResource t125}" IsChecked="{Binding IsDefaultCopyHandler}"/>
+                        </StackPanel>
+                    </GroupBox>
                 </StackPanel>
             </TabItem>
             <TabItem Header="{DynamicResource t79}" >

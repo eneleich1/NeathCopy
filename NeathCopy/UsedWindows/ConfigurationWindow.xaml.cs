@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 using NeathCopy.ViewModels;
 using NeathCopy.UsedWindows;
@@ -28,6 +29,10 @@ namespace NeathCopy.UsedWindows
         {
             e.Cancel = true;
             Hide();
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                NeathCopy.VisualsCopysHandler.MainHandler?.ExecutePendingExitToLegacy();
+            }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
         }
 
         private void VideoConversionMenu_Click(object sender, RoutedEventArgs e)

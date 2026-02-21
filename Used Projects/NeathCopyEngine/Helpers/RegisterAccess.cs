@@ -9,6 +9,8 @@ namespace NeathCopyEngine.Helpers
 {
     public class RegisterAccess
     {
+        private RequestInfo pendingCopyRequestInfo;
+        private readonly object pendingCopyRequestLock = new object();
         /// <summary>
         /// Get or set the Company-Software'RegisterKey.
         /// </summary>
@@ -108,6 +110,30 @@ namespace NeathCopyEngine.Helpers
             }
         }
         /// <summary>
+        /// Store a pending copy request info in memory, replacing any existing one.
+        /// </summary>
+        /// <param name="info"></param>
+        public void SetPendingCopyRequestInfo(RequestInfo info)
+        {
+            lock (pendingCopyRequestLock)
+            {
+                pendingCopyRequestInfo = info;
+            }
+        }
+        /// <summary>
+        /// Try to consume the pending copy request info once. Returns null if none.
+        /// </summary>
+        /// <returns></returns>
+        public RequestInfo TryConsumePendingCopyRequestInfo()
+        {
+            lock (pendingCopyRequestLock)
+            {
+                var info = pendingCopyRequestInfo;
+                pendingCopyRequestInfo = null;
+                return info;
+            }
+        }
+        /// <summary>
         /// Retrieve the Handle of active CopyHandlersManager Window.
         /// </summary>
         /// <returns></returns>
@@ -191,12 +217,12 @@ namespace NeathCopyEngine.Helpers
                 if (key == null) return "";
 
                 object value = key.GetValue(aspect);
-                return value.ToString();
+                return value == null ? "" : value.ToString();
             }
         }
         public bool SetConfigurationValue(string aspect,object value)
         {
-            using (var key = MainKey.OpenSubKey(SettingsKeys, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            using (var key = MainKey.CreateSubKey(SettingsKeys, RegistryKeyPermissionCheck.ReadWriteSubTree))
             {
                 if (key == null) return false;
 
@@ -214,6 +240,113 @@ namespace NeathCopyEngine.Helpers
                 var res = key.GetValue("ExistConfig");
 
                 return res==null?false:res.ToString() == "1";
+            }
+        }
+
+        public string GetIntegrationMode()
+        {
+            using (var key = MainKey.OpenSubKey(CompanyKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            {
+                if (key == null) return "";
+
+                object value = key.GetValue("IntegrationMode");
+                return value == null ? "" : value.ToString();
+            }
+        }
+
+        public bool SetIntegrationMode(string mode)
+        {
+            using (var key = MainKey.CreateSubKey(CompanyKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            {
+                if (key == null) return false;
+
+                key.SetValue("IntegrationMode", mode ?? "");
+                return true;
+            }
+        }
+
+        public bool IsDefaultCopyHandlerFlag()
+        {
+            using (var key = MainKey.OpenSubKey(CompanyKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            {
+                if (key == null) return false;
+
+                object value = key.GetValue("IsDefaultCopyHandler");
+                if (value == null) return false;
+
+                return value.ToString() == "1" || value.ToString().Equals("true", StringComparison.OrdinalIgnoreCase);
+            }
+        }
+
+        public bool SetDefaultCopyHandlerFlag(bool enabled)
+        {
+            using (var key = MainKey.CreateSubKey(CompanyKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            {
+                if (key == null) return false;
+
+                key.SetValue("IsDefaultCopyHandler", enabled ? "1" : "0");
+                return true;
+            }
+        }
+
+        public bool SetCopyHandlerPath(string path)
+        {
+            using (var key = MainKey.CreateSubKey(CompanyKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            {
+                if (key == null) return false;
+
+                key.SetValue("CopyHandler", path ?? "");
+                return true;
+            }
+        }
+
+        public bool SetInstallDir(string path)
+        {
+            using (var key = MainKey.CreateSubKey(CompanyKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            {
+                if (key == null) return false;
+
+                key.SetValue("InstallDir", path ?? "");
+                return true;
+            }
+        }
+
+        public bool SetLogsDir(string path)
+        {
+            using (var key = MainKey.CreateSubKey(CompanyKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            {
+                if (key == null) return false;
+
+                key.SetValue("LogsDir", path ?? "");
+                return true;
+            }
+        }
+
+        public bool HasCompanyKey()
+        {
+            using (var key = MainKey.OpenSubKey(CompanyKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            {
+                return key != null;
+            }
+        }
+
+        public bool ValueExists(string name)
+        {
+            using (var key = MainKey.OpenSubKey(CompanyKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            {
+                if (key == null) return false;
+                return key.GetValue(name) != null;
+            }
+        }
+
+        public string GetCopyHandlerPath()
+        {
+            using (var key = MainKey.OpenSubKey(CompanyKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            {
+                if (key == null) return "";
+
+                object value = key.GetValue("CopyHandler");
+                return value == null ? "" : value.ToString();
             }
         }
 

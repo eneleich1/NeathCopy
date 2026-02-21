@@ -59,7 +59,7 @@ namespace NeathCopy
         /// 
         /// </summary>
         public int Id { get; set; }
-        public enum VisualCopyState { None,Paused,Discovering, Runing,Finished };
+        public enum VisualCopyState { None,Paused,Discovering, Runing,Finished,Canceled };
 
         VisualCopyState vcState;
         public VisualCopyState State
@@ -166,6 +166,13 @@ namespace NeathCopy
             //Initialize VisualCopy View Model
             displayInfo = new VisualCopyVM();
             displayInfo.VisualCopy = this;
+        }
+
+        private int completionState; // 0 = none, 1 = finished, 2 = canceled
+
+        private bool TrySetCompletionState(int desired)
+        {
+            return System.Threading.Interlocked.CompareExchange(ref completionState, desired, 0) == 0;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -329,11 +336,17 @@ namespace NeathCopy
         }
         public void Cancel(string cause)
         {
-            State = VisualCopyState.Finished;
-          
-            NeathCopy.Cancel(cause);
+            if (!TrySetCompletionState(2))
+                return;
 
-            RaiseCanceled(this);
+            State = VisualCopyState.Canceled;
+
+            Task.Run(() => NeathCopy.Cancel(cause));
+
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                RaiseCanceled(this);
+            }));
         }
         public void StartNow()
         {
@@ -736,6 +749,9 @@ namespace NeathCopy
         {
             try
             {
+                if (!TrySetCompletionState(1))
+                    return;
+
                 State = VisualCopyState.Finished;
 
                 if (errors.Count > 0)

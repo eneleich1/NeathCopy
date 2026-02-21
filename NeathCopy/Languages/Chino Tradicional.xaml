@@ -127,6 +127,26 @@
     <sys:String x:Key="t118">Close NeathCopy</sys:String>
     <sys:String x:Key="t119">Keep NeathCopy Open</sys:String>
 
+    <sys:String x:Key="t120">整合模式</sys:String>
+    <sys:String x:Key="t121">系統匣 + IPC（建議）</sys:String>
+    <sys:String x:Key="t122">相容模式（檔案佇列 + 每次啟動）</sys:String>
+    <sys:String x:Key="t123">系統匣 + IPC 讓 NeathCopy 常駐系統匣並使用快速 IPC。</sys:String>
+    <sys:String x:Key="t124">相容模式使用檔案佇列並在每次操作時啟動新程序。</sys:String>
+    <sys:String x:Key="t125">將 NeathCopy 設為預設複製處理器</sys:String>
+    <sys:String x:Key="t126">您確定要將 NeathCopy 設為預設複製處理器嗎？</sys:String>
+    <sys:String x:Key="t127">NeathCopy 仍在系統匣中執行。</sys:String>
+    <sys:String x:Key="t128">預設處理器需要先註冊外殼擴充。請以系統管理員執行安裝程式。</sys:String>
+    <sys:String x:Key="t129">註冊外殼擴充失敗。請以系統管理員身分執行。</sys:String>
+    <sys:String x:Key="t131">開啟</sys:String>
+    <sys:String x:Key="t132">設定</sys:String>
+    <sys:String x:Key="t133">停用預設複製處理器</sys:String>
+    <sys:String x:Key="t134">離開</sys:String>
+    <sys:String x:Key="t135">NeathCopy 正以系統管理員身分執行，從檔案總管拖放將無法使用。請以一般方式重新啟動 NeathCopy。</sys:String>
+    <sys:String x:Key="t136">現在以一般方式重新啟動 NeathCopy 嗎？</sys:String>
+    <sys:String x:Key="t137">已取消系統管理員權限核准。</sys:String>
+    <sys:String x:Key="t138">找不到管理員輔助程式。請重新安裝 NeathCopy。</sys:String>
+    <sys:String x:Key="t139">NeathCopy 將切換為 Legacy 模式，並在關閉設定視窗後結束。</sys:String>
+
     <sys:String x:Key="t102">Update Times</sys:String>
     <sys:String x:Key="t103">Update Time Interval</sys:String>
     <sys:String x:Key="t104">Update Copy Information Interval</sys:String>

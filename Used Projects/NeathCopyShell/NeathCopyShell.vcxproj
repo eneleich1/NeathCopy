@@ -76,12 +76,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\Target\ShellExt_x86</OutDir>
+    <OutDir>..\..\Target\ShellExt_x86\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\Target\ShellExt_x64</OutDir>
+    <OutDir>..\..\Target\Release\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -153,6 +153,7 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="FileDragDropExt.cpp" />
     <ClCompile Include="Reg.cpp" />
+    <ClCompile Include="ShellLogger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClassFactory.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="PathWriter.h" />
     <ClInclude Include="Reg.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="ShellLogger.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GlobalExportFunctions.def" />
