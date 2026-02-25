@@ -656,11 +656,8 @@ namespace NeathCopyEngine.CopyHandlers
                 return;
             }
 
-            if (Errors.Count == 0)
-            {
-                CreateEmptysDirectories(DiscoverdList);
-                RestoreAllDirectoriesMetadata();
-            }
+            CreateEmptysDirectories(DiscoverdList);
+            RestoreAllDirectoriesMetadata();
 
             State = CopyHandleState.Finished;
 
@@ -686,11 +683,8 @@ namespace NeathCopyEngine.CopyHandlers
             }
 
             //Creating empty directories
-            if (Errors.Count == 0)
-            {
-                CreateEmptysDirectories(DiscoverdList);
-                RestoreAllDirectoriesMetadata();
-            }
+            CreateEmptysDirectories(DiscoverdList);
+            RestoreAllDirectoriesMetadata();
 
             #region Delete all Directory in data info list
 
@@ -738,11 +732,8 @@ namespace NeathCopyEngine.CopyHandlers
             }
 
             //Creating empty directories
-            if (Errors.Count == 0)
-            {
-                CreateEmptysDirectories(DiscoverdList);
-                RestoreAllDirectoriesMetadata();
-            }
+            CreateEmptysDirectories(DiscoverdList);
+            RestoreAllDirectoriesMetadata();
 
             State = CopyHandleState.Finished;
         }
