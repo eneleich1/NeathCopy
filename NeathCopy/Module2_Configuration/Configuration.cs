@@ -229,6 +229,7 @@ namespace NeathCopy.Module2_Configuration
             FileCopiers.Add("NotCopyFileCopier", new NotCopyFileCopier(1024)); 
             FileCopiers.Add("ProducerConsumerFileCopier", new ProducerConsumerFileCopier(1024));
             FileCopiers.Add("DynamicBufferFileCopier", new DynamicBufferFileCopier(1024));
+            FileCopiers.Add("CopyFileExFileCopier", new CopyFileExFileCopier(1024 * 1024));
         }
 
         #endregion

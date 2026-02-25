@@ -393,7 +393,8 @@ namespace NeathCopy
         {
             if (Configuration.Main.CurrentFileCopier != null)
                 NeathCopy.FileCopier = Configuration.Main.CurrentFileCopier.Clone();
-            ((BufferFileCopier)NeathCopy.FileCopier).BufferSize = Configuration.Main.BufferSize;
+            if (NeathCopy.FileCopier is BufferFileCopier bufferFileCopier)
+                bufferFileCopier.BufferSize = Configuration.Main.BufferSize;
         }
 
         TransferErrorOption NeathCopy_TransferError(NeathCopyHandle copyHandle, NeathCopyEngine.DataTools.FileDataInfo currentFile, string error)
