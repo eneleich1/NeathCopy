@@ -779,7 +779,8 @@ namespace NeathCopy
                 if (displayInfo.ElapsedTime.AllMiliseconds <1000)
                     speed = NeathCopy.DiscoverdList.Size.Bytes;
                 else
-                    speed = (NeathCopy.DiscoverdList.Size.Bytes / displayInfo.ElapsedTime.AllMiliseconds)/1000d;
+                    //bytes / s = cant bytes * 1000 / cant ms
+                    speed = (NeathCopy.DiscoverdList.Size.Bytes * 1000d) / displayInfo.ElapsedTime.AllMiliseconds;
 
 
                 WriteTransferLog(
