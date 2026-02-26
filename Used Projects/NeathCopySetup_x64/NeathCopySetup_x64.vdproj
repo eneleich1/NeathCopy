@@ -1,4 +1,4 @@
-"DeployProject"
+﻿"DeployProject"
 {
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
@@ -13,6 +13,42 @@
 "SccProvider" = "8:"
     "Hierarchy"
     {
+        "Entry"
+        {
+        "MsmKey" = "8:_00C411AE1A10B1853BE2482B86C5170F"
+        "OwnerKey" = "8:_E254E7D95D6040E58CC06EC715CE062A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_09EE2B743E407A6A9A3E1E043C9B2EF2"
+        "OwnerKey" = "8:_5779E98353034E359FF6B9817639F2A8"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1241013D119089D86B79139E27933D21"
+        "OwnerKey" = "8:_E254E7D95D6040E58CC06EC715CE062A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2A87E30D1363D8B53BC241B4163CDB13"
+        "OwnerKey" = "8:_E254E7D95D6040E58CC06EC715CE062A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4285F24F05BD022BD46AAD73980AF58B"
+        "OwnerKey" = "8:_5779E98353034E359FF6B9817639F2A8"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4285F24F05BD022BD46AAD73980AF58B"
+        "OwnerKey" = "8:_5796A9A891FD46A591AC3B93E05C8012"
+        "MsmSig" = "8:_UNDEFINED"
+        }
         "Entry"
         {
         "MsmKey" = "8:_473C9F060FDD4F8FB61920811E1FCE0C"
@@ -33,32 +69,26 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_66759E86A0CA1C350099E806DE1B626E"
-        "OwnerKey" = "8:_5779E98353034E359FF6B9817639F2A8"
+        "MsmKey" = "8:_8A115DFA98B50A96295BFA3F62FE2CAD"
+        "OwnerKey" = "8:_E254E7D95D6040E58CC06EC715CE062A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_66759E86A0CA1C350099E806DE1B626E"
-        "OwnerKey" = "8:_5796A9A891FD46A591AC3B93E05C8012"
+        "MsmKey" = "8:_965208605E3223E0B496A69DC76FEDF5"
+        "OwnerKey" = "8:_E254E7D95D6040E58CC06EC715CE062A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9B32AA4712D482605BB81D6146401EA1"
-        "OwnerKey" = "8:_5779E98353034E359FF6B9817639F2A8"
+        "MsmKey" = "8:_D27C57F7F8156C34A856F7A8E27CECC2"
+        "OwnerKey" = "8:_E254E7D95D6040E58CC06EC715CE062A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9B32AA4712D482605BB81D6146401EA1"
-        "OwnerKey" = "8:_AAA71FB1B748210A5781BA191BACA401"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_AAA71FB1B748210A5781BA191BACA401"
-        "OwnerKey" = "8:_5779E98353034E359FF6B9817639F2A8"
+        "MsmKey" = "8:_DB9C2CA953E7F79593A48F0D2B8C0104"
+        "OwnerKey" = "8:_E254E7D95D6040E58CC06EC715CE062A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -87,18 +117,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_FD186E74CCB60DE3E3822099A558F5F5"
-        "OwnerKey" = "8:_5779E98353034E359FF6B9817639F2A8"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FD186E74CCB60DE3E3822099A558F5F5"
-        "OwnerKey" = "8:_AAA71FB1B748210A5781BA191BACA401"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_5779E98353034E359FF6B9817639F2A8"
         "MsmSig" = "8:_UNDEFINED"
@@ -106,31 +124,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_AAA71FB1B748210A5781BA191BACA401"
+        "OwnerKey" = "8:_4285F24F05BD022BD46AAD73980AF58B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FD186E74CCB60DE3E3822099A558F5F5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9B32AA4712D482605BB81D6146401EA1"
+        "OwnerKey" = "8:_09EE2B743E407A6A9A3E1E043C9B2EF2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_5796A9A891FD46A591AC3B93E05C8012"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_66759E86A0CA1C350099E806DE1B626E"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -234,7 +240,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.5.2"
+                "FrameworkVersion" = "8:v4.5.2"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=863262"
                 }
@@ -242,41 +248,10 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_473C9F060FDD4F8FB61920811E1FCE0C"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_00C411AE1A10B1853BE2482B86C5170F"
             {
-            "SourcePath" = "8:..\\..\\Folders\\Publish\\Sounds\\cancell.wav"
-            "TargetName" = "8:cancell.wav"
-            "Tag" = "8:"
-            "Folder" = "8:_B8E6536DF35848D29093983CBC54D1DF"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_66759E86A0CA1C350099E806DE1B626E"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-                "ScatterAssemblies"
-                {
-                    "_66759E86A0CA1C350099E806DE1B626E"
-                    {
-                    "Name" = "8:System.Net.Http.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:System.Net.Http.dll"
-            "TargetName" = "8:"
+            "SourcePath" = "8:api-ms-win-crt-convert-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-convert-l1-1-0.dll"
             "Tag" = "8:"
             "Folder" = "8:_F8B7167CB6DD42BB82C5D0976413B5A9"
             "Condition" = "8:"
@@ -293,14 +268,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_AAA71FB1B748210A5781BA191BACA401"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_09EE2B743E407A6A9A3E1E043C9B2EF2"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:NeathCopyEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_AAA71FB1B748210A5781BA191BACA401"
+                    "_09EE2B743E407A6A9A3E1E043C9B2EF2"
                     {
                     "Name" = "8:NeathCopyEngine.dll"
                     "Attributes" = "3:512"
@@ -324,9 +299,180 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1241013D119089D86B79139E27933D21"
+            {
+            "SourcePath" = "8:VCRUNTIME140_1.dll"
+            "TargetName" = "8:VCRUNTIME140_1.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_F8B7167CB6DD42BB82C5D0976413B5A9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2A87E30D1363D8B53BC241B4163CDB13"
+            {
+            "SourcePath" = "8:VCRUNTIME140.dll"
+            "TargetName" = "8:VCRUNTIME140.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_F8B7167CB6DD42BB82C5D0976413B5A9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4285F24F05BD022BD46AAD73980AF58B"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+                "ScatterAssemblies"
+                {
+                    "_4285F24F05BD022BD46AAD73980AF58B"
+                    {
+                    "Name" = "8:System.Net.Http.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:System.Net.Http.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_F8B7167CB6DD42BB82C5D0976413B5A9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_473C9F060FDD4F8FB61920811E1FCE0C"
+            {
+            "SourcePath" = "8:..\\..\\Target\\Sounds\\cancell.wav"
+            "TargetName" = "8:cancell.wav"
+            "Tag" = "8:"
+            "Folder" = "8:_B8E6536DF35848D29093983CBC54D1DF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8A115DFA98B50A96295BFA3F62FE2CAD"
+            {
+            "SourcePath" = "8:api-ms-win-crt-runtime-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-runtime-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_F8B7167CB6DD42BB82C5D0976413B5A9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_965208605E3223E0B496A69DC76FEDF5"
+            {
+            "SourcePath" = "8:api-ms-win-crt-stdio-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-stdio-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_F8B7167CB6DD42BB82C5D0976413B5A9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D27C57F7F8156C34A856F7A8E27CECC2"
+            {
+            "SourcePath" = "8:api-ms-win-crt-string-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-string-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_F8B7167CB6DD42BB82C5D0976413B5A9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DB9C2CA953E7F79593A48F0D2B8C0104"
+            {
+            "SourcePath" = "8:api-ms-win-crt-heap-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-heap-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_F8B7167CB6DD42BB82C5D0976413B5A9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ECCBEAFD20394A95829BA5E66AACB426"
             {
-            "SourcePath" = "8:..\\..\\Folders\\Publish\\neathcopy.ico"
+            "SourcePath" = "8:..\\..\\Target\\neathcopy.ico"
             "TargetName" = "8:neathcopy.ico"
             "Tag" = "8:"
             "Folder" = "8:_F8B7167CB6DD42BB82C5D0976413B5A9"
@@ -346,7 +492,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EE513ACC8EBC430CB683050C4B0379C1"
             {
-            "SourcePath" = "8:..\\..\\Folders\\Publish\\Sounds\\add data.wav"
+            "SourcePath" = "8:..\\..\\Target\\Sounds\\add data.wav"
             "TargetName" = "8:add data.wav"
             "Tag" = "8:"
             "Folder" = "8:_B8E6536DF35848D29093983CBC54D1DF"
@@ -366,7 +512,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FAD95E61F29D4200BD2579A444603EFE"
             {
-            "SourcePath" = "8:..\\..\\Folders\\Publish\\Sounds\\task finished.wav"
+            "SourcePath" = "8:..\\..\\Target\\Sounds\\task finished.wav"
             "TargetName" = "8:task finished.wav"
             "Tag" = "8:"
             "Folder" = "8:_B8E6536DF35848D29093983CBC54D1DF"
@@ -1251,7 +1397,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_5779E98353034E359FF6B9817639F2A8"
             {
-            "SourcePath" = "8:..\\..\\NeathCopy\\obj\\Debug\\NeathCopy.exe"
+            "SourcePath" = "8:..\\..\\NeathCopy\\obj\\Release\\NeathCopy.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F8B7167CB6DD42BB82C5D0976413B5A9"
@@ -1307,7 +1453,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E254E7D95D6040E58CC06EC715CE062A"
             {
-            "SourcePath" = "8:..\\..\\Target\\ShellExt_x64\\NeathCopyShell.dll"
+            "SourcePath" = "8:..\\..\\Target\\Release\\NeathCopyShell.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F8B7167CB6DD42BB82C5D0976413B5A9"
@@ -1336,4 +1482,3 @@
         }
     }
 }
-
