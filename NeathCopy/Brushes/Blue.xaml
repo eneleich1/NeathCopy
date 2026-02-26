@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:NeathCopy.Brushes">
+>
 
     <SolidColorBrush x:Key="BorderBrush" Color="Blue" />
     
@@ -129,11 +129,10 @@
     </ImageBrush>
 
     <ImageBrush x:Key="moreBrush" ImageSource="Images/Blue/more.png" Stretch="Uniform"/>
+    <ImageBrush x:Key="pauseBrush" ImageSource="Images/Light/pause.png" Stretch="Uniform"/>
+    <ImageBrush x:Key="resumeStartBrush" ImageSource="Images/Blue/resume.png" Stretch="Uniform"/>
     <ImageBrush x:Key="skipBrush" ImageSource="Images/Blue/skip.png" Stretch="Uniform"/>
     <ImageBrush x:Key="cancelBrush" ImageSource="Images/Blue/cancel_zoom.png" Stretch="Uniform"/>
-    <ImageBrush x:Key="pauseBrush" ImageSource="Images/Dark/pause.png" Stretch="Uniform"/>
-    <ImageBrush x:Key="resumeStartBrush" ImageSource="Images/Dark/resume.png" Stretch="Uniform"/>
-
 
     <!--Microsoft Brushes-->
     <LinearGradientBrush x:Key="NormalBrush" StartPoint="0,0" EndPoint="0,1">

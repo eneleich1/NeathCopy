@@ -12,16 +12,16 @@ namespace NeathCopy.Themes
     {
         public static ThemesManager Manager { get; private set; }
 
-        //public delegate void BrushesChangedEventHandle(string brushes);
-        ///// <summary>
-        ///// Occurs when Brushes are changeds.
-        ///// </summary>
-        //public static event BrushesChangedEventHandle BrushesChanged;
-        //private static void RaiseBrushesChanged(string brushes)
-        //{
-        //    if (BrushesChanged != null)
-        //        BrushesChanged(brushes);
-        //}
+        public delegate void BrushesChangedEventHandle(string brushes);
+        /// <summary>
+        /// Occurs when Brushes are changed.
+        /// </summary>
+        public event BrushesChangedEventHandle BrushesChanged;
+        private void RaiseBrushesChanged(string brushes)
+        {
+            if (BrushesChanged != null)
+                BrushesChanged(brushes);
+        }
 
         public delegate void VisualCopySkingChangedEventHandle(string skin);
         /// <summary>
@@ -58,7 +58,7 @@ namespace NeathCopy.Themes
             var theme = new ResourceDictionary() { Source = uri };
             Application.Current.Resources.MergedDictionaries[2] = theme;
 
-            //RaiseBrushesChanged(brushes);
+            RaiseBrushesChanged(brushes);
         }
         public  void SetFonts(string font)
         {

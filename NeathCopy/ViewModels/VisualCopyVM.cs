@@ -50,6 +50,7 @@ namespace NeathCopy.ViewModels
             CopyOption = "Allways Ask";
 
             Themes.ThemesManager.Manager.VisualCopySkingChanged += Manager_VisualCopySkingChanged;
+            Themes.ThemesManager.Manager.BrushesChanged += Manager_BrushesChanged;
 
             InitializeTimers();
 
@@ -57,6 +58,14 @@ namespace NeathCopy.ViewModels
 
         private void Manager_VisualCopySkingChanged(string skin)
         {
+            SetPauseResumeBrush();
+        }
+
+        private void Manager_BrushesChanged(string brushes)
+        {
+            // Re-resolve the pause/resume brush from the currently active Brushes dictionary.
+            // This fixes the case where the app swaps Application-level resource dictionaries at runtime,
+            // but the ViewModel is still holding a reference to a Brush instance from the previous dictionary.
             SetPauseResumeBrush();
         }
 
