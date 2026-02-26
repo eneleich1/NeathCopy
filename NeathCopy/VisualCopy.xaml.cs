@@ -1,4 +1,5 @@
 ﻿using NeathCopy.Module2_Configuration;
+using NeathCopy.Services;
 using NeathCopy.Themes;
 using NeathCopy.Tools;
 using NeathCopy.UsedWindows;
@@ -342,6 +343,9 @@ namespace NeathCopy
             State = VisualCopyState.Canceled;
 
             Task.Run(() => NeathCopy.Cancel(cause));
+
+            var cancelContext = BuildHookContext(null, cause, ComputeSpeedBytesPerSec(NeathCopy.TotalBytesTransferred));
+            ScriptHookService.RunHook(HookType.Cancel, cancelContext);
 
             Dispatcher.BeginInvoke(new Action(() =>
             {
@@ -755,10 +759,15 @@ namespace NeathCopy
 
                 State = VisualCopyState.Finished;
 
+                var speedBytesPerSec = ComputeSpeedBytesPerSec(NeathCopy.DiscoverdList.Size.Bytes);
+                var hookContext = BuildHookContext(errors, "", speedBytesPerSec);
+
                 if (errors.Count > 0)
                 {
                     PauseAction = PauseButtonAction.Resume;
                     NeathCopy.Errors.Clear();
+
+                    ScriptHookService.RunHook(HookType.Error, hookContext);
 
                     if (Configuration.Main.AffterErrorAction.Method.Name == "Close_AffterErrorAction")
                         RaiseFinish(this);
@@ -803,6 +812,8 @@ namespace NeathCopy
                         string.Format("Elapsed Time: {0}", displayInfo.ElapsedTime),
                         "<End>-------------------------------------",
                     });
+
+                ScriptHookService.RunHook(HookType.Success, hookContext);
 
                 OnFinish.Invoke();
 
@@ -850,6 +861,71 @@ namespace NeathCopy
 
                 return Math.Min(prices["More than 16 Gb"], filesCount);
             }
+        }
+
+        private ScriptHookContext BuildHookContext(List<Error> errors, string cancelCause, double speedBytesPerSec)
+        {
+            var requestSources = new List<string>();
+            if (RequestInf != null)
+            {
+                if (RequestInf.Sources != null && RequestInf.Sources.Count > 0)
+                    requestSources.AddRange(RequestInf.Sources);
+                else if (!string.IsNullOrWhiteSpace(RequestInf.SourceArg))
+                    requestSources.Add(RequestInf.SourceArg);
+            }
+
+            List<string> errorMessages = null;
+            if (errors != null && errors.Count > 0)
+                errorMessages = errors.Select(e => e.Message).ToList();
+
+            return new ScriptHookContext
+            {
+                Operation = RequestInf?.Operation ?? "",
+                Source = GetHookSource(),
+                Destination = RequestInf?.Destiny ?? "",
+                Engine = NeathCopy?.FileCopier?.Name ?? "",
+                BufferSize = GetHookBufferSize(),
+                FilesCount = NeathCopy?.DiscoverdList?.Count ?? 0,
+                TotalBytes = NeathCopy?.DiscoverdList?.Size.Bytes ?? 0,
+                ElapsedMs = displayInfo?.ElapsedTime.AllMiliseconds ?? 0,
+                SpeedBytesPerSec = speedBytesPerSec,
+                ErrorsCount = errors?.Count ?? 0,
+                CancelCause = cancelCause ?? "",
+                RequestSources = requestSources,
+                Errors = errorMessages
+            };
+        }
+
+        private string GetHookSource()
+        {
+            if (RequestInf == null)
+                return "";
+
+            if (!string.IsNullOrWhiteSpace(RequestInf.SourceArg))
+                return RequestInf.SourceArg;
+
+            if (RequestInf.Sources != null && RequestInf.Sources.Count > 0)
+                return RequestInf.Sources[0];
+
+            return "";
+        }
+
+        private int GetHookBufferSize()
+        {
+            var bufferCopier = NeathCopy?.FileCopier as BufferFileCopier;
+            return bufferCopier?.BufferSize ?? Configuration.Main.BufferSize;
+        }
+
+        private double ComputeSpeedBytesPerSec(long totalBytes)
+        {
+            if (displayInfo == null)
+                return 0;
+
+            var elapsedMs = displayInfo.ElapsedTime.AllMiliseconds;
+            if (elapsedMs < 1000)
+                return totalBytes;
+
+            return (totalBytes * 1000d) / elapsedMs;
         }
 
 

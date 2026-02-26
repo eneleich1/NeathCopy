@@ -43,5 +43,14 @@ namespace NeathCopy.UsedWindows
             };
             window.Show();
         }
+
+        private void ScriptHooksMenu_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new ScriptHooksWindow
+            {
+                Owner = this
+            };
+            window.ShowDialog();
+        }
     }
 }

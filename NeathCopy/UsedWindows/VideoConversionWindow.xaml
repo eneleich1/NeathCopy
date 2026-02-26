@@ -12,7 +12,9 @@
         WindowStartupLocation="CenterOwner"
         Icon="/NeathCopy;component/Brushes/Images/Light/settings.png"
         Closing="Window_Closing">
-    <Grid Margin="8" Background="{DynamicResource BackgroundPrimary}">
+    <Grid Margin="8"
+          Background="{DynamicResource ControlBackgroundBrush}"
+          TextElement.Foreground="{DynamicResource TextBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -35,7 +37,7 @@
                     <Button Content="Clear List" Width="80"
                             Command="{Binding ClearListCommand}"/>
                     <TextBlock Margin="16,0,0,0" VerticalAlignment="Center"
-                               Foreground="{DynamicResource TextPrimaryBrush}"
+                               Foreground="{DynamicResource TextBrush}"
                                Text="Drag and drop video files here."/>
                 </StackPanel>
 
@@ -60,10 +62,10 @@
                                             <ProgressBar Width="120" Height="14"
                                                          Minimum="0" Maximum="100"
                                                          Value="{Binding Progress}"
-                                                         Foreground="{DynamicResource ProgressIndicatorBrush}"
-                                                         Background="{DynamicResource ProgressTrackBrush}"/>
+                                                         Foreground="{DynamicResource ProgressBarIndicatorBrush}"
+                                                         Background="{DynamicResource ProgressBarTrackBrush}"/>
                                             <TextBlock Grid.Column="1" Margin="8,0,0,0"
-                                                       Foreground="{DynamicResource TextPrimaryBrush}"
+                                                       Foreground="{DynamicResource TextBrush}"
                                                        Text="{Binding Progress, StringFormat={}{0:F0}%}"/>
                                         </Grid>
                                     </DataTemplate>
@@ -95,13 +97,13 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="Output format" VerticalAlignment="Center"
-                               Foreground="{DynamicResource TextPrimaryBrush}"/>
+                               Foreground="{DynamicResource TextBrush}"/>
                     <ComboBox Grid.Column="1" Width="140" HorizontalAlignment="Left"
                               ItemsSource="{Binding OutputFormats}"
                               SelectedItem="{Binding SelectedOutputFormat}"/>
 
                     <TextBlock Grid.Row="1" Text="Bitrate (optional)" VerticalAlignment="Center"
-                               Foreground="{DynamicResource TextPrimaryBrush}"/>
+                               Foreground="{DynamicResource TextBrush}"/>
                     <ComboBox Grid.Row="1" Grid.Column="1" Width="140" HorizontalAlignment="Left"
                               IsEditable="True" Text="{Binding Bitrate, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBoxItem Content="2000k"/>
@@ -113,7 +115,7 @@
                     </ComboBox>
 
                     <TextBlock Grid.Row="2" Text="Resolution (optional)" VerticalAlignment="Center"
-                               Foreground="{DynamicResource TextPrimaryBrush}"/>
+                               Foreground="{DynamicResource TextBrush}"/>
                     <ComboBox Grid.Row="2" Grid.Column="1" Width="140" HorizontalAlignment="Left"
                               IsEditable="True" Text="{Binding Resolution, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBoxItem Content="640x480"/>
@@ -123,7 +125,7 @@
                     </ComboBox>
 
                     <TextBlock Grid.Row="3" Text="Output folder" VerticalAlignment="Center"
-                               Foreground="{DynamicResource TextPrimaryBrush}"/>
+                               Foreground="{DynamicResource TextBrush}"/>
                     <Grid Grid.Row="3" Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -144,7 +146,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="Max parallel conversions"
-                               Foreground="{DynamicResource TextPrimaryBrush}"/>
+                               Foreground="{DynamicResource TextBrush}"/>
                     <TextBox Grid.Row="1" Width="80"
                              Text="{Binding MaxParallelText, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
@@ -159,13 +161,13 @@
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Overall" VerticalAlignment="Center" Margin="0,0,8,0"
-                               Foreground="{DynamicResource TextPrimaryBrush}"/>
+                               Foreground="{DynamicResource TextBrush}"/>
                     <ProgressBar Minimum="0" Maximum="100" Height="16" Width="260"
                                  Value="{Binding OverallProgress}"
-                                 Foreground="{DynamicResource ProgressIndicatorBrush}"
-                                 Background="{DynamicResource ProgressTrackBrush}"/>
+                                 Foreground="{DynamicResource ProgressBarIndicatorBrush}"
+                                 Background="{DynamicResource ProgressBarTrackBrush}"/>
                     <TextBlock Margin="8,0,0,0" VerticalAlignment="Center"
-                               Foreground="{DynamicResource TextPrimaryBrush}"
+                               Foreground="{DynamicResource TextBrush}"
                                Text="{Binding OverallProgress, StringFormat={}{0:F0}%}"/>
                 </StackPanel>
                 <TextBox Grid.Row="1" Margin="0,8,0,0" Height="150"

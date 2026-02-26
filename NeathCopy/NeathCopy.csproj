@@ -111,6 +111,7 @@
     <Compile Include="Services\AppControl\AppController.cs" />
     <Compile Include="Services\AppControl\IAppController.cs" />
     <Compile Include="Services\IntegrationManager.cs" />
+    <Compile Include="Services\ScriptHookService.cs" />
     <Compile Include="Services\TransferOrchestrator.cs" />
     <Compile Include="Services\VideoConversionService.cs" />
     <Compile Include="Themes\ControlsStyles\Theme1ToolBarPanel.xaml.cs">
@@ -156,6 +157,9 @@
     </Compile>
     <Compile Include="UsedWindows\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UsedWindows\ScriptHooksWindow.xaml.cs">
+      <DependentUpon>ScriptHooksWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UsedWindows\UserDropUIWindow.xaml.cs">
       <DependentUpon>UserDropUIWindow.xaml</DependentUpon>
@@ -257,6 +261,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\GroupBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\ListBoxItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -274,6 +282,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Shared.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\TextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -338,6 +350,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UsedWindows\MessageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UsedWindows\ScriptHooksWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

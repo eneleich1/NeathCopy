@@ -53,9 +53,9 @@
     <SolidColorBrush x:Key="ProgressBarTrackBorderBrush" Color="Black"/>
 
     <!--Image Brushes-->
-    <sys:String x:Key="IconUri">"/NeathCopy;component/Brushes/Images/Light/settings.png"</sys:String>
+    <sys:String x:Key="IconUri">"/NeathCopy;component/Brushes/Images/Dark/settings.png"</sys:String>
 
-    <ImageBrush x:Key="settingsBrush" Stretch="Uniform" ImageSource="Images/Light/settings.png">
+    <ImageBrush x:Key="settingsBrush" Stretch="Uniform" ImageSource="Images/Dark/settings.png">
         <ImageBrush.RelativeTransform>
             <TransformGroup>
                 <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="1.5" ScaleY="1.5"/>
@@ -136,11 +136,11 @@
         </ImageBrush.RelativeTransform>
     </ImageBrush>
 
-    <ImageBrush x:Key="moreBrush" ImageSource="Images/Dark/more.png" Stretch="Uniform"/>
-    <ImageBrush x:Key="pauseBrush" ImageSource="Images/Dark/pause.png" Stretch="Uniform"/>
-    <ImageBrush x:Key="resumeStartBrush" ImageSource="Images/Dark/resume.png" Stretch="Uniform"/>
-    <ImageBrush x:Key="skipBrush" ImageSource="Images/Dark/skip.png" Stretch="Uniform"/>
-    <ImageBrush x:Key="cancelBrush" ImageSource="Images/Dark/cancel_zoom.png" Stretch="Uniform"/>
+    <ImageBrush x:Key="moreBrush" ImageSource="Images/Light/more.png" Stretch="Uniform"/>
+    <ImageBrush x:Key="pauseBrush" ImageSource="Images/Light/pause.png" Stretch="Uniform"/>
+    <ImageBrush x:Key="resumeStartBrush" ImageSource="Images/Light/resume.png" Stretch="Uniform"/>
+    <ImageBrush x:Key="skipBrush" ImageSource="Images/Light/skip.png" Stretch="Uniform"/>
+    <ImageBrush x:Key="cancelBrush" ImageSource="Images/Light/cancel_zoom.png" Stretch="Uniform"/>
 
 
     <!--Microsoft Brushes-->

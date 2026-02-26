@@ -99,7 +99,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Foreground"
-          Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+          Value="{DynamicResource TextBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="GridViewColumnHeader">
@@ -177,6 +177,8 @@
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListView">
@@ -200,6 +202,32 @@
                             <Setter TargetName="Border"
                     Property="Background"
                     Value="{DynamicResource DisabledBorderBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="{x:Type ListViewItem}" TargetType="ListViewItem">
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListViewItem">
+                    <Border x:Name="Border"
+                            Background="{TemplateBinding Background}">
+                        <ContentPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource SelectedBackgroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource SelectedBackgroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource DisabledForegroundBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

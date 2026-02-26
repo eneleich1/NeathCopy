@@ -1,0 +1,10 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style TargetType="GroupBox">
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+    </Style>
+
+</ResourceDictionary>

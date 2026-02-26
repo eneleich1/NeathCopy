@@ -129,8 +129,8 @@
     </ImageBrush>
 
     <ImageBrush x:Key="moreBrush" ImageSource="Images/Light/more.png" Opacity="0.6" Stretch="Uniform"/>
-    <ImageBrush x:Key="pauseBrush" ImageSource="Images/Light/pause.png" Stretch="Uniform"/>
-    <ImageBrush x:Key="resumeStartBrush" ImageSource="Images/Light/resume.png" Stretch="Uniform"/>
+    <ImageBrush x:Key="pauseBrush" ImageSource="Images/Light/pause.png" Opacity="0.6" Stretch="Uniform"/>
+    <ImageBrush x:Key="resumeStartBrush" ImageSource="Images/Light/resume.png" Opacity="0.6" Stretch="Uniform"/>
     <ImageBrush x:Key="skipBrush" ImageSource="Images/Light/skip.png" Opacity="0.6" Stretch="Uniform"/>
     <ImageBrush x:Key="cancelBrush" ImageSource="Images/Light/cancel_zoom.png" Opacity="0.6" Stretch="Uniform"/>
 

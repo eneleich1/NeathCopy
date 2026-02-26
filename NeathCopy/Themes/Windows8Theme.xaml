@@ -7,9 +7,11 @@
         <ResourceDictionary Source="ControlsStyles/Windows8ToolBarPanel.xaml"/>
         <ResourceDictionary Source="/NeathCopy;component/Resources/ListView.xaml"/>
         <ResourceDictionary Source="/NeathCopy;component/Resources/ComboBox.xaml"/>
+        <ResourceDictionary Source="/NeathCopy;component/Resources/TextBox.xaml"/>
         <ResourceDictionary Source="/NeathCopy;component/Resources/TabControl.xaml"/>
         <ResourceDictionary Source="/NeathCopy;component/Resources/ListBoxItem.xaml"/>
         <ResourceDictionary Source="/NeathCopy;component/Resources/Button.xaml"/>
+        <ResourceDictionary Source="/NeathCopy;component/Resources/GroupBox.xaml"/>
         <ResourceDictionary Source="/NeathCopy;component/Resources/ToolTip.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
