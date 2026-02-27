@@ -184,7 +184,6 @@ namespace NeathCopy.Module2_Configuration
             {
                 integrationMode = value;
                 RegisterAccess.Acces.SetConfigurationValue("IntegrationMode", integrationMode ?? "");
-                RegisterAccess.Acces.SetIntegrationMode(integrationMode ?? "");
                 RaiseSettingChanged();
             }
         }
@@ -525,8 +524,6 @@ namespace NeathCopy.Module2_Configuration
 
                 config.UpdateTimeInterval = int.Parse(RegisterAccess.Acces.GetConfigurationValue("UpdateTimeInterval"));
                 var modeValue = RegisterAccess.Acces.GetConfigurationValue("IntegrationMode");
-                if (string.IsNullOrWhiteSpace(modeValue))
-                    modeValue = RegisterAccess.Acces.GetIntegrationMode();
                 config.IntegrationMode = string.IsNullOrWhiteSpace(modeValue) ? "TrayIPC" : modeValue;
 
                 config.isDefaultCopyHandler = RegisterAccess.Acces.IsDefaultCopyHandlerFlag();

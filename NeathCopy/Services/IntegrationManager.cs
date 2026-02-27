@@ -32,6 +32,7 @@ namespace NeathCopy.Services
         {
             var exe = System.Windows.Forms.Application.ExecutablePath;
             var dir = Path.GetDirectoryName(exe) ?? string.Empty;
+            var defaultFilesListPath = Path.Combine(@"C:\Users\Public\AppData\NeathCopy", "FilesList.txt");
 
             bool hasKey = RegisterAccess.Acces.HasCompanyKey();
             var currentCopyHandler = RegisterAccess.Acces.GetCopyHandlerPath();
@@ -43,11 +44,31 @@ namespace NeathCopy.Services
 
             if (config != null)
             {
-                if (!RegisterAccess.Acces.ValueExists("IntegrationMode") || string.IsNullOrWhiteSpace(RegisterAccess.Acces.GetIntegrationMode()))
-                    RegisterAccess.Acces.SetIntegrationMode(config.IntegrationMode ?? TrayIpcMode);
-
                 if (!RegisterAccess.Acces.ValueExists("IsDefaultCopyHandler"))
                     RegisterAccess.Acces.SetDefaultCopyHandlerFlag(config.IsDefaultCopyHandler);
+            }
+
+            try
+            {
+                var hasFilesListValue = RegisterAccess.Acces.ValueExists("FilesList");
+                var filesListPath = hasFilesListValue
+                    ? RegisterAccess.Acces.GetFilesListPath()
+                    : defaultFilesListPath;
+
+                var filesListDir = Path.GetDirectoryName(filesListPath);
+                if (!string.IsNullOrWhiteSpace(filesListDir))
+                    Directory.CreateDirectory(filesListDir);
+
+                if (!File.Exists(filesListPath))
+                {
+                    using (File.Create(filesListPath)) { }
+                }
+
+                if (!hasFilesListValue)
+                    RegisterAccess.Acces.SetFilesListPath(filesListPath);
+            }
+            catch (Exception)
+            {
             }
         }
 
@@ -63,7 +84,6 @@ namespace NeathCopy.Services
 
                 RegisterAccess.Acces.SetCopyHandlerPath(exe);
                 RegisterAccess.Acces.SetInstallDir(dir);
-                RegisterAccess.Acces.SetIntegrationMode(config.IntegrationMode ?? TrayIpcMode);
                 RegisterAccess.Acces.SetDefaultCopyHandlerFlag(true);
             }
             else

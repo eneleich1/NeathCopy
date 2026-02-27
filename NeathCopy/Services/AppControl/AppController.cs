@@ -27,7 +27,6 @@ namespace NeathCopy.Services.AppControl
         private bool trayBalloonShownThisRun;
         private bool pendingExitToLegacy;
         private bool isShuttingDown;
-        private Func<VisualCopy> previousAddNewVisualCopy;
         private static bool elevationWarningShown;
         private readonly TransferOrchestrator transferOrchestrator;
 
@@ -51,7 +50,6 @@ namespace NeathCopy.Services.AppControl
 
             if (resident)
             {
-                EnsureAllInOneAddNewVisualCopy();
                 StartPipeServer();
                 EnsureTrayIcon();
                 StartTrayTimer();
@@ -64,7 +62,6 @@ namespace NeathCopy.Services.AppControl
             }
             else
             {
-                RestoreAddNewVisualCopy();
                 StopPipeServer();
                 StopTrayTimer();
                 DisposeTrayIcon();
@@ -503,15 +500,7 @@ namespace NeathCopy.Services.AppControl
 
             if (!mainContainer.VisualsCopys.Any())
             {
-                if (IsResidentMode())
-                {
-                    EnsureAllInOneAddNewVisualCopy();
-                    Configuration.Main.AddNewVisualCopy();
-                }
-                else
-                {
-                    Configuration.Main.AddNewVisualCopy();
-                }
+                Configuration.Main.AddNewVisualCopy();
             }
 
             EnsureContainerWindow();
@@ -603,25 +592,6 @@ namespace NeathCopy.Services.AppControl
                 && Configuration.Main.IsDefaultCopyHandler;
         }
 
-        private void EnsureAllInOneAddNewVisualCopy()
-        {
-            if (Configuration.Main.AddNewVisualCopy == Configuration.Main.AllInOne_AddNewVC)
-                return;
-
-            if (previousAddNewVisualCopy == null)
-                previousAddNewVisualCopy = Configuration.Main.AddNewVisualCopy;
-
-            Configuration.Main.AddNewVisualCopy = Configuration.Main.AllInOne_AddNewVC;
-        }
-
-        private void RestoreAddNewVisualCopy()
-        {
-            if (previousAddNewVisualCopy == null)
-                return;
-
-            Configuration.Main.AddNewVisualCopy = previousAddNewVisualCopy;
-            previousAddNewVisualCopy = null;
-        }
 
         private void EnsureMainWindow()
         {

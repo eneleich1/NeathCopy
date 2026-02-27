@@ -39,14 +39,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_4285F24F05BD022BD46AAD73980AF58B"
-        "OwnerKey" = "8:_5779E98353034E359FF6B9817639F2A8"
+        "MsmKey" = "8:_3B14162E6A7A4DBBAC61E5561B28633E"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_4285F24F05BD022BD46AAD73980AF58B"
-        "OwnerKey" = "8:_5796A9A891FD46A591AC3B93E05C8012"
+        "OwnerKey" = "8:_5779E98353034E359FF6B9817639F2A8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -124,13 +124,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_09EE2B743E407A6A9A3E1E043C9B2EF2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_4285F24F05BD022BD46AAD73980AF58B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_09EE2B743E407A6A9A3E1E043C9B2EF2"
+        "OwnerKey" = "8:_3B14162E6A7A4DBBAC61E5561B28633E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -211,20 +217,6 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_065C6584458A4061A6C954D107D7CC3B"
-            {
-            "Name" = "8:Primary output from InstallerActions (Active)"
-            "Condition" = "8:"
-            "Object" = "8:_5796A9A891FD46A591AC3B93E05C8012"
-            "FileType" = "3:1"
-            "InstallAction" = "3:1"
-            "Arguments" = "8:"
-            "EntryPoint" = "8:"
-            "Sequence" = "3:1"
-            "Identifier" = "8:_1D8EC7B7_9DC3_43DF_9880_E46EDCF0914E"
-            "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
-            }
         }
         "DefaultFeature"
         {
@@ -240,7 +232,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:v4.5.2"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.8"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=863262"
                 }
@@ -536,6 +528,28 @@
         }
         "Folder"
         {
+            "{1525181F-901A-416C-8A58-119130FE478E}:_527C15CDC53E4476B2BC3BE4129662E8"
+            {
+            "Name" = "8:#1928"
+            "AlwaysCreate" = "11:TRUE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:StartupFolder"
+                "Folders"
+                {
+                }
+            }
+            "{1525181F-901A-416C-8A58-119130FE478E}:_A1C2D3E4F5B64789A0B1C2D3E4F5A6B7"
+            {
+            "Name" = "8:#1917"
+            "AlwaysCreate" = "11:TRUE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:CommonStartupFolder"
+                "Folders"
+                {
+                }
+            }
             "{1525181F-901A-416C-8A58-119130FE478E}:_A48D4E74D2504A43916AEE6F99914EF0"
             {
             "Name" = "8:#1915"
@@ -620,7 +634,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:NeathCopy"
         "ProductCode" = "8:{CFADC5B1-A076-4072-83A1-F3C22E6EE4B9}"
-        "PackageCode" = "8:{EF9B2071-6AB0-4495-852A-558F3D6584AC}"
+        "PackageCode" = "8:{7F3E2FCB-1294-479B-AAD4-A0BB4C22EA88}"
         "UpgradeCode" = "8:{8853671A-AB8C-4516-8A1B-B4466FA4EDED}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -881,7 +895,15 @@
                                                     "Condition" = "8:"
                                                     "Transitive" = "11:FALSE"
                                                     "ValueTypes" = "3:1"
-                                                    "Value" = "8:FasterBufferFileCopier"
+                                                    "Value" = "8:CopyFileExFileCopier"
+                                                    }
+                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_EBFB836D3F814331B6A0AFDFE614B059"
+                                                    {
+                                                    "Name" = "8:IntegrationMode"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "ValueTypes" = "3:1"
+                                                    "Value" = "8:TrayIPC"
                                                     }
                                                     "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_FEDDFA7FB2B0495498F13EA8C916F5C3"
                                                     {
@@ -904,6 +926,14 @@
                                             "ValueTypes" = "3:1"
                                             "Value" = "8:C:\\Users\\Public\\AppData\\NeathCopy"
                                             }
+                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_05EAADC2CF63479898B85873AE64EBCB"
+                                            {
+                                            "Name" = "8:ShellDebugMode"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "ValueTypes" = "3:1"
+                                            "Value" = "8:file"
+                                            }
                                             "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_082D5E41E861445198B68D22F61ED312"
                                             {
                                             "Name" = "8:InstallDir"
@@ -911,6 +941,14 @@
                                             "Transitive" = "11:FALSE"
                                             "ValueTypes" = "3:1"
                                             "Value" = "8:C:\\Program Files\\NeathCopy\\"
+                                            }
+                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_0882D2D612774278BCAEFC9C25C76EB3"
+                                            {
+                                            "Name" = "8:ShellDebugVerbosity"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "ValueTypes" = "3:3"
+                                            "Value" = "3:0"
                                             }
                                             "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_0B31898137E445C5AB80617CA65E5C76"
                                             {
@@ -936,6 +974,14 @@
                                             "ValueTypes" = "3:1"
                                             "Value" = "8:C:\\Program Files\\NeathCopy\\\\NeathCopy.exe"
                                             }
+                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_53F4FCAE26DA40C78504ABEB4F1F6D89"
+                                            {
+                                            "Name" = "8:ShellDebugEventLog"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "ValueTypes" = "3:3"
+                                            "Value" = "3:0"
+                                            }
                                             "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_5D05DD9653134B4C8FF8A39B07E3D0E3"
                                             {
                                             "Name" = "8:ExistConfig"
@@ -943,6 +989,30 @@
                                             "Transitive" = "11:FALSE"
                                             "ValueTypes" = "3:1"
                                             "Value" = "8:1"
+                                            }
+                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_6EFBD13F52E04968B03195B3FD6B4F20"
+                                            {
+                                            "Name" = "8:ShellDebug"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "ValueTypes" = "3:3"
+                                            "Value" = "3:0"
+                                            }
+                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_A87BB08CE2C5424D87BA636A54FEF145"
+                                            {
+                                            "Name" = "8:IsDefaultCopyHandler"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "ValueTypes" = "3:1"
+                                            "Value" = "8:1"
+                                            }
+                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_D4097EF854FE460D8063AD86CCCA8BA2"
+                                            {
+                                            "Name" = "8:Exist"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "ValueTypes" = "3:1"
+                                            "Value" = "8:0"
                                             }
                                         }
                                     }
@@ -982,6 +1052,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_1B2C3D4E5F6A708192A3B4C5D6E7F809"
+            {
+            "Name" = "8:NeathCopy Tray"
+            "Arguments" = "8:--tray"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_5779E98353034E359FF6B9817639F2A8"
+            "Folder" = "8:_A1C2D3E4F5B64789A0B1C2D3E4F5A6B7"
+            "WorkingFolder" = "8:_F8B7167CB6DD42BB82C5D0976413B5A9"
+            "Icon" = "8:_ECCBEAFD20394A95829BA5E66AACB426"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_975A4EA7637943CB906DC1672CC60A47"
             {
             "Name" = "8:NeathCopy"
@@ -996,7 +1080,7 @@
             "Icon" = "8:_ECCBEAFD20394A95829BA5E66AACB426"
             "Feature" = "8:"
             }
-        }
+                    }
         "UserInterface"
         {
             "{DF760B10-853B-4699-99F2-AFF7185B4A62}:_1EDF9CADDB5248E394E39AEF1144E912"
@@ -1395,6 +1479,34 @@
         }
         "ProjectOutput"
         {
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_3B14162E6A7A4DBBAC61E5561B28633E"
+            {
+            "SourcePath" = "8:..\\..\\NeathCopy.AdminHelper\\obj\\Release\\NeathCopy.AdminHelper.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_F8B7167CB6DD42BB82C5D0976413B5A9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{B36F6F2E-63C7-4BFD-AAB4-4B40FD4474F4}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_5779E98353034E359FF6B9817639F2A8"
             {
             "SourcePath" = "8:..\\..\\NeathCopy\\obj\\Release\\NeathCopy.exe"
@@ -1423,37 +1535,9 @@
                 {
                 }
             }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_5796A9A891FD46A591AC3B93E05C8012"
-            {
-            "SourcePath" = "8:..\\InstallerActions\\obj\\Release\\InstallerActions.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_F8B7167CB6DD42BB82C5D0976413B5A9"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{509756C6-BDE0-4964-B612-420C144337E9}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E254E7D95D6040E58CC06EC715CE062A"
             {
-            "SourcePath" = "8:..\\..\\Target\\Release\\NeathCopyShell.dll"
+            "SourcePath" = "8:..\\..\\Target\\Release\\x64\\NeathCopyShell.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F8B7167CB6DD42BB82C5D0976413B5A9"

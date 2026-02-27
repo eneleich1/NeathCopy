@@ -307,10 +307,14 @@ namespace NeathCopy
                 #endregion
 
                 Configuration.Main = Configuration.LoadFromRegister();
-                IntegrationManager.EnsureMinimalRegistryKeysIfMissing(Configuration.Main);
                 IsTrayLaunch = arguments != null && arguments.Any(a => string.Equals(a, "--tray", StringComparison.OrdinalIgnoreCase));
-                if (IsTrayLaunch && !IntegrationManager.IsResident(Configuration.Main))
-                    return;
+                if (IsTrayLaunch)
+                {
+                    Configuration.Main.IntegrationMode = IntegrationManager.TrayIpcMode;
+                    Configuration.Main.IsDefaultCopyHandler = true;
+                    RegisterAccess.Acces.SetExistConfiguration(true);
+                }
+                IntegrationManager.EnsureMinimalRegistryKeysIfMissing(Configuration.Main);
 
                 App myApp = new App();
 

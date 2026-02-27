@@ -243,6 +243,17 @@ namespace NeathCopyEngine.Helpers
             }
         }
 
+        public bool SetExistConfiguration(bool exists)
+        {
+            using (var key = MainKey.CreateSubKey(CompanyKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            {
+                if (key == null) return false;
+
+                key.SetValue("ExistConfig", exists ? "1" : "0");
+                return true;
+            }
+        }
+
         public string GetIntegrationMode()
         {
             using (var key = MainKey.OpenSubKey(CompanyKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
@@ -318,6 +329,17 @@ namespace NeathCopyEngine.Helpers
                 if (key == null) return false;
 
                 key.SetValue("LogsDir", path ?? "");
+                return true;
+            }
+        }
+
+        public bool SetFilesListPath(string path)
+        {
+            using (var key = MainKey.CreateSubKey(CompanyKey, RegistryKeyPermissionCheck.ReadWriteSubTree))
+            {
+                if (key == null) return false;
+
+                key.SetValue("FilesList", path ?? "");
                 return true;
             }
         }
