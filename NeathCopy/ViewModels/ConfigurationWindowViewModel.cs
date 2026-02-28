@@ -4,6 +4,9 @@ using NeathCopy.Services;
 using NeathCopyEngine.CopyHandlers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace NeathCopy.ViewModels
@@ -12,12 +15,49 @@ namespace NeathCopy.ViewModels
     {
         private bool loading;
 
+        public string NeathCopyVersion { get; }
+        public string NeathCopyCompany { get; }
+        public string NeathCopyCopyright { get; }
+
         public IEnumerable<string> Themes => Configuration.Thems;
         public IEnumerable<string> Skins => Configuration.VisualCopySkins;
         public IEnumerable<string> Brushes => Configuration.Brushes;
         public IEnumerable<string> Fonts => Configuration.Fonts;
         public IEnumerable<string> Languages => Configuration.Languages;
         public IEnumerable<FileCopier> FileCopiers => Configuration.FileCopiers.Values;
+
+        public ConfigurationWindowViewModel()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var version = assembly.GetName().Version?.ToString(3) ?? "0.0.0";
+            var company = assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false)
+                .Cast<AssemblyCompanyAttribute>()
+                .FirstOrDefault()?.Company ?? "";
+            var copyright = assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false)
+                .Cast<AssemblyCopyrightAttribute>()
+                .FirstOrDefault()?.Copyright ?? "";
+            var yearRange = BuildYearRange(copyright);
+
+            NeathCopyVersion = $"NeathCopy {version}";
+            NeathCopyCompany = company.Trim();
+            NeathCopyCopyright = yearRange;
+        }
+
+        private static string BuildYearRange(string copyright)
+        {
+            if (string.IsNullOrWhiteSpace(copyright))
+                return "";
+
+            var match = Regex.Match(copyright, @"\b(19|20)\d{2}\b");
+            if (!match.Success)
+                return copyright.Trim();
+
+            var startYear = match.Value;
+            var currentYear = DateTime.Now.Year.ToString();
+            return startYear == currentYear
+                ? $"Copyright © {currentYear}"
+                : $"Copyright © {startYear}-{currentYear}";
+        }
 
         private string selectedTheme;
         public string SelectedTheme

@@ -175,6 +175,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.Resources>
                         <Style TargetType="TextBlock" x:Key="InfoLabelStyle">
@@ -190,7 +191,19 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1">
                         <TextBlock Text="{DynamicResource t96}" Style="{StaticResource InfoLabelStyle}" />
-                        <TextBlock Text="NeathCopy v3.8"/>
+                        <TextBlock Text="{Binding NeathCopyVersion}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2">
+                        <TextBlock Text="Company:" Style="{StaticResource InfoLabelStyle}" />
+                        <TextBlock Text="{Binding NeathCopyCompany}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="3">
+                        <TextBlock Text="Email:" Style="{StaticResource InfoLabelStyle}" />
+                        <TextBlock Text="eneleichllc@gmail.com"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="4">
+                        <TextBlock Text="Copyright:" Style="{StaticResource InfoLabelStyle}" />
+                        <TextBlock Text="{Binding NeathCopyCopyright}"/>
                     </StackPanel>
                 </Grid>
             </TabItem>

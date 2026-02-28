@@ -1,5 +1,7 @@
 using NeathCopy.Module2_Configuration;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Input;
 
 namespace NeathCopy.ViewModels
 {
@@ -17,5 +19,7 @@ namespace NeathCopy.ViewModels
         {
             AddDataBehaviours = Configuration.addDataFac.AddDataBehaviours;
         }
+
+        public string NeathCopyVersion => "NeathCopy " + GetType().Assembly.GetName().Version.ToString(3);
     }
 }
