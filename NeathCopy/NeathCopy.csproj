@@ -158,6 +158,9 @@
     <Compile Include="UsedWindows\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UsedWindows\PackageCopierWindow.xaml.cs">
+      <DependentUpon>PackageCopierWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UsedWindows\ScriptHooksWindow.xaml.cs">
       <DependentUpon>ScriptHooksWindow.xaml</DependentUpon>
     </Compile>
@@ -179,6 +182,7 @@
     <Compile Include="ViewModels\FormattedDriveInfo.cs" />
     <Compile Include="ViewModels\InformationWindowViewModel.cs" />
     <Compile Include="ViewModels\MessageWindowViewModel.cs" />
+    <Compile Include="ViewModels\PackageCopierWindowViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\UserDropUIWindowViewModel.cs" />
     <Compile Include="ViewModels\VideoConversionViewModel.cs" />
@@ -350,6 +354,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UsedWindows\MessageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UsedWindows\PackageCopierWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

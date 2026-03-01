@@ -17,7 +17,7 @@ namespace NeathCopyEngine.Helpers
         /// <param name="count"></param>
         public static void RemoveRange(this ObservableCollection<FileDataInfo> list, int startIndex, int count)
         {
-            for (int i = startIndex;i < startIndex+count; i++)
+            for (int i = startIndex + count - 1; i >= startIndex; i--)
             {
                 list.RemoveAt(i);
             }

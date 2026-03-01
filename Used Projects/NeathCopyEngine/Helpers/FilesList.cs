@@ -2,7 +2,6 @@
 using NeathCopyEngine.DataTools;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -30,7 +29,7 @@ namespace NeathCopyEngine.Helpers
         /// <summary>
         ///Get List of DiscoverFile to Copy.
         /// </summary>
-        public ObservableCollection<FileDataInfo> Files { get; set; }
+        public BulkObservableCollection<FileDataInfo> Files { get; set; }
         /// <summary>
         /// Get the List of all Emptys directories.
         /// </summary>
@@ -136,7 +135,7 @@ namespace NeathCopyEngine.Helpers
 
         public FilesList()
         {
-            Files = new ObservableCollection<FileDataInfo>();
+            Files = new BulkObservableCollection<FileDataInfo>();
             EmptyDirectories = new List<DirectoryDataInfo>();
             Directories = new List<DirectoryDataInfo>();
             SourcesDirectories = new List<string>();

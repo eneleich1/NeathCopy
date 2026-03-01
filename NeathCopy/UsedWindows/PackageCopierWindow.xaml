@@ -1,0 +1,149 @@
+<Window x:Class="NeathCopy.UsedWindows.PackageCopierWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Package Copier"
+        Style="{DynamicResource UsedWindowStyle}"
+        MinWidth="920"
+        MinHeight="660"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner"
+        Icon="/NeathCopy;component/Brushes/Images/Light/list.png"
+        Closing="Window_Closing">
+    <Grid Margin="8"
+          Background="{DynamicResource ControlBackgroundBrush}"
+          TextElement.Foreground="{DynamicResource TextBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Grid.Row="0" Grid.Column="0" Header="Sources" Margin="0,0,6,0">
+            <Grid Margin="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <WrapPanel Margin="0,0,0,8">
+                    <Button Content="Add Files" Width="90" Margin="0,0,8,0" Click="AddSourceFiles_Click"/>
+                    <Button Content="Add Folder" Width="90" Margin="0,0,8,0" Click="AddSourceFolder_Click"/>
+                    <Button Content="Remove Selected" Width="120" Margin="0,0,8,0" Click="RemoveSources_Click"/>
+                    <Button Content="Clear" Width="70" Click="ClearSources_Click"/>
+                </WrapPanel>
+
+                <ListBox Grid.Row="1"
+                         Name="sourcesListBox"
+                         SelectionMode="Extended"
+                         AllowDrop="True"
+                         DragOver="SourcesListBox_DragOver"
+                         Drop="SourcesListBox_Drop"
+                         ItemsSource="{Binding Sources}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,2,0,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Type}" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Path}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Path}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="0" Grid.Column="1" Header="Destinations" Margin="6,0,0,0">
+            <Grid Margin="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <WrapPanel Margin="0,0,0,8">
+                    <Button Content="Add Folder" Width="90" Margin="0,0,8,0" Click="AddDestination_Click"/>
+                    <Button Content="Remove Selected" Width="120" Margin="0,0,8,0" Click="RemoveDestinations_Click"/>
+                    <Button Content="Clear" Width="70" Click="ClearDestinations_Click"/>
+                </WrapPanel>
+
+                <ListBox Grid.Row="1"
+                         Name="destinationsListBox"
+                         SelectionMode="Extended"
+                         AllowDrop="True"
+                         DragOver="DestinationsListBox_DragOver"
+                         Drop="DestinationsListBox_Drop"
+                         ItemsSource="{Binding Destinations}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Path}" Margin="0,2,0,2"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="Settings" Margin="0,8,0,0">
+            <Grid Margin="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock VerticalAlignment="Center" Text="Threads"/>
+                <TextBox Grid.Column="1"
+                         Margin="8,0,0,0"
+                         Width="80"
+                         HorizontalAlignment="Left"
+                         Text="{Binding ThreadsText, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="{Binding StatusText}" TextTrimming="CharacterEllipsis"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Progress" Margin="0,8,0,0">
+            <Grid Margin="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Overall" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <ProgressBar Minimum="0"
+                                 Maximum="100"
+                                 Height="16"
+                                 Width="360"
+                                 Value="{Binding OverallProgress, Mode=OneWay}"
+                                 Foreground="{DynamicResource ProgressBarIndicatorBrush}"
+                                 Background="{DynamicResource ProgressBarTrackBrush}"/>
+                    <TextBlock Margin="8,0,0,0"
+                               VerticalAlignment="Center"
+                               Text="{Binding OverallProgress, StringFormat={}{0:F0}%}"/>
+                </StackPanel>
+                <TextBox Grid.Row="1"
+                         Margin="0,8,0,0"
+                         Height="180"
+                         IsReadOnly="True"
+                         TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Auto"
+                         Text="{Binding LogText, Mode=OneWay}"
+                         TextChanged="LogTextBox_TextChanged"/>
+            </Grid>
+        </GroupBox>
+
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+            <Button Content="Start Copy" Width="110" Margin="0,0,8,0" Command="{Binding StartCommand}"/>
+            <Button Content="Cancel" Width="90" Margin="0,0,8,0" Command="{Binding CancelCommand}"/>
+            <Button Content="Close" Width="90" Click="Close_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

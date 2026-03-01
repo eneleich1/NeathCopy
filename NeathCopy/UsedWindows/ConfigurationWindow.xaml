@@ -16,6 +16,7 @@
             <MenuItem Header="{DynamicResource t60}" Name="toolsMenu">
                 <MenuItem Header="Video Conversion (FFmpeg)" Click="VideoConversionMenu_Click"/>
                 <MenuItem Header="Script Hooks" Click="ScriptHooksMenu_Click"/>
+                <MenuItem Header="Package Copier" Click="PackageCopierMenu_Click"/>
             </MenuItem>
         </Menu>
         <TabControl Grid.Row="1" Margin="5">

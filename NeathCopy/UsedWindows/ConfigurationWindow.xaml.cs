@@ -52,5 +52,25 @@ namespace NeathCopy.UsedWindows
             };
             window.ShowDialog();
         }
+
+        private void PackageCopierMenu_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var window = new PackageCopierWindow
+                    {
+                        Owner = this,
+                        WindowStartupLocation = WindowStartupLocation.CenterOwner
+                    };
+                    window.Show();
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Package Copier Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }
