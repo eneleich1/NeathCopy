@@ -69,6 +69,7 @@
     <Compile Include="Exceptions\NotEnoughSpaceException.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\BulkObservableCollection.cs" />
+    <Compile Include="Helpers\AtomicSerializer.cs" />
     <Compile Include="Helpers\FilesList.cs" />
     <Compile Include="Helpers\LongPathHelper.cs" />
     <Compile Include="Helpers\MetadataRestorer.cs" />

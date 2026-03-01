@@ -72,5 +72,15 @@ namespace NeathCopy.UsedWindows
                 MessageBox.Show(ex.ToString(), "Package Copier Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void CrashRecoveryBrowse_Click(object sender, RoutedEventArgs e)
+        {
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                dialog.SelectedPath = viewModel.CrashRecoveryFolder;
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    viewModel.CrashRecoveryFolder = dialog.SelectedPath;
+            }
+        }
     }
 }

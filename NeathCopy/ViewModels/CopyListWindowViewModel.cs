@@ -266,7 +266,7 @@ namespace NeathCopy.ViewModels
 
             var ofd = new System.Windows.Forms.OpenFileDialog
             {
-                Filter = "cnl Files (*.cnl)|*.cnl"
+                Filter = "Compressed Lists (*.cnl;*.ncopylist)|*.cnl;*.ncopylist|cnl Files (*.cnl)|*.cnl|Recovery Lists (*.ncopylist)|*.ncopylist"
             };
 
             var dlgResult = ofd.ShowDialog();

@@ -115,6 +115,15 @@ namespace NeathCopyEngine.CopyHandlers
         public MultiDestinationCopyRequest MultiDestinationRequest { get; private set; }
         private volatile bool pauseAfterSkipRequested;
         private MultiDestinationCollisionMode multiDestinationCollisionMode = MultiDestinationCollisionMode.Ask;
+        public bool CrashRecoveryEnabled { get; set; }
+        public string CrashRecoveryFolder { get; set; }
+        public string CrashRecoveryCheckpointPath { get; private set; }
+        SerializableFilesList crashRecoveryList;
+        readonly object crashLock = new object();
+        bool crashRecoveryInitialized;
+        string crashRecoveryOperation;
+        bool crashRecoveryMultipleDestiny;
+        bool crashRecoverySavedAtCancel;
 
         #endregion
 
@@ -133,7 +142,60 @@ namespace NeathCopyEngine.CopyHandlers
             transferErrorOption = TransferErrorOption.SkipCurrentFile;
             FileCollisionAction = AllwaysAsk;
             logsPath = Path.Combine(RegisterAccess.Acces.GetLogsDir(), "Errors Log.txt");
+            CrashRecoveryEnabled = false;
+            CrashRecoveryFolder = GetDefaultFilesListFolder();
+            CrashRecoveryCheckpointPath = null;
+            crashRecoveryList = null;
+            crashRecoveryInitialized = false;
+            crashRecoverySavedAtCancel = false;
 
+        }
+
+        public void InitializeCrashRecovery(string destinyLabelOrPath, string operation, bool multipleDestiny)
+        {
+            if (!CrashRecoveryEnabled)
+                return;
+
+            lock (crashLock)
+            {
+                var folder = string.IsNullOrWhiteSpace(CrashRecoveryFolder)
+                    ? GetDefaultFilesListFolder()
+                    : CrashRecoveryFolder;
+                folder = LongPathHelper.Normalize(folder);
+                Directory.CreateDirectory(folder);
+
+                crashRecoveryOperation = string.IsNullOrWhiteSpace(operation) ? "copy" : operation;
+                crashRecoveryMultipleDestiny = multipleDestiny;
+
+                var label = SanitizeFileName(string.IsNullOrWhiteSpace(destinyLabelOrPath) ? "UnknownDestiny" : destinyLabelOrPath);
+                if (label.Length > 80)
+                    label = label.Substring(0, 80);
+
+                var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                var fileName = string.Format("{0}_{1}.ncopylist", label, timestamp);
+                var fullPath = LongPathHelper.Normalize(Path.Combine(folder, fileName));
+                if (File.Exists(fullPath))
+                {
+                    var suffix = 1;
+                    while (true)
+                    {
+                        var candidate = LongPathHelper.Normalize(
+                            Path.Combine(folder, string.Format("{0}_{1}_{2}.ncopylist", label, timestamp, suffix)));
+                        if (!File.Exists(candidate))
+                        {
+                            fullPath = candidate;
+                            break;
+                        }
+                        suffix++;
+                    }
+                }
+                CrashRecoveryCheckpointPath = fullPath;
+
+                BuildCrashRecoveryListSnapshot();
+                SaveCrashRecoveryCheckpointUnsafe();
+                crashRecoveryInitialized = true;
+                crashRecoverySavedAtCancel = false;
+            }
         }
 
         public void ConfigureMultiDestinationCopy(MultiDestinationCopyRequest request, int bufferSize)
@@ -254,6 +316,7 @@ namespace NeathCopyEngine.CopyHandlers
             {
                 operationCts?.Dispose();
                 operationCts = new CancellationTokenSource();
+                crashRecoverySavedAtCancel = false;
                 pauseGate.Set();
                 ConfigureExecutionContext();
 
@@ -286,6 +349,7 @@ namespace NeathCopyEngine.CopyHandlers
         #region Affter File Copy Action
         void DoNothing(FileDataInfo currentFile)
         {
+            FinalizeTempDestinationForFile(currentFile);
             try
             {
                 MetadataRestorer.RestoreFileMetadata(currentFile.FullName, currentFile.DestinyPath);
@@ -300,6 +364,7 @@ namespace NeathCopyEngine.CopyHandlers
         /// <param name="currentFile"></param>
         void DeleteFile(FileDataInfo currentFile)
         {
+            FinalizeTempDestinationForFile(currentFile);
             try
             {
                 MetadataRestorer.RestoreFileMetadata(currentFile.FullName, currentFile.DestinyPath);
@@ -454,7 +519,18 @@ namespace NeathCopyEngine.CopyHandlers
                     if (DiscoverdList.Count == 0 || DiscoverdList.Index >= DiscoverdList.Count) 
                         return CopyRoutineResult.Error;
                     CurrentFile = DiscoverdList.Files[DiscoverdList.Index];
+
+                    if (CurrentFile.CopyState == CopyState.Copied || CurrentFile.CopyState == CopyState.Moved)
+                    {
+                        FileCopier.TotalBytesTransferred += CurrentFile.Size;
+                        CopiedsFiles++;
+                        UpdateCrashRecoveryForCurrentFile(CurrentFile.CopyState, false);
+                        continue;
+                    }
+
                     CurrentFile.CopyState = CopyState.Processing;
+                    PrepareTempDestinationIfNeeded(fastMove);
+                    UpdateCrashRecoveryForCurrentFile(CopyState.Processing, true);
 
                     //Create the Directories.
                     
@@ -482,14 +558,18 @@ namespace NeathCopyEngine.CopyHandlers
                         {
                             // Skip counts as processed but must not be marked as copied/moved.
                             CopiedsFiles++;
+                            CleanupTempDestinationIfNeeded();
                         }
                         else
                         {
                             CurrentFile.CopyState = affeterOperationState;
+                            FinalizeTempDestinationIfNeeded();
 
                             //Status.
                             CopiedsFiles++;
                         }
+
+                        UpdateCrashRecoveryForCurrentFile(CurrentFile.CopyState, false);
 
                     }
 
@@ -497,7 +577,10 @@ namespace NeathCopyEngine.CopyHandlers
                 catch (Exception ex)
                 {
                     if (CurrentFile != null && CurrentFile.CopyState == CopyState.Skiped)
+                    {
+                        UpdateCrashRecoveryForCurrentFile(CurrentFile.CopyState, false);
                         continue;
+                    }
 
                     opt = ErrorsCheck(ex);
 
@@ -511,7 +594,11 @@ namespace NeathCopyEngine.CopyHandlers
                         FileCopier.FileBytesTransferred = 0;
                     }
                     else if (!(ex is ThreadAbortException))
+                    {
                         CurrentFile.CopyState = CopyState.Error;
+                        CleanupTempDestinationIfNeeded();
+                        UpdateCrashRecoveryForCurrentFile(CurrentFile.CopyState, false);
+                    }
                 }
 
             }
@@ -675,6 +762,7 @@ namespace NeathCopyEngine.CopyHandlers
             MultiDestinationRequest = null;
             State = CopyHandleState.Runing;
             ConfigureExecutionContext();
+            EnsureCrashRecoveryInitializedForCurrentOperation("copy", false);
 
             AffterFileCopyAction = DoNothing;
             affeterOperationState = CopyState.Copied;
@@ -693,6 +781,7 @@ namespace NeathCopyEngine.CopyHandlers
 
             CreateEmptysDirectories(DiscoverdList);
             RestoreAllDirectoriesMetadata();
+            SaveCrashRecoveryCheckpointBestEffort();
 
             State = CopyHandleState.Finished;
 
@@ -702,6 +791,7 @@ namespace NeathCopyEngine.CopyHandlers
             MultiDestinationRequest = null;
             State = CopyHandleState.Runing;
             ConfigureExecutionContext();
+            EnsureCrashRecoveryInitializedForCurrentOperation("move", false);
 
             AffterFileCopyAction = DeleteFile;
             affeterOperationState = CopyState.Moved;
@@ -743,6 +833,7 @@ namespace NeathCopyEngine.CopyHandlers
             }
 
             #endregion
+            SaveCrashRecoveryCheckpointBestEffort();
 
             State = CopyHandleState.Finished;
 
@@ -752,6 +843,7 @@ namespace NeathCopyEngine.CopyHandlers
             MultiDestinationRequest = null;
             State = CopyHandleState.Runing;
             ConfigureExecutionContext();
+            EnsureCrashRecoveryInitializedForCurrentOperation("fastmove", false);
 
             AffterFileCopyAction = DoNothing;
             affeterOperationState = CopyState.Moved;
@@ -771,6 +863,7 @@ namespace NeathCopyEngine.CopyHandlers
             //Creating empty directories
             CreateEmptysDirectories(DiscoverdList);
             RestoreAllDirectoriesMetadata();
+            SaveCrashRecoveryCheckpointBestEffort();
 
             State = CopyHandleState.Finished;
         }
@@ -779,6 +872,7 @@ namespace NeathCopyEngine.CopyHandlers
         {
             State = CopyHandleState.Runing;
             ConfigureExecutionContext();
+            EnsureCrashRecoveryInitializedForCurrentOperation("copy", true);
 
             var request = MultiDestinationRequest;
             if (request == null || request.Items == null || request.Items.Count == 0)
@@ -808,6 +902,7 @@ namespace NeathCopyEngine.CopyHandlers
 
                     CurrentFile = DiscoverdList.Files[DiscoverdList.Index];
                     CurrentFile.CopyState = CopyState.Processing;
+                    UpdateCrashRecoveryForCurrentFile(CopyState.Processing, true);
 
                     var item = request.Items[DiscoverdList.Index];
                     var collisionDecision = ResolveMultiDestinationCollision(item, request);
@@ -838,21 +933,29 @@ namespace NeathCopyEngine.CopyHandlers
 
                     CurrentFile.CopyState = skipped ? CopyState.Skiped : CopyState.Copied;
                     CopiedsFiles++;
+                    UpdateCrashRecoveryForCurrentFile(CurrentFile.CopyState, false);
                 }
                 catch (OperationCanceledException)
                 {
+                    SaveCrashRecoveryCheckpointBestEffort();
                     State = CopyHandleState.Canceled;
                     return;
                 }
                 catch (Exception ex)
                 {
                     Errors.Add(new CopyError { Message = ex.Message });
+                    if (CurrentFile != null)
+                    {
+                        CurrentFile.CopyState = CopyState.Error;
+                        UpdateCrashRecoveryForCurrentFile(CurrentFile.CopyState, false);
+                    }
                     RaiseTransferError(this, CurrentFile, ex.Message);
                     Cancel("Multi-destination write failed");
                     return;
                 }
             }
 
+            SaveCrashRecoveryCheckpointBestEffort();
             State = CopyHandleState.Finished;
         }
 
@@ -1013,6 +1116,12 @@ namespace NeathCopyEngine.CopyHandlers
 
                 //Inform cancel action.
                 RaiseCanceled(cause);
+
+                if (!crashRecoverySavedAtCancel)
+                {
+                    crashRecoverySavedAtCancel = true;
+                    SaveCrashRecoveryCheckpointBestEffort();
+                }
             }
             catch (Exception ex)
             {
@@ -1025,6 +1134,208 @@ namespace NeathCopyEngine.CopyHandlers
                 }
 
             }
+        }
+
+        private void EnsureCrashRecoveryInitializedForCurrentOperation(string operation, bool multipleDestiny)
+        {
+            if (!CrashRecoveryEnabled)
+                return;
+
+            if (crashRecoveryInitialized)
+                return;
+
+            var destinyLabel = "UnknownDestiny";
+            if (DiscoverdList != null && DiscoverdList.Destinys != null && DiscoverdList.Destinys.Count > 0)
+                destinyLabel = multipleDestiny
+                    ? string.Format("Multiple_{0}", DiscoverdList.Destinys.Count)
+                    : DiscoverdList.Destinys[0];
+
+            InitializeCrashRecovery(destinyLabel, operation, multipleDestiny);
+        }
+
+        private void BuildCrashRecoveryListSnapshot()
+        {
+            var files = new List<FileOnList>();
+            if (DiscoverdList != null && DiscoverdList.Files != null)
+            {
+                files = DiscoverdList.Files.Select(f => new FileOnList
+                {
+                    From = f.FullName,
+                    To = f.DestinyPath,
+                    CopyState = f.CopyState
+                }).ToList();
+            }
+
+            crashRecoveryList = new SerializableFilesList
+            {
+                Operation = string.IsNullOrWhiteSpace(crashRecoveryOperation)
+                    ? (DiscoverdList == null ? "copy" : DiscoverdList.Operation)
+                    : crashRecoveryOperation,
+                MultipleDestiny = crashRecoveryMultipleDestiny,
+                Files = files,
+                CurrentIndex = DiscoverdList == null ? 0 : DiscoverdList.Index,
+                JobId = string.IsNullOrWhiteSpace(crashRecoveryList == null ? null : crashRecoveryList.JobId)
+                    ? Guid.NewGuid().ToString("N")
+                    : crashRecoveryList.JobId,
+                CreatedUtc = crashRecoveryList == null || crashRecoveryList.CreatedUtc == default(DateTime)
+                    ? DateTime.UtcNow
+                    : crashRecoveryList.CreatedUtc,
+                UpdatedUtc = DateTime.UtcNow
+            };
+        }
+
+        private void UpdateCrashRecoveryForCurrentFile(CopyState state, bool setIndexAsCurrent)
+        {
+            if (!CrashRecoveryEnabled || !crashRecoveryInitialized)
+                return;
+
+            lock (crashLock)
+            {
+                if (crashRecoveryList == null)
+                    BuildCrashRecoveryListSnapshot();
+
+                if (crashRecoveryList == null)
+                    return;
+
+                var idx = DiscoverdList == null ? -1 : DiscoverdList.Index;
+                if (idx >= 0)
+                {
+                    crashRecoveryList.CurrentIndex = idx;
+                    if (idx < crashRecoveryList.Files.Count)
+                        crashRecoveryList.Files[idx].CopyState = state;
+                }
+
+                if (setIndexAsCurrent && idx >= 0)
+                    crashRecoveryList.CurrentIndex = idx;
+
+                crashRecoveryList.UpdatedUtc = DateTime.UtcNow;
+                SaveCrashRecoveryCheckpointUnsafe();
+            }
+        }
+
+        private void SaveCrashRecoveryCheckpointBestEffort()
+        {
+            try
+            {
+                if (!CrashRecoveryEnabled || !crashRecoveryInitialized)
+                    return;
+
+                lock (crashLock)
+                {
+                    if (crashRecoveryList == null)
+                        BuildCrashRecoveryListSnapshot();
+                    else if (DiscoverdList != null)
+                        crashRecoveryList.CurrentIndex = DiscoverdList.Index;
+
+                    if (crashRecoveryList != null)
+                    {
+                        crashRecoveryList.UpdatedUtc = DateTime.UtcNow;
+                        SaveCrashRecoveryCheckpointUnsafe();
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private void SaveCrashRecoveryCheckpointUnsafe()
+        {
+            if (crashRecoveryList == null || string.IsNullOrWhiteSpace(CrashRecoveryCheckpointPath))
+                return;
+
+            AtomicSerializer.SerializeCompressedAtomic(
+                crashRecoveryList,
+                typeof(SerializableFilesList),
+                CrashRecoveryCheckpointPath);
+        }
+
+        private void PrepareTempDestinationIfNeeded(bool fastMove)
+        {
+            if (!CrashRecoveryEnabled || fastMove || CurrentFile == null)
+                return;
+
+            var tempPath = CurrentFile.DestinyPath + ".neathcopytmp";
+            CurrentFile.TempDestinyPath = tempPath;
+            try
+            {
+                var normalized = LongPathHelper.Normalize(tempPath);
+                if (File.Exists(normalized))
+                    File.Delete(normalized);
+            }
+            catch
+            {
+            }
+        }
+
+        private void FinalizeTempDestinationIfNeeded()
+        {
+            FinalizeTempDestinationForFile(CurrentFile);
+        }
+
+        private void FinalizeTempDestinationForFile(FileDataInfo file)
+        {
+            if (!CrashRecoveryEnabled || file == null || string.IsNullOrWhiteSpace(file.TempDestinyPath))
+                return;
+
+            var tempPath = LongPathHelper.Normalize(file.TempDestinyPath);
+            var finalPath = LongPathHelper.Normalize(file.DestinyPath);
+            try
+            {
+                if (File.Exists(finalPath))
+                    File.Delete(finalPath);
+
+                if (File.Exists(tempPath))
+                    File.Move(tempPath, finalPath);
+            }
+            finally
+            {
+                file.TempDestinyPath = null;
+            }
+        }
+
+        private void CleanupTempDestinationIfNeeded()
+        {
+            if (CurrentFile == null || string.IsNullOrWhiteSpace(CurrentFile.TempDestinyPath))
+                return;
+
+            try
+            {
+                var tempPath = LongPathHelper.Normalize(CurrentFile.TempDestinyPath);
+                if (File.Exists(tempPath))
+                    File.Delete(tempPath);
+            }
+            catch
+            {
+            }
+            finally
+            {
+                CurrentFile.TempDestinyPath = null;
+            }
+        }
+
+        private static string SanitizeFileName(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return "CrashRecovery";
+
+            var invalid = Path.GetInvalidFileNameChars();
+            var clean = new string(value.Select(c => invalid.Contains(c) ? '_' : c).ToArray());
+            clean = clean.Replace(':', '_').Replace('\\', '_').Replace('/', '_');
+            while (clean.Contains("__"))
+                clean = clean.Replace("__", "_");
+
+            clean = clean.Trim('_', ' ', '.');
+            return string.IsNullOrWhiteSpace(clean) ? "CrashRecovery" : clean;
+        }
+
+        private static string GetDefaultFilesListFolder()
+        {
+            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (string.IsNullOrWhiteSpace(documents))
+                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FilesList");
+
+            return Path.Combine(documents, "NeathCopy", "FilesList");
         }
 
         #endregion

@@ -94,6 +94,23 @@
                             <CheckBox Margin="0,6,0,0" Content="{DynamicResource t125}" IsChecked="{Binding IsDefaultCopyHandler}"/>
                         </StackPanel>
                     </GroupBox>
+                    <Separator/>
+                    <GroupBox Header="Crash Recovery" HorizontalAlignment="Left">
+                        <StackPanel Margin="3" Width="420">
+                            <CheckBox Margin="0,3,0,3"
+                                      Content="Enable checkpoints for crash/power-outage recovery"
+                                      IsChecked="{Binding CrashRecoveryEnabled}"/>
+                            <TextBlock Text="Checkpoint folder"/>
+                            <DockPanel Margin="0,3,0,0">
+                                <Button DockPanel.Dock="Right"
+                                        Width="68"
+                                        Margin="8,0,0,0"
+                                        Content="Browse..."
+                                        Click="CrashRecoveryBrowse_Click"/>
+                                <TextBox Text="{Binding CrashRecoveryFolder, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DockPanel>
+                        </StackPanel>
+                    </GroupBox>
                 </StackPanel>
             </TabItem>
             <TabItem Header="{DynamicResource t79}" >

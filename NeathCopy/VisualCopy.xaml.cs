@@ -741,6 +741,23 @@ namespace NeathCopy
 
                 InitCopyEngine();
 
+                NeathCopy.CrashRecoveryEnabled = Configuration.Main.CrashRecoveryEnabled;
+                NeathCopy.CrashRecoveryFolder = Configuration.Main.CrashRecoveryFolder;
+                if (NeathCopy.CrashRecoveryEnabled)
+                {
+                    var destinyLabel = RequestInf != null && !string.IsNullOrWhiteSpace(RequestInf.Destiny)
+                        ? RequestInf.Destiny
+                        : (NeathCopy.DiscoverdList.Destinys != null && NeathCopy.DiscoverdList.Destinys.Count > 0
+                            ? NeathCopy.DiscoverdList.Destinys[0]
+                            : "UnknownDestiny");
+
+                    var operation = RequestInf == null ? "copy" : RequestInf.Operation;
+                    var isMultipleDestiny = (RequestInf != null && RequestInf.Content == RquestContent.FromList && loadedList != null && loadedList.MultipleDestiny)
+                        || (RequestInf != null && RequestInf.Content == RquestContent.MultiDestinationPackageCopy)
+                        || (NeathCopy.DiscoverdList.Destinys != null && NeathCopy.DiscoverdList.Destinys.Count > 1);
+                    NeathCopy.InitializeCrashRecovery(destinyLabel, operation, isMultipleDestiny);
+                }
+
                 NeathCopy.StartOperation();
             }
             catch(Exception ex)
@@ -1219,7 +1236,9 @@ namespace NeathCopy
         {
             public List<FileDataInfo> Files { get; set; }
             public long TotalSize { get; set; }
+            public long RemainingSize { get; set; }
             public int FileCount { get; set; }
+            public int CurrentIndex { get; set; }
         }
 
         private sealed class MultiDestinationLoadResult
@@ -1298,7 +1317,8 @@ namespace NeathCopy
                 NeathCopy.DiscoverdList.Files.AddRange(result.Files);
                 NeathCopy.DiscoverdList.Count += result.FileCount;
                 NeathCopy.DiscoverdList.Size += result.TotalSize;
-                NeathCopy.DiscoverdList.SizeOfFilesToCopy += result.TotalSize;
+                NeathCopy.DiscoverdList.SizeOfFilesToCopy += result.RemainingSize;
+                NeathCopy.DiscoverdList.Index = Math.Max(0, Math.Min(result.CurrentIndex, NeathCopy.DiscoverdList.Count));
                 NeathCopy.DiscoverdList.DiscoveringState = FilesList.DiscoverState.Normal;
                 RequestInf.Content = RquestContent.FromList;
             });
@@ -1310,13 +1330,20 @@ namespace NeathCopy
             {
                 var files = new List<FileDataInfo>();
                 long totalSize = 0;
+                long remainingSize = 0;
                 int fileCount = 0;
+                var currentIndex = loadedList == null ? 0 : loadedList.CurrentIndex;
 
                 foreach (FileOnList sourceFile in loadedList.Files)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var fileInfo = new System.IO.FileInfo(LongPathHelper.Normalize(sourceFile.From));
+                    var normalizedFrom = LongPathHelper.Normalize(sourceFile.From);
+                    var sourceExists = File.Exists(normalizedFrom);
+                    if (!sourceExists && sourceFile.CopyState != CopyState.Copied && sourceFile.CopyState != CopyState.Moved)
+                        throw new FileNotFoundException("Source file not found for recovery list.", sourceFile.From);
+
+                    var fileInfo = sourceExists ? new System.IO.FileInfo(normalizedFrom) : null;
                     var destinyPath = loadedList.MultipleDestiny
                         ? sourceFile.To
                         : System.IO.Path.Combine(RequestInf.Destiny, sourceFile.To.Remove(0, 3));
@@ -1325,13 +1352,14 @@ namespace NeathCopy
                     {
                         SourceDirectoryLength = 2,
                         FullName = sourceFile.From,
-                        Name = fileInfo.Name,
+                        Name = fileInfo == null ? System.IO.Path.GetFileName(sourceFile.From) : fileInfo.Name,
                         DestinyPath = destinyPath,
-                        CreationTime = fileInfo.CreationTime,
-                        LastAccessTime = fileInfo.LastAccessTime,
-                        LastWriteTime = fileInfo.LastWriteTime,
-                        Size = fileInfo.Length,
-                        FileAttributes = fileInfo.Attributes
+                        CreationTime = fileInfo == null ? DateTime.Now : fileInfo.CreationTime,
+                        LastAccessTime = fileInfo == null ? DateTime.Now : fileInfo.LastAccessTime,
+                        LastWriteTime = fileInfo == null ? DateTime.Now : fileInfo.LastWriteTime,
+                        Size = fileInfo == null ? 0 : fileInfo.Length,
+                        FileAttributes = fileInfo == null ? FileAttributes.Normal : fileInfo.Attributes,
+                        CopyState = sourceFile.CopyState
                     };
 
                     file.DestinyDirectoryPath = System.IO.Path.GetDirectoryName(file.DestinyPath);
@@ -1339,13 +1367,17 @@ namespace NeathCopy
                     files.Add(file);
                     fileCount++;
                     totalSize += file.Size;
+                    if (file.CopyState != CopyState.Copied && file.CopyState != CopyState.Moved)
+                        remainingSize += file.Size;
                 }
 
                 return new ListLoadResult
                 {
                     Files = files,
                     FileCount = fileCount,
-                    TotalSize = totalSize
+                    TotalSize = totalSize,
+                    RemainingSize = remainingSize,
+                    CurrentIndex = currentIndex
                 };
             }, cancellationToken);
         }

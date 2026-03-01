@@ -200,6 +200,32 @@ namespace NeathCopy.Module2_Configuration
             }
         }
 
+        bool crashRecoveryEnabled;
+        public bool CrashRecoveryEnabled
+        {
+            get { return crashRecoveryEnabled; }
+            set
+            {
+                crashRecoveryEnabled = value;
+                RegisterAccess.Acces.SetConfigurationValue("CrashRecoveryEnabled", crashRecoveryEnabled ? "1" : "0");
+                RaiseSettingChanged();
+            }
+        }
+
+        string crashRecoveryFolder;
+        public string CrashRecoveryFolder
+        {
+            get { return crashRecoveryFolder; }
+            set
+            {
+                crashRecoveryFolder = string.IsNullOrWhiteSpace(value)
+                    ? GetDefaultFilesListFolder()
+                    : value;
+                RegisterAccess.Acces.SetConfigurationValue("CrashRecoveryFolder", crashRecoveryFolder);
+                RaiseSettingChanged();
+            }
+        }
+
         public static Dictionary<string, FileCopier> FileCopiers;
             //new FasterBufferFileCopier(1024*1024)
             //,new NotCopyFileCopier(1024)
@@ -487,6 +513,8 @@ namespace NeathCopy.Module2_Configuration
             config.UpdateTimeInterval = 200;
             config.IntegrationMode = "TrayIPC";
             config.IsDefaultCopyHandler = false;
+            config.CrashRecoveryEnabled = false;
+            config.CrashRecoveryFolder = GetDefaultFilesListFolder();
 
             return config;
         }
@@ -527,6 +555,12 @@ namespace NeathCopy.Module2_Configuration
                 config.IntegrationMode = string.IsNullOrWhiteSpace(modeValue) ? "TrayIPC" : modeValue;
 
                 config.isDefaultCopyHandler = RegisterAccess.Acces.IsDefaultCopyHandlerFlag();
+                config.CrashRecoveryEnabled = ParseBoolOrDefault(
+                    RegisterAccess.Acces.GetConfigurationValue("CrashRecoveryEnabled"),
+                    false);
+                config.CrashRecoveryFolder = ParseStringOrDefault(
+                    RegisterAccess.Acces.GetConfigurationValue("CrashRecoveryFolder"),
+                    GetDefaultFilesListFolder());
 
                 return config;
 
@@ -540,6 +574,34 @@ namespace NeathCopy.Module2_Configuration
         }
 
         #endregion
+
+        private static bool ParseBoolOrDefault(string value, bool defaultValue)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return defaultValue;
+
+            if (value == "1")
+                return true;
+            if (value == "0")
+                return false;
+
+            bool parsed;
+            return bool.TryParse(value, out parsed) ? parsed : defaultValue;
+        }
+
+        private static string ParseStringOrDefault(string value, string defaultValue)
+        {
+            return string.IsNullOrWhiteSpace(value) ? defaultValue : value;
+        }
+
+        private static string GetDefaultFilesListFolder()
+        {
+            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (string.IsNullOrWhiteSpace(documents))
+                return Path.Combine(AppDirectory, "FilesList");
+
+            return Path.Combine(documents, "NeathCopy", "FilesList");
+        }
 
         #region Event Handlers
 

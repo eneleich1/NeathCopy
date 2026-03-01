@@ -268,9 +268,23 @@ namespace NeathCopyEngine.Helpers
         {
             try
             {
-                var files = Files.Select(f => new FileOnList { From = f.FullName, To = f.DestinyPath}).ToList();
+                var files = Files.Select(f => new FileOnList
+                {
+                    From = f.FullName,
+                    To = f.DestinyPath,
+                    CopyState = f.CopyState
+                }).ToList();
 
-                var list = new SerializableFilesList { Files = files, MultipleDestiny = false , Operation=this.Operation};
+                var list = new SerializableFilesList
+                {
+                    Files = files,
+                    MultipleDestiny = false,
+                    Operation = this.Operation,
+                    CurrentIndex = this.Index,
+                    JobId = Guid.NewGuid().ToString("N"),
+                    CreatedUtc = DateTime.UtcNow,
+                    UpdatedUtc = DateTime.UtcNow
+                };
 
                 MySerializer.Serialize(list, typeof(SerializableFilesList), fileName);
             }
@@ -300,9 +314,23 @@ namespace NeathCopyEngine.Helpers
         {
             try
             {
-                var files = Files.Select(f => new FileOnList { From = f.FullName, To=f.DestinyPath}).ToList();
+                var files = Files.Select(f => new FileOnList
+                {
+                    From = f.FullName,
+                    To = f.DestinyPath,
+                    CopyState = f.CopyState
+                }).ToList();
 
-                var list = new SerializableFilesList { Files = files, MultipleDestiny = true, Operation = this.Operation };
+                var list = new SerializableFilesList
+                {
+                    Files = files,
+                    MultipleDestiny = true,
+                    Operation = this.Operation,
+                    CurrentIndex = this.Index,
+                    JobId = Guid.NewGuid().ToString("N"),
+                    CreatedUtc = DateTime.UtcNow,
+                    UpdatedUtc = DateTime.UtcNow
+                };
 
                 MySerializer.Serialize(list, typeof(SerializableFilesList), fileName);
             }
@@ -332,9 +360,23 @@ namespace NeathCopyEngine.Helpers
         {
             try
             {
-                var files = Files.Select(f => new FileOnList { From= f.FullName, To = f.DestinyPath}).ToList();
+                var files = Files.Select(f => new FileOnList
+                {
+                    From = f.FullName,
+                    To = f.DestinyPath,
+                    CopyState = f.CopyState
+                }).ToList();
 
-                var list = new SerializableFilesList { Files = files, MultipleDestiny = true, Operation = this.Operation };
+                var list = new SerializableFilesList
+                {
+                    Files = files,
+                    MultipleDestiny = true,
+                    Operation = this.Operation,
+                    CurrentIndex = this.Index,
+                    JobId = Guid.NewGuid().ToString("N"),
+                    CreatedUtc = DateTime.UtcNow,
+                    UpdatedUtc = DateTime.UtcNow
+                };
 
                 MySerializer.SerializeCompressed(list, typeof(SerializableFilesList), fileName);
             }
@@ -622,11 +664,16 @@ namespace NeathCopyEngine.Helpers
     {
         public string From;
         public string To;
+        public CopyState CopyState;
     }
     public class SerializableFilesList
     {
         public string Operation;
         public bool MultipleDestiny;
+        public int CurrentIndex;
+        public string JobId;
+        public DateTime CreatedUtc;
+        public DateTime UpdatedUtc;
         public List<FileOnList> Files = new List<FileOnList>();
     }
 

@@ -16,6 +16,7 @@ namespace NeathCopyEngine.DataTools
         } 
 
         public string DestinyDirectoryPath { get; set; }
+        public string TempDestinyPath { get; set; }
 
         public override List<FileDataInfo> GetFiles(ref int Count)
         {
@@ -29,9 +30,10 @@ namespace NeathCopyEngine.DataTools
         }
         public FileStream GetStreamToWrite(FileMode mode)
         {
-            var dst = LongPathHelper.Normalize(DestinyPath);
+            var destination = string.IsNullOrWhiteSpace(TempDestinyPath) ? DestinyPath : TempDestinyPath;
+            var dst = LongPathHelper.Normalize(destination);
             MetadataRestorer.EnsureFileWritable(dst);
-            return new FileInfo(dst).Create();
+            return new FileStream(dst, mode, FileAccess.Write, FileShare.None);
         }
 
         public override void FastMove()

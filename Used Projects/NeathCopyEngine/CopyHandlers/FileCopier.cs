@@ -216,7 +216,7 @@ namespace NeathCopyEngine.CopyHandlers
                 try
                 {
                     // Use the captured file reference, not CurrentFile.
-                    var dest = file.DestinyPath;
+                    var dest = string.IsNullOrWhiteSpace(file.TempDestinyPath) ? file.DestinyPath : file.TempDestinyPath;
                     if (!string.IsNullOrWhiteSpace(dest))
                     {
                         System.IO.File.Delete(LongPathHelper.Normalize(dest));

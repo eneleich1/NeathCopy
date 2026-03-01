@@ -401,6 +401,33 @@ namespace NeathCopy.ViewModels
             }
         }
 
+        private bool crashRecoveryEnabled;
+        public bool CrashRecoveryEnabled
+        {
+            get => crashRecoveryEnabled;
+            set
+            {
+                if (SetProperty(ref crashRecoveryEnabled, value) && !loading)
+                    Configuration.Main.CrashRecoveryEnabled = value;
+            }
+        }
+
+        private string crashRecoveryFolder;
+        public string CrashRecoveryFolder
+        {
+            get => crashRecoveryFolder;
+            set
+            {
+                if (!SetProperty(ref crashRecoveryFolder, value))
+                    return;
+
+                if (loading)
+                    return;
+
+                Configuration.Main.CrashRecoveryFolder = value;
+            }
+        }
+
         public void LoadFromConfiguration()
         {
             loading = true;
@@ -439,6 +466,8 @@ namespace NeathCopy.ViewModels
             if (!IntegrationTray && !IntegrationLegacy)
                 IntegrationTray = true;
             IsDefaultCopyHandler = Configuration.Main.IsDefaultCopyHandler;
+            CrashRecoveryEnabled = Configuration.Main.CrashRecoveryEnabled;
+            CrashRecoveryFolder = Configuration.Main.CrashRecoveryFolder;
 
             loading = false;
         }
