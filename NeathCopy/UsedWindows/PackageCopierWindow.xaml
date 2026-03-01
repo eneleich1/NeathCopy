@@ -6,9 +6,11 @@
         mc:Ignorable="d"
         Title="Package Copier"
         Style="{DynamicResource UsedWindowStyle}"
+        Width="920"
+        Height="660"
         MinWidth="920"
         MinHeight="660"
-        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
         Icon="/NeathCopy;component/Brushes/Images/Light/list.png"
         Closing="Window_Closing">
@@ -44,6 +46,8 @@
                          Name="sourcesListBox"
                          SelectionMode="Extended"
                          AllowDrop="True"
+                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                          DragOver="SourcesListBox_DragOver"
                          Drop="SourcesListBox_Drop"
                          ItemsSource="{Binding Sources}">
@@ -55,7 +59,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="{Binding Type}" FontWeight="Bold"/>
-                                <TextBlock Grid.Column="1" Text="{Binding Path}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Path}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Path}" ToolTip="{Binding Path}"/>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -80,12 +84,14 @@
                          Name="destinationsListBox"
                          SelectionMode="Extended"
                          AllowDrop="True"
+                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                          DragOver="DestinationsListBox_DragOver"
                          Drop="DestinationsListBox_Drop"
                          ItemsSource="{Binding Destinations}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Path}" Margin="0,2,0,2"/>
+                            <TextBlock Text="{Binding Path}" ToolTip="{Binding Path}" Margin="0,2,0,2"/>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
@@ -110,30 +116,104 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Progress" Margin="0,8,0,0">
+        <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Transfer" Margin="0,8,0,0">
             <Grid Margin="8">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Overall" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                    <ProgressBar Minimum="0"
-                                 Maximum="100"
-                                 Height="16"
-                                 Width="360"
-                                 Value="{Binding OverallProgress, Mode=OneWay}"
-                                 Foreground="{DynamicResource ProgressBarIndicatorBrush}"
-                                 Background="{DynamicResource ProgressBarTrackBrush}"/>
-                    <TextBlock Margin="8,0,0,0"
-                               VerticalAlignment="Center"
-                               Text="{Binding OverallProgress, StringFormat={}{0:F0}%}"/>
-                </StackPanel>
-                <TextBox Grid.Row="1"
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="File:" Margin="0,0,8,0" VerticalAlignment="Center" FontWeight="Bold"/>
+                    <TextBlock Grid.Column="1" Text="{Binding CurrentFileName, Mode=OneWay}" TextTrimming="CharacterEllipsis" ToolTip="{Binding CurrentFileName, Mode=OneWay}" VerticalAlignment="Center"/>
+                </Grid>
+
+                <Grid Grid.Row="1" Margin="0,2,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="From:" Margin="0,0,8,0" VerticalAlignment="Center" FontWeight="Bold"/>
+                    <TextBlock Grid.Column="1" Text="{Binding CurrentFromPath, Mode=OneWay}" TextTrimming="CharacterEllipsis" ToolTip="{Binding CurrentFromPath, Mode=OneWay}" VerticalAlignment="Center"/>
+                </Grid>
+
+                <Grid Grid.Row="2" Margin="0,2,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="To:" Margin="0,0,8,0" VerticalAlignment="Center" FontWeight="Bold"/>
+                    <TextBlock Grid.Column="1" Text="{Binding CurrentToPath, Mode=OneWay}" TextTrimming="CharacterEllipsis" ToolTip="{Binding CurrentToPath, Mode=OneWay}" VerticalAlignment="Center"/>
+                </Grid>
+
+                <Grid Grid.Row="3" Margin="0,8,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="{Binding PauseResumeButtonText, Mode=OneWay}" Width="90" Command="{Binding PauseResumeCommand}" Margin="0,0,8,0"/>
+                    <Button Grid.Column="1" Content="Skip" Width="80" Command="{Binding SkipCommand}" Margin="0,0,8,0"/>
+                    <Button Grid.Column="2" Content="Cancel" Width="80" Command="{Binding CancelCommand}" Margin="0,0,8,0"/>
+                    <TextBlock Grid.Column="4" VerticalAlignment="Center" FontWeight="Bold" Text="{Binding SpeedText, Mode=OneWay}"/>
+                </Grid>
+
+                <ProgressBar Grid.Row="4"
+                             Minimum="0"
+                             Maximum="100"
+                             Height="16"
+                             Value="{Binding FilePercent, Mode=OneWay}"
+                             Foreground="{DynamicResource ProgressBarIndicatorBrush}"
+                             Background="{DynamicResource ProgressBarTrackBrush}"/>
+
+                <Grid Grid.Row="5" Margin="0,2,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="{Binding FileProgressLeftText, Mode=OneWay}" HorizontalAlignment="Left"/>
+                    <TextBlock Grid.Column="1" Text="{Binding FileProgressCenterText, Mode=OneWay}" HorizontalAlignment="Center" Margin="10,0"/>
+                    <TextBlock Grid.Column="2" Text="{Binding FileProgressRightText, Mode=OneWay}" HorizontalAlignment="Right"/>
+                </Grid>
+
+                <ProgressBar Grid.Row="6"
+                             Minimum="0"
+                             Maximum="100"
+                             Height="16"
+                             Value="{Binding OverallPercent, Mode=OneWay}"
+                             Foreground="{DynamicResource ProgressBarIndicatorBrush}"
+                             Background="{DynamicResource ProgressBarTrackBrush}"/>
+
+                <Grid Grid.Row="7" Margin="0,2,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="{Binding OverallProgressLeftText, Mode=OneWay}" HorizontalAlignment="Left"/>
+                    <TextBlock Grid.Column="1" Text="{Binding OverallProgressCenterText, Mode=OneWay}" HorizontalAlignment="Center" Margin="10,0"/>
+                    <TextBlock Grid.Column="2" Text="{Binding OverallProgressRightText, Mode=OneWay}" HorizontalAlignment="Right"/>
+                </Grid>
+
+                <TextBox Grid.Row="8"
                          Margin="0,8,0,0"
-                         Height="180"
+                         Height="120"
                          IsReadOnly="True"
-                         TextWrapping="Wrap"
+                         TextWrapping="NoWrap"
+                         HorizontalScrollBarVisibility="Auto"
                          VerticalScrollBarVisibility="Auto"
                          Text="{Binding LogText, Mode=OneWay}"
                          TextChanged="LogTextBox_TextChanged"/>
@@ -142,7 +222,6 @@
 
         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
             <Button Content="Start Copy" Width="110" Margin="0,0,8,0" Command="{Binding StartCommand}"/>
-            <Button Content="Cancel" Width="90" Margin="0,0,8,0" Command="{Binding CancelCommand}"/>
             <Button Content="Close" Width="90" Click="Close_Click"/>
         </StackPanel>
     </Grid>
