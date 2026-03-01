@@ -8,7 +8,7 @@ namespace NeathCopyEngine.Helpers
 {
     public enum RquestContent
     {
-        None, Sources, Operation,Destiny, All,FromList
+        None, Sources, Operation,Destiny, All,FromList, MultiDestinationPackageCopy
     }
     /// <summary>
     /// Represent a operation request information.
@@ -21,6 +21,7 @@ namespace NeathCopyEngine.Helpers
         public bool Container { get; set; }
         public List<string> Sources { get; set; }
         public RquestContent Content { get; set; }
+        public MultiDestinationCopyRequest MultiDestinationRequest { get; set; }
         public string[] Arguments = new string[3];
 
         public RequestInfo()

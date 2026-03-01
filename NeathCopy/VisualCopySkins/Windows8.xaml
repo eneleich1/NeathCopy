@@ -63,7 +63,8 @@
                                     <StackPanel Grid.Row="2" Grid.Column="1" Width="220" Orientation="Horizontal" Margin="3,0,0,0">
                                         <TextBlock Text="{DynamicResource t4}" Style="{DynamicResource InfoLabelStyle}"/>
                                         <TextBlock Name="to1_tb"  Margin="2,0,0,0"
-                                               Text="{Binding To, StringFormat=0}"/>
+                                               Text="{Binding To, StringFormat=0}"
+                                               ToolTip="{Binding ToToolTip, StringFormat=0}"/>
                                     </StackPanel>
 
                                     <!--Speed-->
@@ -199,7 +200,8 @@
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Text="{DynamicResource t4}" Style="{DynamicResource InfoLabelStyle}"/>
                                                 <TextBlock Name="to2_tb"  Margin="2,0,0,0"
-                                                       Text="{Binding To, StringFormat=0}"/>
+                                                       Text="{Binding To, StringFormat=0}"
+                                                       ToolTip="{Binding ToToolTip, StringFormat=0}"/>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Text="{DynamicResource t13}" Style="{DynamicResource InfoLabelStyle}"/>

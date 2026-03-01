@@ -374,7 +374,7 @@ namespace NeathCopy.Module2_Configuration
         {
             visualCopy.AceptArgumentsFinished += visualCopy_AceptArgumentsFinished;
 
-            if (requestInfo.Content == RquestContent.All)
+            if (requestInfo.Content == RquestContent.All || requestInfo.Content == RquestContent.MultiDestinationPackageCopy)
                 visualCopy.AceptRequest(requestInfo, false,false);
         }
         public void Inqueve_SetRunningState(VisualCopy visualCopy, RequestInfo requestInfo)
@@ -385,7 +385,7 @@ namespace NeathCopy.Module2_Configuration
 
             visualCopy.AceptArgumentsFinished += visualCopy_AceptArgumentsFinished1;
 
-            if (requestInfo.Content == RquestContent.All)
+            if (requestInfo.Content == RquestContent.All || requestInfo.Content == RquestContent.MultiDestinationPackageCopy)
                 visualCopy.AceptRequest(requestInfo, false,false);
         }
 

@@ -48,6 +48,7 @@ namespace NeathCopy.ViewModels
             FilesCount = "0 of 0";
             Operation = "Copy";
             CopyOption = "Allways Ask";
+            ToToolTip = string.Empty;
 
             Themes.ThemesManager.Manager.VisualCopySkingChanged += Manager_VisualCopySkingChanged;
             Themes.ThemesManager.Manager.BrushesChanged += Manager_BrushesChanged;
@@ -106,6 +107,18 @@ namespace NeathCopy.ViewModels
             {
                 to = value;
                 var args = new PropertyChangedEventArgs(nameof(To));
+                PropertyChanged?.Invoke(this, args);
+            }
+        }
+
+        string toToolTip;
+        public string ToToolTip
+        {
+            get => toToolTip;
+            set
+            {
+                toToolTip = value;
+                var args = new PropertyChangedEventArgs(nameof(ToToolTip));
                 PropertyChanged?.Invoke(this, args);
             }
         }
@@ -379,15 +392,33 @@ namespace NeathCopy.ViewModels
                 //To
                 if (CurrentFile != null)
                 {
-                    To = System.IO.Path.GetDirectoryName(CurrentFile.DestinyPath);
+                    if (VisualCopy.RequestInf != null &&
+                        VisualCopy.RequestInf.Content == RquestContent.MultiDestinationPackageCopy &&
+                        VisualCopy.RequestInf.MultiDestinationRequest != null &&
+                        VisualCopy.RequestInf.MultiDestinationRequest.DestinationRoots != null &&
+                        VisualCopy.RequestInf.MultiDestinationRequest.DestinationRoots.Count > 0)
+                    {
+                        var destinationRoots = VisualCopy.RequestInf.MultiDestinationRequest.DestinationRoots;
+                        To = string.Format("Multiple destinations ({0})", destinationRoots.Count);
+                        ToToolTip = string.Join(Environment.NewLine, destinationRoots);
 
-                    //Drive Info
-                    VisualCopy.driveInfo = DriveInfoFactory.CreateDriveInfo(PathDisplayHelper.GetRootForDriveInfo(To));
-                    if (VisualCopy.driveInfo != null)
-                        TargetDevice = string.Format("{0}({1}) {2}"
-                            , VisualCopy.driveInfo.VolumeLabel.ShortVersion(4)
-                            , VisualCopy.driveInfo.Name == null ? "" : VisualCopy.driveInfo.Name
-                            , new MySize(VisualCopy.driveInfo.TotalSize));
+                        var firstDestination = destinationRoots[0];
+                        VisualCopy.driveInfo = DriveInfoFactory.CreateDriveInfo(PathDisplayHelper.GetRootForDriveInfo(firstDestination));
+                        TargetDevice = "Multiple destinations";
+                    }
+                    else
+                    {
+                        To = System.IO.Path.GetDirectoryName(CurrentFile.DestinyPath);
+                        ToToolTip = To;
+
+                        //Drive Info
+                        VisualCopy.driveInfo = DriveInfoFactory.CreateDriveInfo(PathDisplayHelper.GetRootForDriveInfo(To));
+                        if (VisualCopy.driveInfo != null)
+                            TargetDevice = string.Format("{0}({1}) {2}"
+                                , VisualCopy.driveInfo.VolumeLabel.ShortVersion(4)
+                                , VisualCopy.driveInfo.Name == null ? "" : VisualCopy.driveInfo.Name
+                                , new MySize(VisualCopy.driveInfo.TotalSize));
+                    }
                 }
 
                 //Operation, CopyOption

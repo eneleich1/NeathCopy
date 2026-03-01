@@ -1,4 +1,5 @@
 using Microsoft.Win32;
+using NeathCopy.Module2_Configuration;
 using NeathCopy.ViewModels;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +20,25 @@ namespace NeathCopy.UsedWindows
         {
             InitializeComponent();
             viewModel = new PackageCopierWindowViewModel();
+            viewModel.StartRequested += ViewModel_StartRequested;
             DataContext = viewModel;
+        }
+
+        private void ViewModel_StartRequested(object sender, PackageCopierStartEventArgs e)
+        {
+            if (e == null || e.RequestInfo == null)
+                return;
+
+            try
+            {
+                var visualCopy = Configuration.Main.AddNewVisualCopy();
+                Configuration.Main.SetRunningState(visualCopy, e.RequestInfo);
+                Close();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Package Copier", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void AddSourceFiles_Click(object sender, RoutedEventArgs e)
@@ -130,6 +149,7 @@ namespace NeathCopy.UsedWindows
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            viewModel.StartRequested -= ViewModel_StartRequested;
             viewModel.CancelCopy();
         }
     }

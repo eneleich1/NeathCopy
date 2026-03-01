@@ -395,6 +395,13 @@ namespace NeathCopy
         /// </summary>
         private void InitCopyEngine()
         {
+            if (RequestInf != null && RequestInf.Content == RquestContent.MultiDestinationPackageCopy)
+            {
+                if (NeathCopy.FileCopier is MultiDestinationFileCopier multiCopier)
+                    multiCopier.BufferSize = Configuration.Main.BufferSize;
+                return;
+            }
+
             if (Configuration.Main.CurrentFileCopier != null)
                 NeathCopy.FileCopier = Configuration.Main.CurrentFileCopier.Clone();
             if (NeathCopy.FileCopier is BufferFileCopier bufferFileCopier)
@@ -537,57 +544,75 @@ namespace NeathCopy
 
                     displayInfo.Operation = "Discovering";
                     State = VisualCopyState.Discovering;
-                    if (loadFromList)
-                        await FixFilesFromListAsync(CancellationToken.None);
-                    else
-                        NeathCopy.DiscoverdList.Discover(RequestInf, Dispatcher);
-                    displayInfo.Operation = opeBackup;
 
-                    //Check free disk space
-                    DiskSpaceOptions opt;
-                    if (loadFromList && loadedList.MultipleDestiny) opt = DiskSpaceOptions.IGNORE;
-                    else opt = CheckForDiskSpace(NeathCopy.DiscoverdList.Size.Bytes);
+                    var isMultiDestinationRequest =
+                        info.Content == RquestContent.MultiDestinationPackageCopy &&
+                        info.MultiDestinationRequest != null;
 
-                    //Inform AceptRequest finish
-                    if (opt == DiskSpaceOptions.OK || opt == DiskSpaceOptions.IGNORE)
+                    if (isMultiDestinationRequest)
                     {
-                        NeathCopy.Operation = validActions[info.Operation];
+                        await PrepareMultiDestinationRequestAsync(info.MultiDestinationRequest, CancellationToken.None).ConfigureAwait(false);
+                        NeathCopy.ConfigureMultiDestinationCopy(info.MultiDestinationRequest, Configuration.Main.BufferSize);
                         NeathCopy.DiscoverdList.CommitTransaction();
 
-                        //Make sure when Acept Argument Finished, Raise Event to Execute PerformOperation
                         if (AceptArgumentsFinished == null)
                             AceptArgumentsFinished = visualCopy_AceptArgumentsFinished;
 
                         RaiseAceptRequestFinished(this);
                     }
-                    else if (opt == DiskSpaceOptions.FIT_CONTENT)
+                    else
                     {
-                        driveInfo = driveInfo.Clone();
+                        if (loadFromList)
+                            await FixFilesFromListAsync(CancellationToken.None).ConfigureAwait(false);
+                        else
+                            NeathCopy.DiscoverdList.Discover(RequestInf, Dispatcher);
+                        displayInfo.Operation = opeBackup;
 
-                        long freeSpace = driveInfo.TotalFreeSpace - NeathCopy.DiscoverdList.TrueFilesToCopySize.Bytes;
+                        //Check free disk space
+                        DiskSpaceOptions opt;
+                        if (loadFromList && loadedList.MultipleDestiny) opt = DiskSpaceOptions.IGNORE;
+                        else opt = CheckForDiskSpace(NeathCopy.DiscoverdList.Size.Bytes);
 
-                        var requiredSpace = NeathCopy.DiscoverdList.TransactionSize.Bytes;
-                        long free = 0;
-                        while (freeSpace < requiredSpace)
+                        //Inform AceptRequest finish
+                        if (opt == DiskSpaceOptions.OK || opt == DiskSpaceOptions.IGNORE)
                         {
-                            Dispatcher.Invoke(() => { free = NeathCopy.DiscoverdList.RemoveLast(); });
-                            requiredSpace -= free;
+                            NeathCopy.Operation = validActions[info.Operation];
+                            NeathCopy.DiscoverdList.CommitTransaction();
+
+                            if (AceptArgumentsFinished == null)
+                                AceptArgumentsFinished = visualCopy_AceptArgumentsFinished;
+
+                            RaiseAceptRequestFinished(this);
                         }
-                        NeathCopy.DiscoverdList.CommitTransaction();
-                        NeathCopy.Operation = validActions[info.Operation];
+                        else if (opt == DiskSpaceOptions.FIT_CONTENT)
+                        {
+                            driveInfo = driveInfo.Clone();
 
-                        //Make sure when Acept Argument Finished, Raise Event to Execute PerformOperation
-                        if (AceptArgumentsFinished == null)
-                            AceptArgumentsFinished = visualCopy_AceptArgumentsFinished;
+                            long freeSpace = driveInfo.TotalFreeSpace - NeathCopy.DiscoverdList.TrueFilesToCopySize.Bytes;
 
-                        RaiseAceptRequestFinished(this);
+                            var requiredSpace = NeathCopy.DiscoverdList.TransactionSize.Bytes;
+                            long free = 0;
+                            while (freeSpace < requiredSpace)
+                            {
+                                Dispatcher.Invoke(() => { free = NeathCopy.DiscoverdList.RemoveLast(); });
+                                requiredSpace -= free;
+                            }
+                            NeathCopy.DiscoverdList.CommitTransaction();
+                            NeathCopy.Operation = validActions[info.Operation];
+
+                            if (AceptArgumentsFinished == null)
+                                AceptArgumentsFinished = visualCopy_AceptArgumentsFinished;
+
+                            RaiseAceptRequestFinished(this);
+                        }
+                        else
+                        {
+                            NeathCopy.DiscoverdList.DiscardTransaction();
+                            Cancel("There is not enought free disk space and operation must be cancelled");
+                        }
                     }
-                    //Since this is the only and firsth request, the operation should be Cancel.
-                    else
-                    {
-                        NeathCopy.DiscoverdList.DiscardTransaction();
-                        Cancel("There is not enought free disk space and operation must be cancelled");
-                    }
+
+                    displayInfo.Operation = opeBackup;
 
                     #endregion
                 }
@@ -734,7 +759,7 @@ namespace NeathCopy
                         {
                         "<Init>-------------------------------------",
                         string.Format("FileCopier: {0}",NeathCopy.FileCopier.Name),
-                        string.Format("BufferSize: {0}",((BufferFileCopier)NeathCopy.FileCopier).BufferSize),
+                        string.Format("BufferSize: {0}", GetHookBufferSize()),
                         string.Format("Request Operation: {0}",NeathCopy.DiscoverdList.Operation),
                         string.Format("Destiny Folder: {0}", RequestInf==null?"Destiny Variable":RequestInf.Destiny),
                         string.Format("Files: {0}", NeathCopy.DiscoverdList.Count),
@@ -797,7 +822,7 @@ namespace NeathCopy
                     {
                         "<Init>-------------------------------------",
                         string.Format("FileCopier: {0}",NeathCopy.FileCopier.Name),
-                        string.Format("BufferSize: {0}",((BufferFileCopier)NeathCopy.FileCopier).BufferSize),
+                        string.Format("BufferSize: {0}", GetHookBufferSize()),
                         string.Format("Request Operation: {0}",RequestInf.Operation),
                         string.Format("Destiny Folder: {0}", RequestInf==null?"Destiny Variable":RequestInf.Destiny),
 
@@ -1195,6 +1220,68 @@ namespace NeathCopy
             public List<FileDataInfo> Files { get; set; }
             public long TotalSize { get; set; }
             public int FileCount { get; set; }
+        }
+
+        private sealed class MultiDestinationLoadResult
+        {
+            public List<FileDataInfo> Files { get; set; }
+            public long TotalSize { get; set; }
+            public int FileCount { get; set; }
+        }
+
+        private async Task PrepareMultiDestinationRequestAsync(MultiDestinationCopyRequest request, CancellationToken cancellationToken)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                NeathCopy.DiscoverdList.DiscoveringState = FilesList.DiscoverState.Discovering;
+            });
+
+            var result = await Task.Run(() =>
+            {
+                var files = new List<FileDataInfo>();
+                long totalSize = 0;
+                int fileCount = 0;
+                var firstDestination = request.DestinationRoots.FirstOrDefault() ?? string.Empty;
+
+                foreach (var item in request.Items)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var displaySource = string.IsNullOrWhiteSpace(item.SourceDisplayPath) ? item.SourcePath : item.SourceDisplayPath;
+                    var destinyPath = IOPath.Combine(firstDestination, item.RelativePath ?? IOPath.GetFileName(displaySource));
+
+                    files.Add(new FileDataInfo
+                    {
+                        FullName = displaySource,
+                        Name = IOPath.GetFileName(displaySource),
+                        DestinyPath = destinyPath,
+                        DestinyDirectoryPath = IOPath.GetDirectoryName(destinyPath),
+                        Size = item.Length,
+                        CopyState = CopyState.Waiting
+                    });
+
+                    fileCount++;
+                    totalSize += item.Length;
+                }
+
+                return new MultiDestinationLoadResult
+                {
+                    Files = files,
+                    FileCount = fileCount,
+                    TotalSize = totalSize
+                };
+            }, cancellationToken).ConfigureAwait(false);
+
+            Dispatcher.Invoke(() =>
+            {
+                NeathCopy.DiscoverdList.Files.AddRange(result.Files);
+                NeathCopy.DiscoverdList.Count += result.FileCount;
+                NeathCopy.DiscoverdList.Size += result.TotalSize;
+                NeathCopy.DiscoverdList.SizeOfFilesToCopy += result.TotalSize;
+                NeathCopy.DiscoverdList.Destinys = request.DestinationRoots.ToList();
+                NeathCopy.DiscoverdList.Operation = "copy";
+                NeathCopy.DiscoverdList.DiscoveringState = FilesList.DiscoverState.Normal;
+            });
         }
 
         private async Task FixFilesFromListAsync(CancellationToken cancellationToken)

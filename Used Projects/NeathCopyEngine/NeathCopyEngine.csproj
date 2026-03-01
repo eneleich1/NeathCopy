@@ -53,6 +53,7 @@
     <Compile Include="CopyHandlers\CopyHandle.cs" />
     <Compile Include="CopyHandlers\Error.cs" />
     <Compile Include="CopyHandlers\FileCopier.cs" />
+    <Compile Include="CopyHandlers\MultiDestinationFileCopier.cs" />
     <Compile Include="CopyHandlers\CopyFileExFileCopier.cs" />
     <Compile Include="CopyHandlers\NeathCopyHandle.cs" />
     <Compile Include="DataTools\cNetworkDrives0015.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Helpers\FilesList.cs" />
     <Compile Include="Helpers\LongPathHelper.cs" />
     <Compile Include="Helpers\MetadataRestorer.cs" />
+    <Compile Include="Helpers\MultiDestinationCopyRequest.cs" />
     <Compile Include="Helpers\MySerializer.cs" />
     <Compile Include="Helpers\MySize.cs" />
     <Compile Include="Helpers\PathDisplayHelper.cs" />

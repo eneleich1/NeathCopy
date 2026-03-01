@@ -100,9 +100,10 @@
 
                                     <!--To-->
                                     <StackPanel Orientation="Horizontal" Canvas.Left="15" Canvas.Top="45" Width="260">
-                                        <TextBlock Text="{DynamicResource t4}"  Style="{DynamicResource InfoLabelStyle}"/>
-                                        <TextBlock Name="to1_tb" Margin="3,0,0,0"  Foreground="{DynamicResource TextBrush}"
-                                               Text="{Binding To, StringFormat=0}"/>
+                                    <TextBlock Text="{DynamicResource t4}"  Style="{DynamicResource InfoLabelStyle}"/>
+                                    <TextBlock Name="to1_tb" Margin="3,0,0,0"  Foreground="{DynamicResource TextBrush}"
+                                               Text="{Binding To, StringFormat=0}"
+                                               ToolTip="{Binding ToToolTip, StringFormat=0}"/>
                                     </StackPanel>
 
                                     <!--Speed-->
@@ -237,9 +238,10 @@
 
                                     <!--To-->
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{DynamicResource t4}" Style="{DynamicResource InfoLabelStyle}"/>
-                                        <TextBlock Name="to2_tb"  Margin="2,0,0,0"
-                                               Text="{Binding To, StringFormat=0}"/>
+                                    <TextBlock Text="{DynamicResource t4}" Style="{DynamicResource InfoLabelStyle}"/>
+                                    <TextBlock Name="to2_tb"  Margin="2,0,0,0"
+                                               Text="{Binding To, StringFormat=0}"
+                                               ToolTip="{Binding ToToolTip, StringFormat=0}"/>
                                     </StackPanel>
 
                                     <!--Elapsed Time-->

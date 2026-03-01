@@ -112,8 +112,18 @@ namespace NeathCopyEngine.CopyHandlers
         string logsPath;
 
         AffterErrorAction opt;
+        public MultiDestinationCopyRequest MultiDestinationRequest { get; private set; }
+        private volatile bool pauseAfterSkipRequested;
+        private MultiDestinationCollisionMode multiDestinationCollisionMode = MultiDestinationCollisionMode.Ask;
 
         #endregion
+
+        private enum MultiDestinationCollisionMode
+        {
+            Ask,
+            OverwriteAll,
+            SkipAll
+        }
 
         public NeathCopyHandle() : base()
         {
@@ -124,6 +134,30 @@ namespace NeathCopyEngine.CopyHandlers
             FileCollisionAction = AllwaysAsk;
             logsPath = Path.Combine(RegisterAccess.Acces.GetLogsDir(), "Errors Log.txt");
 
+        }
+
+        public void ConfigureMultiDestinationCopy(MultiDestinationCopyRequest request, int bufferSize)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            if (request.Items == null || request.Items.Count == 0)
+                throw new ArgumentException("The multi-destination request has no files.", nameof(request));
+
+            if (request.DestinationRoots == null || request.DestinationRoots.Count == 0)
+                throw new ArgumentException("The multi-destination request has no destinations.", nameof(request));
+
+            MultiDestinationRequest = request;
+            pauseAfterSkipRequested = false;
+            multiDestinationCollisionMode = MultiDestinationCollisionMode.Ask;
+            var copier = FileCopier as MultiDestinationFileCopier;
+            if (copier == null)
+                copier = new MultiDestinationFileCopier(bufferSize);
+            else
+                copier.BufferSize = bufferSize > 0 ? bufferSize : copier.BufferSize;
+
+            FileCopier = copier;
+            Operation = CopyMultiDestination;
         }
 
         #region Events
@@ -638,6 +672,7 @@ namespace NeathCopyEngine.CopyHandlers
 
         public override void Copy()
         {
+            MultiDestinationRequest = null;
             State = CopyHandleState.Runing;
             ConfigureExecutionContext();
 
@@ -664,6 +699,7 @@ namespace NeathCopyEngine.CopyHandlers
         }
         public override void Move()
         {
+            MultiDestinationRequest = null;
             State = CopyHandleState.Runing;
             ConfigureExecutionContext();
 
@@ -713,6 +749,7 @@ namespace NeathCopyEngine.CopyHandlers
         }
         public override void FastMove()
         {
+            MultiDestinationRequest = null;
             State = CopyHandleState.Runing;
             ConfigureExecutionContext();
 
@@ -734,6 +771,87 @@ namespace NeathCopyEngine.CopyHandlers
             //Creating empty directories
             CreateEmptysDirectories(DiscoverdList);
             RestoreAllDirectoriesMetadata();
+
+            State = CopyHandleState.Finished;
+        }
+
+        private void CopyMultiDestination()
+        {
+            State = CopyHandleState.Runing;
+            ConfigureExecutionContext();
+
+            var request = MultiDestinationRequest;
+            if (request == null || request.Items == null || request.Items.Count == 0)
+            {
+                State = CopyHandleState.Finished;
+                return;
+            }
+
+            var copier = FileCopier as MultiDestinationFileCopier;
+            if (copier == null)
+            {
+                copier = new MultiDestinationFileCopier(1024 * 1024);
+                FileCopier = copier;
+                ConfigureExecutionContext();
+            }
+
+            for (; DiscoverdList.Index < request.Items.Count; DiscoverdList.Index++)
+            {
+                try
+                {
+                    WaitForResumeOrCancel();
+                    if (State == CopyHandleState.Canceled)
+                        return;
+
+                    if (DiscoverdList.Index >= DiscoverdList.Count)
+                        break;
+
+                    CurrentFile = DiscoverdList.Files[DiscoverdList.Index];
+                    CurrentFile.CopyState = CopyState.Processing;
+
+                    var item = request.Items[DiscoverdList.Index];
+                    var collisionDecision = ResolveMultiDestinationCollision(item, request);
+                    if (collisionDecision == MultiDestinationCollisionDecision.Cancel)
+                    {
+                        Cancel("User Cancel");
+                        return;
+                    }
+                    if (collisionDecision == MultiDestinationCollisionDecision.Skip)
+                    {
+                        CurrentFile.CopyState = CopyState.Skiped;
+                        copier.FileBytesTransferred = 0;
+                        copier.TotalBytesTransferred += item.Length;
+                        CopiedsFiles++;
+                        continue;
+                    }
+
+                    var skipped = copier
+                        .CopyFileToDestinationsAsync(item, request.DestinationRoots, request.Threads)
+                        .GetAwaiter()
+                        .GetResult();
+
+                    if (pauseAfterSkipRequested && skipped)
+                    {
+                        pauseAfterSkipRequested = false;
+                        pauseGate.Reset();
+                    }
+
+                    CurrentFile.CopyState = skipped ? CopyState.Skiped : CopyState.Copied;
+                    CopiedsFiles++;
+                }
+                catch (OperationCanceledException)
+                {
+                    State = CopyHandleState.Canceled;
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    Errors.Add(new CopyError { Message = ex.Message });
+                    RaiseTransferError(this, CurrentFile, ex.Message);
+                    Cancel("Multi-destination write failed");
+                    return;
+                }
+            }
 
             State = CopyHandleState.Finished;
         }
@@ -761,8 +879,17 @@ namespace NeathCopyEngine.CopyHandlers
                     FileCopier.CurrentFile.CopyState = CopyState.Skiped;
                     FileCopier.Skip();
                 }
-                // Ensure we are not blocked on pause so the current copy can exit.
-                pauseGate.Set();
+                // Ensure the active copy can observe skip; in paused state for multi-destination,
+                // re-apply pause after skip so the transfer remains paused.
+                if (State == CopyHandleState.Paused && MultiDestinationRequest != null)
+                {
+                    pauseAfterSkipRequested = true;
+                    pauseGate.Set();
+                }
+                else
+                {
+                    pauseGate.Set();
+                }
             }
             catch (Exception ex)
             {
@@ -773,6 +900,60 @@ namespace NeathCopyEngine.CopyHandlers
                     w.WriteLine(Error.GetErrorLogInLine(ex.Message, "NeathCopyEngine", "NeathCopyHandle", "Skip"));
                 }
 
+            }
+        }
+
+        private enum MultiDestinationCollisionDecision
+        {
+            Copy,
+            Skip,
+            Cancel
+        }
+
+        private MultiDestinationCollisionDecision ResolveMultiDestinationCollision(
+            MultiDestinationCopyItem item,
+            MultiDestinationCopyRequest request)
+        {
+            if (item == null || request == null || request.DestinationRoots == null || request.DestinationRoots.Count == 0)
+                return MultiDestinationCollisionDecision.Copy;
+
+            var hasCollision = request.DestinationRoots.Any(root =>
+            {
+                var path = LongPathHelper.Normalize(Path.Combine(root, item.RelativePath));
+                return File.Exists(path);
+            });
+
+            if (!hasCollision)
+                return MultiDestinationCollisionDecision.Copy;
+
+            if (multiDestinationCollisionMode == MultiDestinationCollisionMode.OverwriteAll)
+                return MultiDestinationCollisionDecision.Copy;
+
+            if (multiDestinationCollisionMode == MultiDestinationCollisionMode.SkipAll)
+                return MultiDestinationCollisionDecision.Skip;
+
+            var action = FileExist != null ? FileExist(this, CurrentFile) : AllwaysAsk;
+            if (action == null || action.Method == null)
+                return MultiDestinationCollisionDecision.Copy;
+
+            switch (action.Method.Name)
+            {
+                case nameof(OverwriteAll):
+                case nameof(OverwriteAllDifferent):
+                    multiDestinationCollisionMode = MultiDestinationCollisionMode.OverwriteAll;
+                    return MultiDestinationCollisionDecision.Copy;
+                case nameof(OverwriteCurrentFile):
+                case nameof(OverwriteDifferent):
+                    return MultiDestinationCollisionDecision.Copy;
+                case nameof(SkipAll):
+                    multiDestinationCollisionMode = MultiDestinationCollisionMode.SkipAll;
+                    return MultiDestinationCollisionDecision.Skip;
+                case nameof(SkipCurrentFile):
+                    return MultiDestinationCollisionDecision.Skip;
+                case nameof(CancelCollision):
+                    return MultiDestinationCollisionDecision.Cancel;
+                default:
+                    return MultiDestinationCollisionDecision.Copy;
             }
         }
         private void LogSkip(int previousIndex, int newIndex, CopyHandleState previousState, CopyHandleState currentState)

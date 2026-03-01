@@ -20,7 +20,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -116,101 +116,9 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Transfer" Margin="0,8,0,0">
+        <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Header="Log" Margin="0,8,0,0">
             <Grid Margin="8">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="File:" Margin="0,0,8,0" VerticalAlignment="Center" FontWeight="Bold"/>
-                    <TextBlock Grid.Column="1" Text="{Binding CurrentFileName, Mode=OneWay}" TextTrimming="CharacterEllipsis" ToolTip="{Binding CurrentFileName, Mode=OneWay}" VerticalAlignment="Center"/>
-                </Grid>
-
-                <Grid Grid.Row="1" Margin="0,2,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="From:" Margin="0,0,8,0" VerticalAlignment="Center" FontWeight="Bold"/>
-                    <TextBlock Grid.Column="1" Text="{Binding CurrentFromPath, Mode=OneWay}" TextTrimming="CharacterEllipsis" ToolTip="{Binding CurrentFromPath, Mode=OneWay}" VerticalAlignment="Center"/>
-                </Grid>
-
-                <Grid Grid.Row="2" Margin="0,2,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="To:" Margin="0,0,8,0" VerticalAlignment="Center" FontWeight="Bold"/>
-                    <TextBlock Grid.Column="1" Text="{Binding CurrentToPath, Mode=OneWay}" TextTrimming="CharacterEllipsis" ToolTip="{Binding CurrentToPath, Mode=OneWay}" VerticalAlignment="Center"/>
-                </Grid>
-
-                <Grid Grid.Row="3" Margin="0,8,0,4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Content="{Binding PauseResumeButtonText, Mode=OneWay}" Width="90" Command="{Binding PauseResumeCommand}" Margin="0,0,8,0"/>
-                    <Button Grid.Column="1" Content="Skip" Width="80" Command="{Binding SkipCommand}" Margin="0,0,8,0"/>
-                    <Button Grid.Column="2" Content="Cancel" Width="80" Command="{Binding CancelCommand}" Margin="0,0,8,0"/>
-                    <TextBlock Grid.Column="4" VerticalAlignment="Center" FontWeight="Bold" Text="{Binding SpeedText, Mode=OneWay}"/>
-                </Grid>
-
-                <ProgressBar Grid.Row="4"
-                             Minimum="0"
-                             Maximum="100"
-                             Height="16"
-                             Value="{Binding FilePercent, Mode=OneWay}"
-                             Foreground="{DynamicResource ProgressBarIndicatorBrush}"
-                             Background="{DynamicResource ProgressBarTrackBrush}"/>
-
-                <Grid Grid.Row="5" Margin="0,2,0,8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="{Binding FileProgressLeftText, Mode=OneWay}" HorizontalAlignment="Left"/>
-                    <TextBlock Grid.Column="1" Text="{Binding FileProgressCenterText, Mode=OneWay}" HorizontalAlignment="Center" Margin="10,0"/>
-                    <TextBlock Grid.Column="2" Text="{Binding FileProgressRightText, Mode=OneWay}" HorizontalAlignment="Right"/>
-                </Grid>
-
-                <ProgressBar Grid.Row="6"
-                             Minimum="0"
-                             Maximum="100"
-                             Height="16"
-                             Value="{Binding OverallPercent, Mode=OneWay}"
-                             Foreground="{DynamicResource ProgressBarIndicatorBrush}"
-                             Background="{DynamicResource ProgressBarTrackBrush}"/>
-
-                <Grid Grid.Row="7" Margin="0,2,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="{Binding OverallProgressLeftText, Mode=OneWay}" HorizontalAlignment="Left"/>
-                    <TextBlock Grid.Column="1" Text="{Binding OverallProgressCenterText, Mode=OneWay}" HorizontalAlignment="Center" Margin="10,0"/>
-                    <TextBlock Grid.Column="2" Text="{Binding OverallProgressRightText, Mode=OneWay}" HorizontalAlignment="Right"/>
-                </Grid>
-
-                <TextBox Grid.Row="8"
-                         Margin="0,8,0,0"
-                         Height="120"
+                <TextBox Name="logTextBox"
                          IsReadOnly="True"
                          TextWrapping="NoWrap"
                          HorizontalScrollBarVisibility="Auto"

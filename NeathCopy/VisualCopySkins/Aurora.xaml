@@ -583,6 +583,7 @@
                                             <Ellipse Width="4" Height="4" Fill="#7FB3FF" Margin="0,6,8,0"/>
                                             <TextBlock Grid.Column="1" Text="To:" Style="{DynamicResource SmallInfoStyle}"/>
                                             <TextBlock Grid.Column="2" Text="{Binding To, StringFormat=0}" Style="{DynamicResource InfoValueStyle}" Margin="8,0,0,0"
+                                                       ToolTip="{Binding ToToolTip, StringFormat=0}"
                                                        TextTrimming="CharacterEllipsis"/>
                                         </Grid>
 
