@@ -349,7 +349,6 @@ namespace NeathCopyEngine.CopyHandlers
         #region Affter File Copy Action
         void DoNothing(FileDataInfo currentFile)
         {
-            FinalizeTempDestinationForFile(currentFile);
             try
             {
                 MetadataRestorer.RestoreFileMetadata(currentFile.FullName, currentFile.DestinyPath);
@@ -364,7 +363,6 @@ namespace NeathCopyEngine.CopyHandlers
         /// <param name="currentFile"></param>
         void DeleteFile(FileDataInfo currentFile)
         {
-            FinalizeTempDestinationForFile(currentFile);
             try
             {
                 MetadataRestorer.RestoreFileMetadata(currentFile.FullName, currentFile.DestinyPath);
@@ -529,7 +527,6 @@ namespace NeathCopyEngine.CopyHandlers
                     }
 
                     CurrentFile.CopyState = CopyState.Processing;
-                    PrepareTempDestinationIfNeeded(fastMove);
                     UpdateCrashRecoveryForCurrentFile(CopyState.Processing, true);
 
                     //Create the Directories.
@@ -558,12 +555,10 @@ namespace NeathCopyEngine.CopyHandlers
                         {
                             // Skip counts as processed but must not be marked as copied/moved.
                             CopiedsFiles++;
-                            CleanupTempDestinationIfNeeded();
                         }
                         else
                         {
                             CurrentFile.CopyState = affeterOperationState;
-                            FinalizeTempDestinationIfNeeded();
 
                             //Status.
                             CopiedsFiles++;
@@ -596,7 +591,6 @@ namespace NeathCopyEngine.CopyHandlers
                     else if (!(ex is ThreadAbortException))
                     {
                         CurrentFile.CopyState = CopyState.Error;
-                        CleanupTempDestinationIfNeeded();
                         UpdateCrashRecoveryForCurrentFile(CurrentFile.CopyState, false);
                     }
                 }
@@ -917,6 +911,7 @@ namespace NeathCopyEngine.CopyHandlers
                         copier.FileBytesTransferred = 0;
                         copier.TotalBytesTransferred += item.Length;
                         CopiedsFiles++;
+                        UpdateCrashRecoveryForCurrentFile(CurrentFile.CopyState, false);
                         continue;
                     }
 
@@ -1248,70 +1243,6 @@ namespace NeathCopyEngine.CopyHandlers
                 crashRecoveryList,
                 typeof(SerializableFilesList),
                 CrashRecoveryCheckpointPath);
-        }
-
-        private void PrepareTempDestinationIfNeeded(bool fastMove)
-        {
-            if (!CrashRecoveryEnabled || fastMove || CurrentFile == null)
-                return;
-
-            var tempPath = CurrentFile.DestinyPath + ".neathcopytmp";
-            CurrentFile.TempDestinyPath = tempPath;
-            try
-            {
-                var normalized = LongPathHelper.Normalize(tempPath);
-                if (File.Exists(normalized))
-                    File.Delete(normalized);
-            }
-            catch
-            {
-            }
-        }
-
-        private void FinalizeTempDestinationIfNeeded()
-        {
-            FinalizeTempDestinationForFile(CurrentFile);
-        }
-
-        private void FinalizeTempDestinationForFile(FileDataInfo file)
-        {
-            if (!CrashRecoveryEnabled || file == null || string.IsNullOrWhiteSpace(file.TempDestinyPath))
-                return;
-
-            var tempPath = LongPathHelper.Normalize(file.TempDestinyPath);
-            var finalPath = LongPathHelper.Normalize(file.DestinyPath);
-            try
-            {
-                if (File.Exists(finalPath))
-                    File.Delete(finalPath);
-
-                if (File.Exists(tempPath))
-                    File.Move(tempPath, finalPath);
-            }
-            finally
-            {
-                file.TempDestinyPath = null;
-            }
-        }
-
-        private void CleanupTempDestinationIfNeeded()
-        {
-            if (CurrentFile == null || string.IsNullOrWhiteSpace(CurrentFile.TempDestinyPath))
-                return;
-
-            try
-            {
-                var tempPath = LongPathHelper.Normalize(CurrentFile.TempDestinyPath);
-                if (File.Exists(tempPath))
-                    File.Delete(tempPath);
-            }
-            catch
-            {
-            }
-            finally
-            {
-                CurrentFile.TempDestinyPath = null;
-            }
         }
 
         private static string SanitizeFileName(string value)
