@@ -42,35 +42,48 @@
                 </StackPanel>
 
                 <ListView Grid.Row="1" Name="filesListView" AllowDrop="True" MinHeight="180"
+                          SelectionMode="Extended"
                           ScrollViewer.VerticalScrollBarVisibility="Auto"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                           Drop="FilesListView_Drop" DragOver="FilesListView_DragOver"
                           ItemsSource="{Binding Items}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="FileName" Width="160" DisplayMemberBinding="{Binding FileName}"/>
-                            <GridViewColumn Header="FullPath" Width="360" DisplayMemberBinding="{Binding FullPath}"/>
-                            <GridViewColumn Header="Status" Width="110" DisplayMemberBinding="{Binding Status}"/>
-                            <GridViewColumn Header="Progress" Width="170">
+                            <GridViewColumn Header="FileName" Width="660">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Grid>
+                                        <Grid Margin="0,2,0,2" HorizontalAlignment="Left">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="300"/>
+                                                <ColumnDefinition Width="130"/>
+                                                <ColumnDefinition Width="42"/>
                                             </Grid.ColumnDefinitions>
-                                            <ProgressBar Width="120" Height="14"
+                                            <TextBlock Grid.Column="0"
+                                                       Width="300"
+                                                       VerticalAlignment="Center"
+                                                       Text="{Binding FileName}"
+                                                       Foreground="{DynamicResource TextBrush}"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       ToolTip="{Binding FullPath}"/>
+                                            <ProgressBar Grid.Column="1"
+                                                         Width="120"
+                                                         Height="12"
+                                                         Margin="8,0,0,0"
+                                                         VerticalAlignment="Center"
                                                          Minimum="0" Maximum="100"
                                                          Value="{Binding Progress}"
                                                          Foreground="{DynamicResource ProgressBarIndicatorBrush}"
                                                          Background="{DynamicResource ProgressBarTrackBrush}"/>
-                                            <TextBlock Grid.Column="1" Margin="8,0,0,0"
-                                                       Foreground="{DynamicResource TextBrush}"
-                                                       Text="{Binding Progress, StringFormat={}{0:F0}%}"/>
+                                            <TextBlock Grid.Column="2"
+                                                       Margin="8,0,0,0"
+                                                       VerticalAlignment="Center"
+                                                           Foreground="{DynamicResource TextBrush}"
+                                                           Text="{Binding Progress, StringFormat={}{0:F0}%}"/>
                                         </Grid>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
+                            <GridViewColumn Header="Status" Width="110" DisplayMemberBinding="{Binding Status}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -99,12 +112,15 @@
                     <TextBlock Text="Output format" VerticalAlignment="Center"
                                Foreground="{DynamicResource TextBrush}"/>
                     <ComboBox Grid.Column="1" Width="140" HorizontalAlignment="Left"
+                              Margin="0,0,0,6"
                               ItemsSource="{Binding OutputFormats}"
                               SelectedItem="{Binding SelectedOutputFormat}"/>
 
                     <TextBlock Grid.Row="1" Text="Bitrate (optional)" VerticalAlignment="Center"
+                               Margin="0,4,0,0"
                                Foreground="{DynamicResource TextBrush}"/>
                     <ComboBox Grid.Row="1" Grid.Column="1" Width="140" HorizontalAlignment="Left"
+                              Margin="0,4,0,6"
                               IsEditable="True" Text="{Binding Bitrate, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBoxItem Content="2000k"/>
                         <ComboBoxItem Content="3000k"/>
@@ -115,8 +131,10 @@
                     </ComboBox>
 
                     <TextBlock Grid.Row="2" Text="Resolution (optional)" VerticalAlignment="Center"
+                               Margin="0,4,0,0"
                                Foreground="{DynamicResource TextBrush}"/>
                     <ComboBox Grid.Row="2" Grid.Column="1" Width="140" HorizontalAlignment="Left"
+                              Margin="0,4,0,6"
                               IsEditable="True" Text="{Binding Resolution, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBoxItem Content="640x480"/>
                         <ComboBoxItem Content="720x480"/>
@@ -125,6 +143,7 @@
                     </ComboBox>
 
                     <TextBlock Grid.Row="3" Text="Output folder" VerticalAlignment="Center"
+                               Margin="0,4,0,0"
                                Foreground="{DynamicResource TextBrush}"/>
                     <Grid Grid.Row="3" Grid.Column="1">
                         <Grid.ColumnDefinitions>
