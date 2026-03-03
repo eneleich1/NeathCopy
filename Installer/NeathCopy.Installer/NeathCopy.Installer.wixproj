@@ -1,0 +1,17 @@
+﻿<Project Sdk="WixToolset.Sdk/6.0.2">
+  <PropertyGroup>
+    <OutputType>Package</OutputType>
+    <Platform>x64</Platform>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <OutputName>NeathCopySetup_x64</OutputName>
+    <OutputPath>..\..\Target\Setup_x64\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="6.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WixExtension Include="WixToolset.UI.wixext" />
+  </ItemGroup>
+</Project>

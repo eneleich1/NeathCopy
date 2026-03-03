@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+  <Package Name="NeathCopy"
+           Manufacturer="Eneleich"
+           Version="1.0.0"
+           UpgradeCode="{8853671A-AB8C-4516-8A1B-B4466FA4EDED}"
+           Compressed="yes"
+           Scope="perMachine">
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of NeathCopy is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Icon Id="NeathCopyIcon" SourceFile="..\..\Target\neathcopy.ico" />
+    <Property Id="ARPPRODUCTICON" Value="NeathCopyIcon" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Quieres lanzar NeathCopy ahora" />
+
+    <Property Id="ARPCONTACT" Value="Nestor" />
+    <Property Id="ARPCOMMENTS" Value="Replace Windows Copy and Move Functions" />
+    <Property Id="ARPHELPTELEPHONE" Value="+1 786-865-3213" />
+
+    <Property Id="NETFRAMEWORK48_RELEASE">
+      <RegistrySearch Id="NetFx48Release"
+                      Root="HKLM"
+                      Key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"
+                      Name="Release"
+                      Type="raw" />
+    </Property>
+    <Property Id="VCRUNTIME_X64_INSTALLED">
+      <RegistrySearch Id="VcRuntimeX64Installed"
+                      Root="HKLM"
+                      Key="SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64"
+                      Name="Installed"
+                      Type="raw" />
+    </Property>
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="NeathCopy">
+        <Directory Id="SOUNDSFOLDER" Name="Sounds" />
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="AppProgramsFolder" Name="NeathCopy" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="StartupFolder" />
+
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="NeathCopyMainExecutable" Guid="*">
+        <File Id="NeathCopyExeFile" Source="..\..\Target\Release\NeathCopy.exe" KeyPath="yes" />
+      </Component>
+
+      <Component Id="NeathCopyShortcuts" Guid="*">
+        <Shortcut Id="NeathCopyStartMenuShortcut"
+                  Directory="AppProgramsFolder"
+                  Name="NeathCopy"
+                  Target="[#NeathCopyExeFile]"
+                  WorkingDirectory="INSTALLFOLDER"
+                  Icon="NeathCopyIcon"
+                  IconIndex="0" />
+        <Shortcut Id="NeathCopyTrayStartupShortcut"
+                  Directory="StartupFolder"
+                  Name="NeathCopy Tray"
+                  Target="[#NeathCopyExeFile]"
+                  WorkingDirectory="INSTALLFOLDER"
+                  Arguments="--tray"
+                  Icon="NeathCopyIcon"
+                  IconIndex="0" />
+        <RegistryValue Root="HKCU"
+                       Key="Software\Eneleich\NeathCopy"
+                       Name="ShortcutsInstalled"
+                       Type="integer"
+                       Value="1"
+                       KeyPath="yes" />
+      </Component>
+
+      <Component Id="NeathCopyRootFiles" Guid="{72C598D3-59CF-4D9D-A180-B20802CD18F2}">
+        <File Source="..\..\Target\Release\NeathCopy.AdminHelper.exe" />
+        <File Source="..\..\Target\Release\NeathCopyEngine.dll" />
+        <File Source="..\..\Target\Release\NeathCopy.exe.config" />
+        <File Source="..\..\Target\Release\NeathCopy.exe.manifest" />
+        <File Source="..\..\Target\Release\x64\NeathCopyShell.dll" SelfRegCost="1" />
+        <File Source="..\..\Target\Release\Tools\ffmpeg-8.0.1-full_build\bin\ffmpeg.exe" />
+        <File Source="..\..\Target\Release\Tools\ffmpeg-8.0.1-full_build\bin\ffprobe.exe" />
+        <File Source="..\..\Target\neathcopy.ico" />
+      </Component>
+
+      <Directory Id="PREREQFOLDER" Name="Prerequisites">
+        <Directory Id="DOTNET48FOLDER" Name="DotNetFX48">
+          <Component Id="DotNet48PrereqFile" Guid="*">
+            <File Id="DotNetFx48Exe"
+                  Source="..\..\Target\Prerequisites\DotNetFX48\ndp48-x86-x64-allos-enu.exe"
+                  KeyPath="yes" />
+          </Component>
+        </Directory>
+        <Directory Id="VCREDISTFOLDER" Name="vcredist_x64">
+          <Component Id="VcRedistX64PrereqFile" Guid="*">
+            <File Id="VcRedistX64Exe"
+                  Source="..\..\Target\Prerequisites\vcredist_x64\vc_redist.x64.exe"
+                  KeyPath="yes" />
+          </Component>
+        </Directory>
+      </Directory>
+
+      <Component Id="RegistryDefaults" Guid="*">
+        <RegistryKey Root="HKLM" Key="Software\Eneleich" />
+
+        <RegistryKey Root="HKCU" Key="Software\Eneleich\NeathCopy">
+          <RegistryValue Name="LogsDir" Type="string" Value="C:\Users\Public\AppData\NeathCopy" />
+          <RegistryValue Name="ShellDebugMode" Type="string" Value="file" />
+          <RegistryValue Name="InstallDir" Type="string" Value="C:\Program Files\NeathCopy\" />
+          <RegistryValue Name="ShellDebugVerbosity" Type="integer" Value="0" />
+          <RegistryValue Name="FilesList" Type="string" Value="C:\Users\Public\AppData\NeathCopy\FilesList.txt" />
+          <RegistryValue Name="Handle" Type="string" Value="0" />
+          <RegistryValue Name="CopyHandler" Type="string" Value="C:\Program Files\NeathCopy\\NeathCopy.exe" />
+          <RegistryValue Name="ShellDebugEventLog" Type="integer" Value="0" />
+          <RegistryValue Name="ExistConfig" Type="string" Value="1" />
+          <RegistryValue Name="ShellDebug" Type="integer" Value="0" />
+          <RegistryValue Name="IsDefaultCopyHandler" Type="string" Value="1" />
+          <RegistryValue Name="Exist" Type="string" Value="0" />
+        </RegistryKey>
+
+        <RegistryKey Root="HKCU" Key="Software\Eneleich\NeathCopy\LastArguments">
+          <RegistryValue Name="Operation" Type="string" Value="" />
+          <RegistryValue Name="SourcesContainer" Type="string" Value="" />
+          <RegistryValue Name="Source" Type="string" Value="" />
+          <RegistryValue Name="Destiny" Type="string" Value="" />
+        </RegistryKey>
+
+        <RegistryKey Root="HKCU" Key="Software\Eneleich\NeathCopy\Settigs">
+          <RegistryValue Name="PlaySound_After_Cancel" Type="string" Value="True" />
+          <RegistryValue Name="AffterErrorAction" Type="string" Value="Close_AffterErrorAction" />
+          <RegistryValue Name="VisualCopySkins" Type="string" Value="Windows8.xaml" />
+          <RegistryValue Name="Language" Type="string" Value="English.xaml" />
+          <RegistryValue Name="PlaySound_After_Finish" Type="string" Value="True" />
+          <RegistryValue Name="BufferSize" Type="string" Value="262144" />
+          <RegistryValue Name="Process_ADD_DATA" Type="string" Value="SameVolumen_Process_ADD_DATA" />
+          <RegistryValue Name="PlaySound_After_ADD_DATA" Type="string" Value="False" />
+          <RegistryValue Name="Font" Type="string" Value="Fonts1.xaml" />
+          <RegistryValue Name="AddNewVisualCopy" Type="string" Value="SeparateWindows_AddNewVC" />
+          <RegistryValue Name="SetRunningState" Type="string" Value="StartOperation_SetRunningState" />
+          <RegistryValue Name="Theme" Type="string" Value="Windows8Theme.xaml" />
+          <RegistryValue Name="UpdateTimeInterval" Type="string" Value="150" />
+          <RegistryValue Name="FileCopier" Type="string" Value="CopyFileExFileCopier" />
+          <RegistryValue Name="IntegrationMode" Type="string" Value="TrayIPC" />
+          <RegistryValue Name="Brushes" Type="string" Value="Dark.xaml" />
+        </RegistryKey>
+
+        <RegistryValue Root="HKCU"
+                       Key="Software\Eneleich\NeathCopy"
+                       Name="InstalledByMsi"
+                       Type="integer"
+                       Value="1"
+                       KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="SOUNDSFOLDER">
+      <Component Id="SoundFiles" Guid="{17A4CC7B-B0E7-4CF7-9FE9-CF82765D3E47}">
+        <File Source="..\..\Target\Sounds\add data.wav" />
+        <File Source="..\..\Target\Sounds\cancell.wav" />
+        <File Source="..\..\Target\Sounds\task finished.wav" />
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="AppProgramsFolder">
+      <Component Id="ProgramsFolderCleanup" Guid="*">
+        <RemoveFolder Id="RemoveApplicationProgramsFolder" On="uninstall" />
+        <RegistryValue Root="HKCU"
+                       Key="Software\Eneleich\NeathCopy"
+                       Name="ProgramsFolderCreated"
+                       Type="integer"
+                       Value="1"
+                       KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <CustomAction Id="InstallDotNet48"
+                  FileRef="DotNetFx48Exe"
+                  ExeCommand="/q /norestart"
+                  Execute="deferred"
+                  Return="ignore"
+                  Impersonate="no" />
+
+    <CustomAction Id="InstallVcRedistX64"
+                  FileRef="VcRedistX64Exe"
+                  ExeCommand="/install /quiet /norestart"
+                  Execute="deferred"
+                  Return="ignore"
+                  Impersonate="no" />
+
+    <CustomAction Id="LaunchNeathCopy"
+                  FileRef="NeathCopyExeFile"
+                  ExeCommand=""
+                  Return="asyncNoWait"
+                  Execute="immediate"
+                  Impersonate="yes" />
+
+    <InstallExecuteSequence>
+      <Custom Action="InstallDotNet48"
+              After="InstallFiles"
+              Condition="NOT Installed AND (NOT NETFRAMEWORK48_RELEASE OR NETFRAMEWORK48_RELEASE &lt; 528040)" />
+      <Custom Action="InstallVcRedistX64"
+              After="InstallDotNet48"
+              Condition="NOT Installed AND VCRUNTIME_X64_INSTALLED &lt;&gt; 1" />
+    </InstallExecuteSequence>
+
+    <ui:WixUI Id="WixUI_InstallDir" />
+    <UI>
+      <Publish Dialog="ExitDialog"
+               Control="Finish"
+               Event="DoAction"
+               Value="LaunchNeathCopy"
+               Condition="WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 AND NOT Installed" />
+    </UI>
+
+    <Feature Id="MainFeature" Title="NeathCopy" Level="1">
+      <ComponentRef Id="NeathCopyMainExecutable" />
+      <ComponentRef Id="NeathCopyShortcuts" />
+      <ComponentRef Id="NeathCopyRootFiles" />
+      <ComponentRef Id="DotNet48PrereqFile" />
+      <ComponentRef Id="VcRedistX64PrereqFile" />
+      <ComponentRef Id="RegistryDefaults" />
+      <ComponentRef Id="SoundFiles" />
+      <ComponentRef Id="ProgramsFolderCleanup" />
+    </Feature>
+  </Package>
+</Wix>
