@@ -122,6 +122,7 @@ namespace NeathCopy.ViewModels
                 PropertyChanged?.Invoke(this, args);
             }
         }
+        string DriveInfoRefreshPath { get; set; }
 
         string targetDevice;
         public string TargetDevice
@@ -399,26 +400,36 @@ namespace NeathCopy.ViewModels
                         VisualCopy.RequestInf.MultiDestinationRequest.DestinationRoots.Count > 0)
                     {
                         var destinationRoots = VisualCopy.RequestInf.MultiDestinationRequest.DestinationRoots;
-                        To = string.Format("Multiple destinations ({0})", destinationRoots.Count);
-                        ToToolTip = string.Join(Environment.NewLine, destinationRoots);
+                        var displayRoots = destinationRoots
+                            .Where(p => !string.IsNullOrWhiteSpace(p))
+                            .Select(PathDisplayHelper.ToDisplayPath)
+                            .ToList();
+                        var firstDisplayDestination = displayRoots.FirstOrDefault() ?? string.Empty;
 
-                        var firstDestination = destinationRoots[0];
-                        VisualCopy.driveInfo = DriveInfoFactory.CreateDriveInfo(PathDisplayHelper.GetRootForDriveInfo(firstDestination));
-                        TargetDevice = "Multiple destinations";
+                        To = firstDisplayDestination;
+                        if (displayRoots.Count > 1)
+                            To = string.Format("{0} (+{1})", To, displayRoots.Count - 1);
+
+                        ToToolTip = string.Join(Environment.NewLine, displayRoots);
+
+                        TrySetDriveInfo(firstDisplayDestination);
                     }
                     else
                     {
-                        To = System.IO.Path.GetDirectoryName(CurrentFile.DestinyPath);
-                        ToToolTip = To;
+                        var displayDestinyPath = PathDisplayHelper.ToDisplayPath(CurrentFile.DestinyPath);
+                        var displayDestinyDirectory = PathDisplayHelper.ToDisplayPath(System.IO.Path.GetDirectoryName(displayDestinyPath));
 
-                        //Drive Info
-                        VisualCopy.driveInfo = DriveInfoFactory.CreateDriveInfo(PathDisplayHelper.GetRootForDriveInfo(To));
-                        if (VisualCopy.driveInfo != null)
-                            TargetDevice = string.Format("{0}({1}) {2}"
-                                , VisualCopy.driveInfo.VolumeLabel.ShortVersion(4)
-                                , VisualCopy.driveInfo.Name == null ? "" : VisualCopy.driveInfo.Name
-                                , new MySize(VisualCopy.driveInfo.TotalSize));
+                        To = displayDestinyDirectory;
+                        ToToolTip = displayDestinyPath;
+
+                        TrySetDriveInfo(displayDestinyPath);
                     }
+
+                    if (VisualCopy.driveInfo != null)
+                        TargetDevice = string.Format("{0}({1}) {2}"
+                            , VisualCopy.driveInfo.VolumeLabel.ShortVersion(4)
+                            , VisualCopy.driveInfo.Name == null ? "" : VisualCopy.driveInfo.Name
+                            , new MySize(VisualCopy.driveInfo.TotalSize));
                 }
 
                 //Operation, CopyOption
@@ -430,6 +441,26 @@ namespace NeathCopy.ViewModels
 
             }
             catch (Exception) { }
+        }
+        private void TrySetDriveInfo(string path)
+        {
+            try
+            {
+                if (!DriveInfoFactory.TryGetRefreshPath(path, out var refreshPath) || string.IsNullOrWhiteSpace(refreshPath))
+                {
+                    DriveInfoRefreshPath = null;
+                    VisualCopy.driveInfo = null;
+                    return;
+                }
+
+                DriveInfoRefreshPath = refreshPath;
+                VisualCopy.driveInfo = DriveInfoFactory.CreateDriveInfo(DriveInfoRefreshPath);
+            }
+            catch (Exception)
+            {
+                DriveInfoRefreshPath = null;
+                VisualCopy.driveInfo = null;
+            }
         }
         public void UpdateSpeed()
         {
@@ -568,12 +599,18 @@ namespace NeathCopy.ViewModels
         {
             try
             {
-                if (VisualCopy == null || VisualCopy.driveInfo == null || VisualCopy.driveInfo.TotalSize == 0) return;
+                if (VisualCopy == null || string.IsNullOrWhiteSpace(DriveInfoRefreshPath))
+                    return;
 
                 try
                 {
+                    if (!DriveInfoFactory.TryGetRefreshPath(DriveInfoRefreshPath, out var refreshPath) || string.IsNullOrWhiteSpace(refreshPath))
+                        return;
+
                     //Update DriveInfo
-                    VisualCopy.driveInfo = DriveInfoFactory.CreateDriveInfo(VisualCopy.driveInfo.Name);
+                    VisualCopy.driveInfo = DriveInfoFactory.CreateDriveInfo(refreshPath);
+                    if (VisualCopy.driveInfo == null || VisualCopy.driveInfo.TotalSize == 0)
+                        return;
 
                     //Driver Size ProgressBar
                     DriverSizePorcent = 100 - (VisualCopy.driveInfo.TotalFreeSpace * 100f) / VisualCopy.driveInfo.TotalSize;

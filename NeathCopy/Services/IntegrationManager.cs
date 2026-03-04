@@ -94,7 +94,10 @@ namespace NeathCopy.Services
 
         public static void UpdateAutoStart(Configuration config)
         {
-            var enable = IsResident(config);
+            if (config == null)
+                return;
+
+            var enable = config.StartWithWindows;
 
             try
             {

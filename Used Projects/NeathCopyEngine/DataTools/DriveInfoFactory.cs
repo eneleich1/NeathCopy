@@ -24,13 +24,56 @@ namespace NeathCopyEngine.DataTools
 
     public class DriveInfoFactory
     {
-        static Uri uri;
-
         public static IDriveInfo CreateDriveInfo(string path)
         {
-            uri = new Uri(PathDisplayHelper.ToDisplayPath(path));
-            if (uri.IsUnc) return new NetworkDriveInfo(path);
-            return new SystemDriveInfo(path);
+            var displayPath = PathDisplayHelper.ToDisplayPath(path);
+            if (string.IsNullOrWhiteSpace(displayPath))
+                throw new ArgumentException("Path for drive information cannot be null or empty.", nameof(path));
+
+            if (TryGetUncShareRoot(displayPath, out _))
+                return new NetworkDriveInfo(displayPath);
+
+            return new SystemDriveInfo(displayPath);
+        }
+
+        public static bool TryGetRefreshPath(string path, out string refreshPath)
+        {
+            refreshPath = null;
+            var displayPath = PathDisplayHelper.ToDisplayPath(path);
+            if (string.IsNullOrWhiteSpace(displayPath))
+                return false;
+
+            if (TryGetUncShareRoot(displayPath, out var uncShareRoot))
+            {
+                refreshPath = uncShareRoot;
+                return true;
+            }
+
+            var localRoot = PathDisplayHelper.GetRootForDriveInfo(displayPath);
+            if (string.IsNullOrWhiteSpace(localRoot))
+                return false;
+
+            refreshPath = localRoot;
+            return true;
+        }
+
+        public static bool TryGetUncShareRoot(string path, out string uncShareRoot)
+        {
+            uncShareRoot = null;
+            var displayPath = PathDisplayHelper.ToDisplayPath(path);
+            if (string.IsNullOrWhiteSpace(displayPath))
+                return false;
+
+            if (!displayPath.StartsWith(@"\\", StringComparison.Ordinal))
+                return false;
+
+            var trimmed = displayPath.TrimEnd('\\');
+            var parts = trimmed.Split(new[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length < 2)
+                return false;
+
+            uncShareRoot = string.Format(@"\\{0}\{1}\", parts[0], parts[1]);
+            return true;
         }
     }
 
@@ -70,19 +113,24 @@ namespace NeathCopyEngine.DataTools
     public class NetworkDriveInfo : IDriveInfo
     {
         long availableFreeSpace, totalFreeSpace, totalSize;
-        string Path;
+        string normalizedPath;
+        string uncShareRoot;
 
         public NetworkDriveInfo(string path)
         {
             var displayPath = PathDisplayHelper.ToDisplayPath(path);
+            if (!DriveInfoFactory.TryGetUncShareRoot(displayPath, out var shareRoot))
+                throw new ArgumentException("Path must be a valid UNC path.", nameof(path));
 
-            if (!DiskSpaceNative.GetDiskFreeSpaceEx(displayPath, out var freeBytesAvailable, out var totalNumberOfBytes, out var totalNumberOfFreeBytes))
+            normalizedPath = displayPath;
+            uncShareRoot = shareRoot;
+
+            if (!DiskSpaceNative.GetDiskFreeSpaceEx(uncShareRoot, out var freeBytesAvailable, out var totalNumberOfBytes, out var totalNumberOfFreeBytes))
                 throw new IOException("Unable to retrieve drive information for network path.");
 
             availableFreeSpace = (long)freeBytesAvailable;
             totalFreeSpace = (long)totalNumberOfFreeBytes;
             totalSize = (long)totalNumberOfBytes;
-            Path = displayPath;
         }
 
         public long AvailableFreeSpace => availableFreeSpace;
@@ -93,9 +141,9 @@ namespace NeathCopyEngine.DataTools
 
         public string VolumeLabel => "Net";
 
-        public string Name => "Net";
+        public string Name => uncShareRoot;
 
-        public string RootDirectory => "Net";
+        public string RootDirectory => uncShareRoot;
 
         public DriveType DriveType => DriveType.Network;
 
@@ -103,7 +151,7 @@ namespace NeathCopyEngine.DataTools
 
         public IDriveInfo Clone()
         {
-           return new NetworkDriveInfo(Path);
+           return new NetworkDriveInfo(normalizedPath);
         }
     }
 

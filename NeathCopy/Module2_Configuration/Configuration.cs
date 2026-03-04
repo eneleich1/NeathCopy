@@ -212,6 +212,18 @@ namespace NeathCopy.Module2_Configuration
             }
         }
 
+        bool startWithWindows;
+        public bool StartWithWindows
+        {
+            get { return startWithWindows; }
+            set
+            {
+                startWithWindows = value;
+                RegisterAccess.Acces.SetConfigurationValue("StartWithWindows", startWithWindows ? "1" : "0");
+                RaiseSettingChanged();
+            }
+        }
+
         string crashRecoveryFolder;
         public string CrashRecoveryFolder
         {
@@ -513,6 +525,7 @@ namespace NeathCopy.Module2_Configuration
             config.UpdateTimeInterval = 200;
             config.IntegrationMode = "TrayIPC";
             config.IsDefaultCopyHandler = false;
+            config.StartWithWindows = false;
             config.CrashRecoveryEnabled = false;
             config.CrashRecoveryFolder = GetDefaultFilesListFolder();
 
@@ -555,6 +568,10 @@ namespace NeathCopy.Module2_Configuration
                 config.IntegrationMode = string.IsNullOrWhiteSpace(modeValue) ? "TrayIPC" : modeValue;
 
                 config.isDefaultCopyHandler = RegisterAccess.Acces.IsDefaultCopyHandlerFlag();
+                config.startWithWindows = ParseBoolOrDefault(
+                    RegisterAccess.Acces.GetConfigurationValue("StartWithWindows"),
+                    string.Equals(config.IntegrationMode, IntegrationManager.TrayIpcMode, StringComparison.OrdinalIgnoreCase) &&
+                    config.isDefaultCopyHandler);
                 config.CrashRecoveryEnabled = ParseBoolOrDefault(
                     RegisterAccess.Acces.GetConfigurationValue("CrashRecoveryEnabled"),
                     false);
@@ -570,7 +587,7 @@ namespace NeathCopy.Module2_Configuration
         }
         public void SaveToRegister()
         {
-
+            IntegrationManager.UpdateAutoStart(this);
         }
 
         #endregion

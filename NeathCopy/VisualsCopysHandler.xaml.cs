@@ -58,6 +58,7 @@ namespace NeathCopy
         static VisualsCopysHandler()
         {
             Configuration.Main = Configuration.LoadFromRegister();
+            IntegrationManager.UpdateAutoStart(Configuration.Main);
             ThemesManager.Manager.InitResources();
             ThemesManager.Manager.SetThemes(Configuration.Main);
         }
@@ -307,12 +308,15 @@ namespace NeathCopy
                 #endregion
 
                 Configuration.Main = Configuration.LoadFromRegister();
+                IntegrationManager.UpdateAutoStart(Configuration.Main);
                 IsTrayLaunch = arguments != null && arguments.Any(a => string.Equals(a, "--tray", StringComparison.OrdinalIgnoreCase));
                 if (IsTrayLaunch)
                 {
                     Configuration.Main.IntegrationMode = IntegrationManager.TrayIpcMode;
                     Configuration.Main.IsDefaultCopyHandler = true;
+                    Configuration.Main.StartWithWindows = true;
                     RegisterAccess.Acces.SetExistConfiguration(true);
+                    IntegrationManager.UpdateAutoStart(Configuration.Main);
                 }
                 IntegrationManager.EnsureMinimalRegistryKeysIfMissing(Configuration.Main);
 

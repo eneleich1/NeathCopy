@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Threading;
 
 namespace NeathCopyEngine.CopyHandlers
@@ -54,6 +55,7 @@ namespace NeathCopyEngine.CopyHandlers
                     return;
                 }
 
+                LogCopyFailureDiagnostic(src, dst, error);
                 throw new IOException(string.Format("CopyFileEx failed ({0}): {1}", error, new Win32Exception(error).Message));
             }
 
@@ -89,6 +91,53 @@ namespace NeathCopyEngine.CopyHandlers
             catch
             {
                 // Ignore cleanup failures.
+            }
+        }
+
+        private static void LogCopyFailureDiagnostic(string sourcePath, string destinationPath, int win32ErrorCode)
+        {
+            try
+            {
+                var hresult = Marshal.GetHRForLastWin32Error();
+                var destinationExists = File.Exists(destinationPath);
+                var destinationAttributes = destinationExists
+                    ? File.GetAttributes(destinationPath).ToString()
+                    : "(not found)";
+                var identity = GetCurrentWindowsIdentity();
+
+                var diagnostic = string.Format(
+                    "CopyFileEx failure | Source=\"{0}\" | Destination=\"{1}\" | Win32Error={2} | HRESULT=0x{3:X8} | DestinationExists={4} | DestinationAttributes=\"{5}\" | Identity=\"{6}\"",
+                    sourcePath ?? string.Empty,
+                    destinationPath ?? string.Empty,
+                    win32ErrorCode,
+                    hresult,
+                    destinationExists,
+                    destinationAttributes,
+                    identity);
+
+                System.Diagnostics.Trace.TraceError(diagnostic);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.TraceError("CopyFileEx failure diagnostic logging failed: " + ex);
+            }
+        }
+
+        private static string GetCurrentWindowsIdentity()
+        {
+            try
+            {
+                using (var identity = WindowsIdentity.GetCurrent())
+                {
+                    if (identity == null)
+                        return "(unknown)";
+
+                    return string.IsNullOrWhiteSpace(identity.Name) ? "(unknown)" : identity.Name;
+                }
+            }
+            catch
+            {
+                return "(unknown)";
             }
         }
 
