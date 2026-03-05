@@ -784,11 +784,16 @@ HRESULT FileDragDropExt::QueryContextMenuImpl(HMENU hmenu, UINT indexMenu, UINT 
 	{
 		if (fastmove == 1)
 		{
-			SHELL_LOG(log, 2, L"QCM", L"QCM-05", L"Fast move, letting Windows handle move");
-			return MAKE_HRESULT(SEVERITY_SUCCESS, 0, USHORT(0));
+			// Same-volume move makes Windows prefer Move as the default drop action.
+			// We must still report the two NeathCopy menu items that were inserted;
+			// otherwise Explorer treats the extension as if it added no commands and
+			// the custom NeathCopy Copy/Move entries stop invoking our handler.
+			SHELL_LOG(log, 2, L"QCM", L"QCM-05", L"Fast move detected; keeping NeathCopy commands registered and leaving Windows default unchanged");
 		}
-
-		SetMenuDefaultItem(hmenu, idCmdFirst + defItem - 1, false);
+		else
+		{
+			SetMenuDefaultItem(hmenu, idCmdFirst + defItem - 1, false);
+		}
 	}
 
 	return MAKE_HRESULT(SEVERITY_SUCCESS, FACILITY_NULL, 2);
