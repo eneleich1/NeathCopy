@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
      xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
   <Package Name="NeathCopy"
@@ -14,7 +14,8 @@
     <Icon Id="NeathCopyIcon" SourceFile="..\..\Target\neathcopy.ico" />
     <Property Id="ARPPRODUCTICON" Value="NeathCopyIcon" />
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
-    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Quieres lanzar NeathCopy ahora" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch NeathCopy now" />
+    <WixVariable Id="WixUILicenseRtf" Value="License-MIT.rtf" />
 
     <Property Id="ARPCONTACT" Value="Nestor" />
     <Property Id="ARPCOMMENTS" Value="Replace Windows Copy and Move Functions" />
