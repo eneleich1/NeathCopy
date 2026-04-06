@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
      xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
-  <Package Name="NeathCopy"
+  <!-- Lite MSI: no embedded .NET / VC++ redist; InstallPrereqs.ps1 downloads from Microsoft at install time. -->
+  <Package Name="NeathCopy (Lite)"
            Manufacturer="Eneleich"
            Version="1.0.0"
-           UpgradeCode="{8853671A-AB8C-4516-8A1B-B4466FA4EDED}"
+           UpgradeCode="{E1F2A3B4-C5D6-4789-0123-456789ABCDEF}"
            Compressed="yes"
            Scope="perMachine">
 
-    <MajorUpgrade DowngradeErrorMessage="A newer version of NeathCopy is already installed." />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of NeathCopy (Lite) is already installed." />
     <MediaTemplate EmbedCab="yes" />
 
     <Icon Id="NeathCopyIcon" SourceFile="..\..\Target\neathcopy.ico" />
@@ -18,7 +19,7 @@
     <WixVariable Id="WixUILicenseRtf" Value="License-MIT.rtf" />
 
     <Property Id="ARPCONTACT" Value="Nestor" />
-    <Property Id="ARPCOMMENTS" Value="Replace Windows Copy and Move Functions" />
+    <Property Id="ARPCOMMENTS" Value="NeathCopy Lite — prerequisites download on install (smaller MSI)." />
     <Property Id="ARPHELPTELEPHONE" Value="+1 786-865-3213" />
 
     <Property Id="NETFRAMEWORK48_RELEASE">
@@ -46,14 +47,13 @@
       <Directory Id="AppProgramsFolder" Name="NeathCopy" />
     </StandardDirectory>
 
-    <!-- All users: %ProgramData%\...\StartUp (WiX has no CommonStartupFolder standard id). -->
     <StandardDirectory Id="CommonAppDataFolder">
       <Directory Id="DirCommonStartupMsft" Name="Microsoft">
         <Directory Id="DirCommonStartupWin" Name="Windows">
           <Directory Id="DirCommonStartupMenu" Name="Start Menu">
             <Directory Id="DirCommonStartupPrograms" Name="Programs">
               <Directory Id="AllUsersStartupFolder" Name="StartUp">
-                <Component Id="NeathCopyCommonStartupTray" Guid="A8F3E2D1-4B5C-6D7E-8F90-123456789ABC">
+                <Component Id="NeathCopyCommonStartupTray" Guid="C9E8D7F6-A5B4-3210-9876-543210FEDCBA">
                   <Shortcut Id="NeathCopyTrayCommonStartupShortcut"
                             Directory="AllUsersStartupFolder"
                             Name="NeathCopy Tray"
@@ -64,7 +64,7 @@
                             IconIndex="0" />
                   <RegistryValue Root="HKLM"
                                  Key="Software\Eneleich\NeathCopy"
-                                 Name="CommonStartupTrayInstalled"
+                                 Name="CommonStartupTrayInstalledLite"
                                  Type="integer"
                                  Value="1"
                                  KeyPath="yes" />
@@ -91,14 +91,13 @@
                   IconIndex="0" />
         <RegistryValue Root="HKCU"
                        Key="Software\Eneleich\NeathCopy"
-                       Name="ShortcutsInstalled"
+                       Name="ShortcutsInstalledLite"
                        Type="integer"
                        Value="1"
                        KeyPath="yes" />
       </Component>
 
-      <!-- Machine-wide defaults: shell + first-run for users who never ran the MSI (HKCU is per-user). -->
-      <Component Id="NeathCopyMachineRegistry" Guid="B7E2D1C0-5A4B-3C2D-1E0F-A98765432101">
+      <Component Id="NeathCopyMachineRegistry" Guid="D0E1F2A3-B4C5-4657-8901-23456789ABCD">
         <RegistryKey Root="HKLM" Key="Software\Eneleich\NeathCopy">
           <RegistryValue Type="string" Name="InstallDir" Value="[INSTALLFOLDER]" />
           <RegistryValue Type="string" Name="CopyHandler" Value="[INSTALLFOLDER]NeathCopy.exe" />
@@ -109,13 +108,13 @@
         </RegistryKey>
         <RegistryValue Root="HKLM"
                        Key="Software\Eneleich\NeathCopy"
-                       Name="MachineDefaultsInstalled"
+                       Name="MachineDefaultsInstalledLite"
                        Type="integer"
                        Value="1"
                        KeyPath="yes" />
       </Component>
 
-      <Component Id="NeathCopyRootFiles" Guid="{72C598D3-59CF-4D9D-A180-B20802CD18F2}">
+      <Component Id="NeathCopyRootFiles" Guid="{82D609E4-6AFD-4E0E-B291-C31213DE19F3}">
         <File Source="..\..\Target\Release\NeathCopy.AdminHelper.exe" />
         <File Source="..\..\Target\Release\NeathCopyEngine.dll" />
         <File Source="..\..\Target\Release\NeathCopy.exe.config" />
@@ -124,22 +123,11 @@
         <File Source="..\..\Target\neathcopy.ico" />
       </Component>
 
-      <Directory Id="PREREQFOLDER" Name="Prerequisites">
-        <Directory Id="DOTNET48FOLDER" Name="DotNetFX48">
-          <Component Id="DotNet48PrereqFile" Guid="*">
-            <File Id="DotNetFx48Exe"
-                  Source="..\..\Target\Prerequisites\DotNetFX48\ndp48-x86-x64-allos-enu.exe"
-                  KeyPath="yes" />
-          </Component>
-        </Directory>
-        <Directory Id="VCREDISTFOLDER" Name="vcredist_x64">
-          <Component Id="VcRedistX64PrereqFile" Guid="*">
-            <File Id="VcRedistX64Exe"
-                  Source="..\..\Target\Prerequisites\vcredist_x64\vc_redist.x64.exe"
-                  KeyPath="yes" />
-          </Component>
-        </Directory>
-      </Directory>
+      <!-- Scripts run deferred (elevated) to download .NET 4.8 web bootstrapper and VC++ x64 from Microsoft. -->
+      <Component Id="PrereqScripts" Guid="A1B2C3D4-E5F6-7890-ABCD-EF1234567893">
+        <File Id="InstallPrereqsCmd" Source="InstallPrereqs.cmd" KeyPath="yes" />
+        <File Id="InstallPrereqsPs1" Source="InstallPrereqs.ps1" />
+      </Component>
 
       <Component Id="RegistryDefaults" Guid="*">
         <RegistryKey Root="HKLM" Key="Software\Eneleich" />
@@ -187,7 +175,7 @@
 
         <RegistryValue Root="HKCU"
                        Key="Software\Eneleich\NeathCopy"
-                       Name="InstalledByMsi"
+                       Name="InstalledByMsiLite"
                        Type="integer"
                        Value="1"
                        KeyPath="yes" />
@@ -207,23 +195,16 @@
         <RemoveFolder Id="RemoveApplicationProgramsFolder" On="uninstall" />
         <RegistryValue Root="HKCU"
                        Key="Software\Eneleich\NeathCopy"
-                       Name="ProgramsFolderCreated"
+                       Name="ProgramsFolderCreatedLite"
                        Type="integer"
                        Value="1"
                        KeyPath="yes" />
       </Component>
     </DirectoryRef>
 
-    <CustomAction Id="InstallDotNet48"
-                  FileRef="DotNetFx48Exe"
-                  ExeCommand="/q /norestart"
-                  Execute="deferred"
-                  Return="ignore"
-                  Impersonate="no" />
-
-    <CustomAction Id="InstallVcRedistX64"
-                  FileRef="VcRedistX64Exe"
-                  ExeCommand="/install /quiet /norestart"
+    <CustomAction Id="DownloadPrereqs"
+                  FileRef="InstallPrereqsCmd"
+                  ExeCommand=""
                   Execute="deferred"
                   Return="ignore"
                   Impersonate="no" />
@@ -236,12 +217,9 @@
                   Impersonate="yes" />
 
     <InstallExecuteSequence>
-      <Custom Action="InstallDotNet48"
+      <Custom Action="DownloadPrereqs"
               After="InstallFiles"
-              Condition="NOT Installed AND (NOT NETFRAMEWORK48_RELEASE OR NETFRAMEWORK48_RELEASE &lt; 528040)" />
-      <Custom Action="InstallVcRedistX64"
-              After="InstallDotNet48"
-              Condition="NOT Installed AND VCRUNTIME_X64_INSTALLED &lt;&gt; 1" />
+              Condition="NOT Installed AND ((NOT NETFRAMEWORK48_RELEASE OR NETFRAMEWORK48_RELEASE &lt; 528040) OR VCRUNTIME_X64_INSTALLED &lt;&gt; 1)" />
     </InstallExecuteSequence>
 
     <ui:WixUI Id="WixUI_InstallDir" />
@@ -253,14 +231,13 @@
                Condition="WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 AND NOT Installed" />
     </UI>
 
-    <Feature Id="MainFeature" Title="NeathCopy" Level="1">
+    <Feature Id="MainFeature" Title="NeathCopy (Lite)" Level="1">
       <ComponentRef Id="NeathCopyMainExecutable" />
       <ComponentRef Id="NeathCopyShortcuts" />
       <ComponentRef Id="NeathCopyCommonStartupTray" />
       <ComponentRef Id="NeathCopyMachineRegistry" />
       <ComponentRef Id="NeathCopyRootFiles" />
-      <ComponentRef Id="DotNet48PrereqFile" />
-      <ComponentRef Id="VcRedistX64PrereqFile" />
+      <ComponentRef Id="PrereqScripts" />
       <ComponentRef Id="RegistryDefaults" />
       <ComponentRef Id="SoundFiles" />
       <ComponentRef Id="ProgramsFolderCleanup" />
