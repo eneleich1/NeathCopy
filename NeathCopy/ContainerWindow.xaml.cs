@@ -58,6 +58,26 @@ namespace NeathCopy
             return viewModel.AddNew();
         }
 
+        internal void BringToFront()
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(BringToFront);
+                return;
+            }
+
+            if (Visibility != Visibility.Visible)
+                Show();
+
+            if (WindowState == WindowState.Minimized)
+                WindowState = WindowState.Normal;
+
+            Activate();
+            Topmost = true;
+            Topmost = false;
+            Focus();
+        }
+
         /// <summary>
         /// Remove the specific visualCopy from this container.
         /// </summary>

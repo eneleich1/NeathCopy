@@ -221,7 +221,7 @@ namespace NeathCopy
                     Process.GetCurrentProcess().Kill();
                     break;
                 case WM_CREATE:
-                    if (StartupClass.IsTrayLaunch && IntegrationManager.IsResident(Configuration.Main))
+                    if (StartupClass.IsInitialTrayBootstrapPending && IntegrationManager.IsResident(Configuration.Main))
                         Visibility = System.Windows.Visibility.Hidden;
                     break;
                 case WM_ADD_DATAINFO:
@@ -297,6 +297,11 @@ namespace NeathCopy
         public static CmdShellExtAgent cmdShellAgent;
         public static RequestInfo requestInfo=new RequestInfo();
         public static bool IsTrayLaunch;
+        public static bool IsInitialTrayBootstrapPending { get; private set; }
+        public static void MarkInitialTrayBootstrapComplete()
+        {
+            IsInitialTrayBootstrapPending = false;
+        }
         public StartupClass() { }
         [STAThread]
         public static void Main(string[] arguments)
@@ -339,6 +344,7 @@ namespace NeathCopy
                 Configuration.Main = Configuration.LoadFromRegister();
                 IntegrationManager.UpdateAutoStart(Configuration.Main);
                 IsTrayLaunch = arguments != null && arguments.Any(a => string.Equals(a, "--tray", StringComparison.OrdinalIgnoreCase));
+                IsInitialTrayBootstrapPending = IsTrayLaunch;
                 if (IsTrayLaunch && !TryAcquireTrayLaunchMutex())
                     return;
 

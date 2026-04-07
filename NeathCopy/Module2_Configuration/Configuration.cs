@@ -319,7 +319,7 @@ namespace NeathCopy.Module2_Configuration
 
             if (VisualsCopysHandler.MainContainer.Visibility != Visibility.Visible)
             {
-                VisualsCopysHandler.MainContainer.Show();
+                VisualsCopysHandler.MainContainer.BringToFront();
             }
 
             return vc;
@@ -336,7 +336,7 @@ namespace NeathCopy.Module2_Configuration
             controller.RegisterContainer(VisualsCopysHandler.MainContainer);
 
             var vc = VisualsCopysHandler.MainContainer.AddNew();
-            VisualsCopysHandler.MainContainer.Show();
+            VisualsCopysHandler.MainContainer.BringToFront();
 
             return vc;
         }

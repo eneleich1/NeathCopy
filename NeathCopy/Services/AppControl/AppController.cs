@@ -45,6 +45,8 @@ namespace NeathCopy.Services.AppControl
         public void ApplyIntegrationState()
         {
             var resident = IntegrationManager.IsResident(Configuration.Main);
+            var trayLaunch = StartupClass.IsTrayLaunch;
+            var initialTrayBootstrapPending = StartupClass.IsInitialTrayBootstrapPending;
             IntegrationManager.EnsureMinimalRegistryKeysIfMissing(Configuration.Main);
             IntegrationManager.UpdateAutoStart(Configuration.Main);
 
@@ -54,10 +56,11 @@ namespace NeathCopy.Services.AppControl
                 EnsureTrayIcon();
                 StartTrayTimer();
 
-                if (StartupClass.IsTrayLaunch)
+                if (initialTrayBootstrapPending)
                 {
                     HideToTray();
                     mainContainer?.Hide();
+                    StartupClass.MarkInitialTrayBootstrapComplete();
                 }
             }
             else
@@ -66,7 +69,7 @@ namespace NeathCopy.Services.AppControl
                 StopTrayTimer();
                 DisposeTrayIcon();
 
-                if (StartupClass.IsTrayLaunch && !pendingExitToLegacy)
+                if (trayLaunch && !pendingExitToLegacy)
                     FullShutdown("Tray launch in legacy mode");
             }
         }
@@ -463,10 +466,7 @@ namespace NeathCopy.Services.AppControl
 
             if (mainContainer.VisualsCopys.Any())
             {
-                if (mainContainer.Visibility != Visibility.Visible)
-                    mainContainer.Show();
-
-                mainContainer.Activate();
+                mainContainer.BringToFront();
             }
         }
 
