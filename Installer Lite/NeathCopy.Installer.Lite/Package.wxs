@@ -17,6 +17,7 @@
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch NeathCopy now" />
     <WixVariable Id="WixUILicenseRtf" Value="License-MIT.rtf" />
+    <WixVariable Id="WixUIDialogBmp" Value="Assets\WixUIDialogBmp.bmp" />
 
     <Property Id="ARPCONTACT" Value="Nestor" />
     <Property Id="ARPCOMMENTS" Value="NeathCopy Lite — prerequisites download on install (smaller MSI)." />
