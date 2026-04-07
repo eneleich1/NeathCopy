@@ -595,11 +595,13 @@ namespace NeathCopy.Services.AppControl
 
         private void EnsureMainWindow()
         {
-            if (mainWindow == null || !mainWindow.IsLoaded)
+            if (mainWindow == null)
             {
                 mainWindow = new VisualsCopysHandler(this);
-                mainWindow.Show();
             }
+
+            if (!mainWindow.IsLoaded)
+                mainWindow.Show();
         }
 
         private void FullShutdown(string reason)

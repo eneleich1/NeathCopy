@@ -1,4 +1,4 @@
-﻿using NeathCopy.Themes;
+using NeathCopy.Themes;
 using NeathCopy.Tools;
 using NeathCopyEngine.CopyHandlers;
 using NeathCopyEngine.Helpers;
@@ -570,8 +570,7 @@ namespace NeathCopy.Module2_Configuration
                 config.isDefaultCopyHandler = RegisterAccess.Acces.IsDefaultCopyHandlerFlag();
                 config.startWithWindows = ParseBoolOrDefault(
                     RegisterAccess.Acces.GetConfigurationValue("StartWithWindows"),
-                    string.Equals(config.IntegrationMode, IntegrationManager.TrayIpcMode, StringComparison.OrdinalIgnoreCase) &&
-                    config.isDefaultCopyHandler);
+                    false);
                 config.CrashRecoveryEnabled = ParseBoolOrDefault(
                     RegisterAccess.Acces.GetConfigurationValue("CrashRecoveryEnabled"),
                     false);

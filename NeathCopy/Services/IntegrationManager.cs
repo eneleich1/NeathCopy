@@ -97,6 +97,12 @@ namespace NeathCopy.Services
             if (config == null)
                 return;
 
+            if (IsInstallerManagedStartup())
+            {
+                RemoveRunAutoStart();
+                return;
+            }
+
             var enable = config.StartWithWindows;
 
             try
@@ -116,6 +122,30 @@ namespace NeathCopy.Services
                         if (key.GetValueNames().Contains(RunValueName))
                             key.DeleteValue(RunValueName, false);
                     }
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public static bool IsInstallerManagedStartup()
+        {
+            return RegisterAccess.Acces.ValueExists("InstalledByMsi")
+                || RegisterAccess.Acces.ValueExists("InstalledByMsiLite");
+        }
+
+        private static void RemoveRunAutoStart()
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(RunKeyPath, true))
+                {
+                    if (key == null)
+                        return;
+
+                    if (key.GetValueNames().Contains(RunValueName))
+                        key.DeleteValue(RunValueName, false);
                 }
             }
             catch (Exception)

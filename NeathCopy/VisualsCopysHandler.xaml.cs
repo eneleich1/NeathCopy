@@ -25,6 +25,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using NeathCopy.ViewModels;
+using System.Threading;
 using System.Windows.Threading;
 
 namespace NeathCopy
@@ -36,6 +37,8 @@ namespace NeathCopy
     {
         public static HwndSource hwndCopy;
         private readonly VisualsCopysHandlerViewModel viewModel;
+        private bool commonStateInitialized;
+        private bool sourceStateInitialized;
         internal IAppController Controller { get; }
 
         public static VisualsCopysHandler MainHandler { get; internal set; }
@@ -45,8 +48,15 @@ namespace NeathCopy
         {
             get
             {
-                foreach (var container in ContainersList)
+                var containers = ContainersList;
+                if (containers == null)
+                    yield break;
+
+                foreach (var container in containers)
                 {
+                    if (container?.VisualsCopys == null)
+                        continue;
+
                     foreach (var vc in container.VisualsCopys)
                     {
                         yield return vc;
@@ -76,21 +86,40 @@ namespace NeathCopy
 
             if (Controller is AppController appController)
                 appController.AttachMainWindow(this);
+
+            EnsureCommonStateInitialized();
+        }
+
+        private void EnsureCommonStateInitialized()
+        {
+            if (commonStateInitialized)
+                return;
+
+            commonStateInitialized = true;
+            if (Controller is AppController appController)
+                ContainersList = appController.ContainersList;
+            else if (ContainersList == null)
+                ContainersList = new List<ContainerWindow>();
+
+            MainHandler = this;
+        }
+
+        private void InitializeSourceState()
+        {
+            if (sourceStateInitialized)
+                return;
+
+            sourceStateInitialized = true;
+            hwndCopy = PresentationSource.FromVisual(this) as HwndSource;
+            hwndCopy?.AddHook(WndProc);
         }
 
         private void MyInitialize()
         {
             try
             {
-                //Initialize some fields
-                if (Controller is AppController appController)
-                    ContainersList = appController.ContainersList;
-                else
-                    ContainersList = new List<ContainerWindow>();
-
-                MainHandler = this;
-                hwndCopy = PresentationSource.FromVisual(this) as HwndSource;
-                hwndCopy.AddHook(WndProc);
+                EnsureCommonStateInitialized();
+                InitializeSourceState();
 
                 //Ensure a main container exists for AllInOne mode before creating the first VisualCopy
                 if (Configuration.Main.AddNewVisualCopy != null &&
@@ -116,18 +145,15 @@ namespace NeathCopy
                 if (StartupClass.requestInfo.Content == RquestContent.All)
                     Configuration.Main.SetRunningState(vc, StartupClass.requestInfo);
 
-                //System.Windows.Forms.MessageBox.Show("after start operation");
                 IntegrationManager.EnsureMinimalRegistryKeysIfMissing(Configuration.Main);
                 ApplyIntegrationState();
                 if (Controller is AppController controllerInstance)
                     controllerInstance.WarnIfElevated();
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show(string.Format("Class: VisualCopyHandler\n Method: MyInitialize\nMessage: {0}", ex.Message));
             }
-
         }
 
         #region WndProc
@@ -173,6 +199,8 @@ namespace NeathCopy
         {
             base.OnSourceInitialized(e);
 
+            EnsureCommonStateInitialized();
+            InitializeSourceState();
             MyInitialize();
         }
 
@@ -264,6 +292,7 @@ namespace NeathCopy
     public class StartupClass
     {
         internal static readonly AppController Controller = new AppController();
+        private static Mutex trayLaunchMutex;
         public static int Id;
         public static CmdShellExtAgent cmdShellAgent;
         public static RequestInfo requestInfo=new RequestInfo();
@@ -310,14 +339,9 @@ namespace NeathCopy
                 Configuration.Main = Configuration.LoadFromRegister();
                 IntegrationManager.UpdateAutoStart(Configuration.Main);
                 IsTrayLaunch = arguments != null && arguments.Any(a => string.Equals(a, "--tray", StringComparison.OrdinalIgnoreCase));
-                if (IsTrayLaunch)
-                {
-                    Configuration.Main.IntegrationMode = IntegrationManager.TrayIpcMode;
-                    Configuration.Main.IsDefaultCopyHandler = true;
-                    Configuration.Main.StartWithWindows = true;
-                    RegisterAccess.Acces.SetExistConfiguration(true);
-                    IntegrationManager.UpdateAutoStart(Configuration.Main);
-                }
+                if (IsTrayLaunch && !TryAcquireTrayLaunchMutex())
+                    return;
+
                 IntegrationManager.EnsureMinimalRegistryKeysIfMissing(Configuration.Main);
 
                 App myApp = new App();
@@ -357,6 +381,20 @@ namespace NeathCopy
             //{
             //    MessageBox.Show(Error.GetErrorLog(ex.Message, "NeathCopy", "StartupClass", "Main"));
             //}
+        }
+
+        private static bool TryAcquireTrayLaunchMutex()
+        {
+            try
+            {
+                bool createdNew;
+                trayLaunchMutex = new Mutex(true, @"Local\NeathCopy.TrayLaunch", out createdNew);
+                return createdNew;
+            }
+            catch (Exception)
+            {
+                return true;
+            }
         }
     }
 
